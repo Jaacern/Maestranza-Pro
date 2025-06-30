@@ -1,0 +1,121 @@
+---
+// Componente de gráfico de inventario
+export interface Props {
+    products: any[];
+}
+
+const { products } = Astro.props;
+
+// Calcular datos para el gráfico de evolución
+const monthlyData = {};
+const currentDate = new Date();
+const months = [];
+
+// Generar datos de los últimos 6 meses
+for (let i = 5; i >= 0; i--) {
+    const date = new Date(currentDate.getFullYear(), currentDate.getMonth() - i, 1);
+    const monthKey = date.toLocaleDateString('es-CL', { month: 'short', year: 'numeric' });
+    months.push(monthKey);
+    monthlyData[monthKey] = Math.floor(Math.random() * 50) + 20; // Datos simulados
+}
+
+// Calcular top categorías
+const categories = {};
+products.forEach(product => {
+    const category = product.category || 'Sin categoría';
+    categories[category] = (categories[category] || 0) + 1;
+});
+
+const topCategories = Object.entries(categories)
+    .sort(([,a], [,b]) => b - a)
+    .slice(0, 5)
+    .map(([name, count]) => ({ name, count }));
+
+// Preparar datos para el script
+const chartData = {
+    months: months,
+    monthlyData: Object.values(monthlyData),
+    topCategories: topCategories
+};
+---
+
+<div class="bg-white p-6 rounded-lg shadow border dark:bg-gray-800 dark:border-gray-700">
+    <div class="flex items-center justify-between mb-4">
+        <div>
+            <h3 class="text-xl font-bold text-gray-900 dark:text-white">Evolución del Inventario</h3>
+            <p class="text-gray-600 dark:text-gray-400">Últimos 6 meses</p>
+        </div>
+    </div>
+    <div class="h-80">
+        <canvas id="evolutionChart"></canvas>
+    </div>
+</div>
+
+<script define:vars={{ chartData }}>
+    import Chart from 'chart.js/auto';
+    
+    // Datos para el gráfico de evolución
+    const { months, monthlyData, topCategories } = chartData;
+
+    // Gráfico de evolución temporal
+    const evolutionCtx = document.getElementById('evolutionChart').getContext('2d');
+    new Chart(evolutionCtx, {
+        type: 'line',
+        data: {
+            labels: months,
+            datasets: [{
+                label: 'Cantidad de Productos',
+                data: monthlyData,
+                borderColor: '#3B82F6',
+                backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                borderWidth: 3,
+                fill: true,
+                tension: 0.4,
+                pointBackgroundColor: '#3B82F6',
+                pointBorderColor: '#ffffff',
+                pointBorderWidth: 2,
+                pointRadius: 6,
+                pointHoverRadius: 8
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                    titleColor: '#ffffff',
+                    bodyColor: '#ffffff',
+                    borderColor: '#3B82F6',
+                    borderWidth: 1,
+                    cornerRadius: 8,
+                    displayColors: false
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    grid: {
+                        color: 'rgba(0, 0, 0, 0.1)'
+                    },
+                    ticks: {
+                        stepSize: 10
+                    }
+                },
+                x: {
+                    grid: {
+                        display: false
+                    }
+                }
+            },
+            elements: {
+                point: {
+                    hoverBackgroundColor: '#3B82F6'
+                }
+            }
+        }
+    });
+</script> 

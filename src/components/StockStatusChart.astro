@@ -1,0 +1,125 @@
+---
+// Componente de gráfico de estado del stock
+export interface Props {
+    products: any[];
+}
+
+const { products } = Astro.props;
+
+// Calcular estados del stock
+const stockStatus = {
+    'Stock Óptimo': 0,
+    'Stock Bajo': 0,
+    'Sin Stock': 0,
+    'Stock Alto': 0
+};
+
+products.forEach(product => {
+    const stock = product.stock || 0;
+    const minStock = product.stockmin || 10;
+    const maxStock = product.stockmax || 100;
+    
+    if (stock === 0) {
+        stockStatus['Sin Stock']++;
+    } else if (stock < minStock) {
+        stockStatus['Stock Bajo']++;
+    } else if (stock > maxStock) {
+        stockStatus['Stock Alto']++;
+    } else {
+        stockStatus['Stock Óptimo']++;
+    }
+});
+
+const statusLabels = Object.keys(stockStatus);
+const statusData = Object.values(stockStatus);
+const statusColors = ['#10B981', '#F59E0B', '#EF4444', '#3B82F6'];
+
+// Preparar datos para el script
+const chartData = {
+    statusLabels: statusLabels,
+    statusData: statusData,
+    statusColors: statusColors
+};
+---
+
+<div class="bg-white p-6 rounded-lg shadow border dark:bg-gray-800 dark:border-gray-700">
+    <div class="flex items-center justify-between mb-4">
+        <div>
+            <h3 class="text-xl font-bold text-gray-900 dark:text-white">Estado del Stock</h3>
+            <p class="text-gray-600 dark:text-gray-400">Distribución por nivel de inventario</p>
+        </div>
+    </div>
+    <div class="h-80">
+        <canvas id="stockStatusChart"></canvas>
+    </div>
+    
+    <!-- Leyenda detallada -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
+        <div class="flex items-center space-x-2">
+            <div class="w-4 h-4 bg-green-500 rounded"></div>
+            <span class="text-sm text-gray-600 dark:text-gray-400">Óptimo</span>
+        </div>
+        <div class="flex items-center space-x-2">
+            <div class="w-4 h-4 bg-yellow-500 rounded"></div>
+            <span class="text-sm text-gray-600 dark:text-gray-400">Bajo</span>
+        </div>
+        <div class="flex items-center space-x-2">
+            <div class="w-4 h-4 bg-red-500 rounded"></div>
+            <span class="text-sm text-gray-600 dark:text-gray-400">Sin Stock</span>
+        </div>
+        <div class="flex items-center space-x-2">
+            <div class="w-4 h-4 bg-blue-500 rounded"></div>
+            <span class="text-sm text-gray-600 dark:text-gray-400">Alto</span>
+        </div>
+    </div>
+</div>
+
+<script define:vars={{ chartData }}>
+    import Chart from 'chart.js/auto';
+    
+    // Datos para el gráfico de estado del stock
+    const { statusLabels, statusData, statusColors } = chartData;
+
+    // Gráfico de estado del stock
+    const stockStatusCtx = document.getElementById('stockStatusChart').getContext('2d');
+    new Chart(stockStatusCtx, {
+        type: 'polarArea',
+        data: {
+            labels: statusLabels,
+            datasets: [{
+                data: statusData,
+                backgroundColor: statusColors.map(color => color + '80'),
+                borderColor: statusColors,
+                borderWidth: 2
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            const label = context.label || '';
+                            const value = context.parsed;
+                            const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                            const percentage = ((value / total) * 100).toFixed(1);
+                            return `${label}: ${value} productos (${percentage}%)`;
+                        }
+                    }
+                }
+            },
+            scales: {
+                r: {
+                    beginAtZero: true,
+                    ticks: {
+                        stepSize: 1
+                    }
+                }
+            }
+        }
+    });
+</script> 
