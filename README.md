@@ -930,7 +930,7 @@ SOFTWARE.
 
 **¡Gracias por usar MaestranzaPro! 🚀**
 
-Si este proyecto te ha sido útil, considera darle una ⭐ en GitHub.
+Si este proyecto te ha sido útil, considera darle una ⭐ en GitHub!!!!
 
 [⬆️ Volver al Inicio](#-maestranzapro---sistema-de-gestión-de-inventario)
 
