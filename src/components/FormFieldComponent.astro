@@ -1,0 +1,73 @@
+---
+// TODO: implementar lógica de campo de formulario
+export interface Props {
+	label: string;
+	name: string;
+	type?: 'text' | 'email' | 'password' | 'number' | 'select' | 'textarea' | 'date';
+	placeholder?: string;
+	required?: boolean;
+	options?: Array<{ value: string; label: string }>;
+	rows?: number;
+	value?: string | number;
+	error?: string;
+}
+
+const { 
+	label, 
+	name, 
+	type = 'text', 
+	placeholder, 
+	required = false, 
+	options = [], 
+	rows = 3, 
+	value, 
+	error 
+} = Astro.props;
+---
+
+<div class="mb-4">
+	<label for={name} class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+		{label} {required && <span class="text-red-500">*</span>}
+	</label>
+	
+	{type === 'select' ? (
+		<select
+			id={name}
+			name={name}
+			class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+			required={required}
+		>
+			<option value="">Seleccionar...</option>
+			{options.map(option => (
+				<option value={option.value} selected={value === option.value}>
+					{option.label}
+				</option>
+			))}
+		</select>
+	) : type === 'textarea' ? (
+		<textarea
+			id={name}
+			name={name}
+			rows={rows}
+			placeholder={placeholder}
+			class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+			required={required}
+		>{value}</textarea>
+	) : (
+		<input
+			type={type}
+			id={name}
+			name={name}
+			placeholder={placeholder}
+			value={value}
+			class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+			required={required}
+		/>
+	)}
+	
+	{error && (
+		<p class="mt-1 text-sm text-red-600 dark:text-red-400">
+			{error}
+		</p>
+	)}
+</div> 

@@ -1,0 +1,400 @@
+---
+import LayoutSidebar from '../../app/LayoutSidebar.astro';
+
+// Datos de ejemplo para tracking
+const trackingData = {
+	totalProducts: 1250,
+	activeProducts: 1180,
+	inactiveProducts: 70,
+	lowStockProducts: 45,
+	criticalStockProducts: 12,
+	movementsToday: 23,
+	movementsWeek: 156,
+	movementsMonth: 678
+};
+
+const recentMovements = [
+	{
+		id: 1,
+		product: "Rodamiento SKF 6205",
+		type: "entrada",
+		quantity: 50,
+		location: "Almacén Principal",
+		user: "Cristóbal Silva",
+		timestamp: "2024-01-15T10:30:00Z"
+	},
+	{
+		id: 2,
+		product: "Válvula de Control Parker",
+		type: "salida",
+		quantity: 2,
+		location: "Taller Mecánico",
+		user: "María González",
+		timestamp: "2024-01-15T09:15:00Z"
+	},
+	{
+		id: 3,
+		product: "Aceite Lubricante Mobil",
+		type: "entrada",
+		quantity: 200,
+		location: "Almacén de Lubricantes",
+		user: "Roberto Méndez",
+		timestamp: "2024-01-15T08:45:00Z"
+	}
+];
+
+const stockByCategory = [
+	{ category: "Rodamientos", stock: 450, value: 125000 },
+	{ category: "Válvulas", stock: 320, value: 89000 },
+	{ category: "Lubricantes", stock: 280, value: 67000 },
+	{ category: "Motores", stock: 150, value: 450000 },
+	{ category: "Filtros", stock: 200, value: 34000 }
+];
+
+const monthlyMovements = [
+	{ month: "Ene", entradas: 45, salidas: 32 },
+	{ month: "Feb", entradas: 52, salidas: 38 },
+	{ month: "Mar", entradas: 48, salidas: 41 },
+	{ month: "Abr", entradas: 61, salidas: 35 },
+	{ month: "May", entradas: 55, salidas: 42 },
+	{ month: "Jun", entradas: 67, salidas: 39 }
+];
+---
+
+<LayoutSidebar>
+	<div class="px-4 pt-6">
+		<!-- Header -->
+		<div class="mb-6">
+			<nav class="flex mb-5" aria-label="Breadcrumb">
+				<ol class="inline-flex items-center space-x-1 text-sm font-medium md:space-x-2">
+					<li class="inline-flex items-center">
+						<a href="/" class="inline-flex items-center text-gray-700 hover:text-primary-600 dark:text-gray-300 dark:hover:text-white">
+							<svg class="w-5 h-5 mr-2.5" fill="currentColor" viewBox="0 0 20 20">
+								<path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"/>
+							</svg>
+							Inicio
+						</a>
+					</li>
+					<li>
+						<div class="flex items-center">
+							<svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+								<path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"/>
+							</svg>
+							<span class="ml-1 text-gray-400 md:ml-2 dark:text-gray-500">Inventario</span>
+						</div>
+					</li>
+					<li>
+						<div class="flex items-center">
+							<svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+								<path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"/>
+							</svg>
+							<span class="ml-1 text-gray-400 md:ml-2 dark:text-gray-500">Tracking</span>
+						</div>
+					</li>
+				</ol>
+			</nav>
+			<div class="flex items-center justify-between">
+				<div>
+					<h1 class="text-2xl font-bold text-gray-900 dark:text-white">
+						Tracking de Inventario
+					</h1>
+					<p class="text-gray-600 dark:text-gray-400">
+						Seguimiento en tiempo real del inventario y movimientos
+					</p>
+				</div>
+				<div class="flex space-x-2">
+					<button class="px-4 py-2 text-sm font-medium text-white bg-primary-700 rounded-lg hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
+						Exportar Reporte
+					</button>
+					<button class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:ring-4 focus:ring-primary-300 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700">
+						Actualizar
+					</button>
+				</div>
+			</div>
+		</div>
+
+		<!-- Métricas de Tracking -->
+		<div class="grid grid-cols-1 gap-4 mb-6 sm:grid-cols-2 lg:grid-cols-4">
+			<div class="p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
+				<div class="flex items-center">
+					<div class="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 text-blue-500 bg-blue-100 rounded-lg dark:bg-blue-800 dark:text-blue-200">
+						<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+							<path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"/>
+						</svg>
+					</div>
+					<div class="ml-4">
+						<span class="text-2xl font-bold leading-none text-gray-900 dark:text-white">
+							{trackingData.totalProducts}
+						</span>
+						<p class="text-base font-normal text-gray-600 dark:text-gray-400">
+							Total Productos
+						</p>
+					</div>
+				</div>
+			</div>
+
+			<div class="p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
+				<div class="flex items-center">
+					<div class="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 text-green-500 bg-green-100 rounded-lg dark:bg-green-800 dark:text-green-200">
+						<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+							<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+						</svg>
+					</div>
+					<div class="ml-4">
+						<span class="text-2xl font-bold leading-none text-gray-900 dark:text-white">
+							{trackingData.activeProducts}
+						</span>
+						<p class="text-base font-normal text-gray-600 dark:text-gray-400">
+							Productos Activos
+						</p>
+					</div>
+				</div>
+			</div>
+
+			<div class="p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
+				<div class="flex items-center">
+					<div class="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 text-red-500 bg-red-100 rounded-lg dark:bg-red-800 dark:text-red-200">
+						<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+							<path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+						</svg>
+					</div>
+					<div class="ml-4">
+						<span class="text-2xl font-bold leading-none text-gray-900 dark:text-white">
+							{trackingData.criticalStockProducts}
+						</span>
+						<p class="text-base font-normal text-gray-600 dark:text-gray-400">
+							Stock Crítico
+						</p>
+					</div>
+				</div>
+			</div>
+
+			<div class="p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
+				<div class="flex items-center">
+					<div class="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 text-purple-500 bg-purple-100 rounded-lg dark:bg-purple-800 dark:text-purple-200">
+						<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+							<path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/>
+							<path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/>
+						</svg>
+					</div>
+					<div class="ml-4">
+						<span class="text-2xl font-bold leading-none text-gray-900 dark:text-white">
+							{trackingData.movementsToday}
+						</span>
+						<p class="text-base font-normal text-gray-600 dark:text-gray-400">
+							Movimientos Hoy
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Gráficos -->
+		<div class="grid grid-cols-1 gap-6 mb-6 lg:grid-cols-2">
+			<!-- Gráfico de Inventario por Categoría -->
+			<div class="p-6 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
+				<h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+					Inventario por Categoría
+				</h3>
+				<div class="h-64 flex items-center justify-center">
+					<div class="text-center">
+						<div class="w-32 h-32 mx-auto mb-4 relative">
+							<svg class="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
+								<path class="text-gray-200" stroke="currentColor" stroke-width="2" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+								<path class="text-blue-600" stroke="currentColor" stroke-width="2" stroke-dasharray="30, 100" stroke-linecap="round" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+							</svg>
+							<div class="absolute inset-0 flex items-center justify-center">
+								<span class="text-2xl font-bold text-gray-900 dark:text-white">1,250</span>
+							</div>
+						</div>
+						<p class="text-sm text-gray-600 dark:text-gray-400">Total Productos</p>
+					</div>
+				</div>
+				<div class="grid grid-cols-2 gap-4 mt-4">
+					{stockByCategory.slice(0, 4).map((item) => (
+						<div class="flex items-center justify-between">
+							<span class="text-sm text-gray-600 dark:text-gray-400">{item.category}</span>
+							<span class="text-sm font-medium text-gray-900 dark:text-white">{item.stock}</span>
+						</div>
+					))}
+				</div>
+			</div>
+
+			<!-- Gráfico de Movimientos Mensuales -->
+			<div class="p-6 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
+				<h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+					Movimientos Mensuales
+				</h3>
+				<div class="h-64 flex items-end justify-between space-x-2">
+					{monthlyMovements.map((item) => (
+						<div class="flex flex-col items-center flex-1">
+							<div class="w-full bg-gray-200 rounded-t dark:bg-gray-700 mb-2" style="height: {(item.entradas / 70) * 200}px">
+								<div class="w-full bg-blue-600 rounded-t" style="height: {(item.entradas / 70) * 200}px"></div>
+							</div>
+							<div class="w-full bg-gray-200 rounded-t dark:bg-gray-700" style="height: {(item.salidas / 70) * 200}px">
+								<div class="w-full bg-red-600 rounded-t" style="height: {(item.salidas / 70) * 200}px"></div>
+							</div>
+							<span class="text-xs text-gray-600 dark:text-gray-400 mt-2">{item.month}</span>
+						</div>
+					))}
+				</div>
+				<div class="flex justify-center space-x-4 mt-4">
+					<div class="flex items-center">
+						<div class="w-3 h-3 bg-blue-600 rounded mr-2"></div>
+						<span class="text-xs text-gray-600 dark:text-gray-400">Entradas</span>
+					</div>
+					<div class="flex items-center">
+						<div class="w-3 h-3 bg-red-600 rounded mr-2"></div>
+						<span class="text-xs text-gray-600 dark:text-gray-400">Salidas</span>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Gráficos Adicionales -->
+		<div class="grid grid-cols-1 gap-6 mb-6 lg:grid-cols-3">
+			<!-- Gráfico de Usuarios Activos -->
+			<div class="p-6 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
+				<h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+					Usuarios Activos
+				</h3>
+				<div class="h-48 flex items-center justify-center">
+					<div class="text-center">
+						<div class="text-3xl font-bold text-green-600 dark:text-green-400 mb-2">24</div>
+						<p class="text-sm text-gray-600 dark:text-gray-400">Usuarios en línea</p>
+						<div class="mt-4 space-y-2">
+							<div class="flex justify-between text-xs">
+								<span>Administradores</span>
+								<span class="font-medium">3</span>
+							</div>
+							<div class="flex justify-between text-xs">
+								<span>Operadores</span>
+								<span class="font-medium">12</span>
+							</div>
+							<div class="flex justify-between text-xs">
+								<span>Supervisores</span>
+								<span class="font-medium">9</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Gráfico de Reportes Generados -->
+			<div class="p-6 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
+				<h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+					Reportes Generados
+				</h3>
+				<div class="h-48 flex items-center justify-center">
+					<div class="text-center">
+						<div class="text-3xl font-bold text-purple-600 dark:text-purple-400 mb-2">156</div>
+						<p class="text-sm text-gray-600 dark:text-gray-400">Este mes</p>
+						<div class="mt-4 space-y-2">
+							<div class="flex justify-between text-xs">
+								<span>Stock</span>
+								<span class="font-medium">45</span>
+							</div>
+							<div class="flex justify-between text-xs">
+								<span>Movimientos</span>
+								<span class="font-medium">67</span>
+							</div>
+							<div class="flex justify-between text-xs">
+								<span>Proveedores</span>
+								<span class="font-medium">23</span>
+							</div>
+							<div class="flex justify-between text-xs">
+								<span>Otros</span>
+								<span class="font-medium">21</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Gráfico de Historial de Actividad -->
+			<div class="p-6 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
+				<h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+					Actividad del Sistema
+				</h3>
+				<div class="h-48 flex items-center justify-center">
+					<div class="w-full">
+						<div class="flex items-center justify-between mb-2">
+							<span class="text-xs text-gray-600 dark:text-gray-400">Hoy</span>
+							<span class="text-xs font-medium text-gray-900 dark:text-white">89%</span>
+						</div>
+						<div class="w-full bg-gray-200 rounded-full h-2 dark:bg-gray-700">
+							<div class="bg-green-600 h-2 rounded-full" style="width: 89%"></div>
+						</div>
+						<div class="flex items-center justify-between mt-4 mb-2">
+							<span class="text-xs text-gray-600 dark:text-gray-400">Esta semana</span>
+							<span class="text-xs font-medium text-gray-900 dark:text-white">92%</span>
+						</div>
+						<div class="w-full bg-gray-200 rounded-full h-2 dark:bg-gray-700">
+							<div class="bg-blue-600 h-2 rounded-full" style="width: 92%"></div>
+						</div>
+						<div class="flex items-center justify-between mt-4 mb-2">
+							<span class="text-xs text-gray-600 dark:text-gray-400">Este mes</span>
+							<span class="text-xs font-medium text-gray-900 dark:text-white">87%</span>
+						</div>
+						<div class="w-full bg-gray-200 rounded-full h-2 dark:bg-gray-700">
+							<div class="bg-yellow-600 h-2 rounded-full" style="width: 87%"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Movimientos Recientes -->
+		<div class="bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
+			<div class="p-6">
+				<h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+					Movimientos Recientes
+				</h3>
+				<div class="overflow-x-auto">
+					<table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+						<thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+							<tr>
+								<th scope="col" class="px-6 py-3">Producto</th>
+								<th scope="col" class="px-6 py-3">Tipo</th>
+								<th scope="col" class="px-6 py-3">Cantidad</th>
+								<th scope="col" class="px-6 py-3">Ubicación</th>
+								<th scope="col" class="px-6 py-3">Usuario</th>
+								<th scope="col" class="px-6 py-3">Hora</th>
+							</tr>
+						</thead>
+						<tbody>
+							{recentMovements.map((movement) => (
+								<tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+									<td class="px-6 py-4 font-medium text-gray-900 dark:text-white">
+										{movement.product}
+									</td>
+									<td class="px-6 py-4">
+										<span class={`inline-flex items-center px-2 py-1 text-xs font-semibold rounded ${
+											movement.type === 'entrada' 
+												? 'text-green-800 bg-green-200 dark:bg-green-700 dark:text-green-100'
+												: 'text-red-800 bg-red-200 dark:bg-red-700 dark:text-red-100'
+										}`}>
+											{movement.type === 'entrada' ? 'Entrada' : 'Salida'}
+										</span>
+									</td>
+									<td class="px-6 py-4 text-gray-900 dark:text-white">
+										{movement.quantity}
+									</td>
+									<td class="px-6 py-4 text-gray-600 dark:text-gray-400">
+										{movement.location}
+									</td>
+									<td class="px-6 py-4 text-gray-600 dark:text-gray-400">
+										{movement.user}
+									</td>
+									<td class="px-6 py-4 text-gray-600 dark:text-gray-400">
+										{new Date(movement.timestamp).toLocaleTimeString('es-CL')}
+									</td>
+								</tr>
+							))}
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</LayoutSidebar> 

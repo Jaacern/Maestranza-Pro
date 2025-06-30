@@ -1,0 +1,315 @@
+---
+import LayoutSidebar from '../app/LayoutSidebar.astro';
+
+// Datos de ejemplo para ventas
+const salesData = {
+	totalSales: 15420000,
+	totalOrders: 89,
+	averageOrder: 173258,
+	growthRate: 12.5,
+	topProducts: [
+		{ name: "Rodamientos SKF 6205", sales: 1250000, units: 50 },
+		{ name: "Válvulas Parker", sales: 980000, units: 25 },
+		{ name: "Motores Eléctricos", sales: 850000, units: 8 },
+		{ name: "Bombas Centrífugas", sales: 720000, units: 6 },
+		{ name: "Cables de Energía", sales: 650000, units: 120 }
+	],
+	recentOrders: [
+		{
+			id: "ORD-2024-001",
+			customer: "Minera Escondida",
+			amount: 1250000,
+			status: "completada",
+			date: "2024-01-15T10:30:00Z",
+			items: 5
+		},
+		{
+			id: "ORD-2024-002",
+			customer: "Codelco Norte",
+			amount: 980000,
+			status: "en_proceso",
+			date: "2024-01-15T09:15:00Z",
+			items: 3
+		},
+		{
+			id: "ORD-2024-003",
+			customer: "Minera Collahuasi",
+			amount: 850000,
+			status: "pendiente",
+			date: "2024-01-15T08:45:00Z",
+			items: 2
+		},
+		{
+			id: "ORD-2024-004",
+			customer: "Minera Los Pelambres",
+			amount: 720000,
+			status: "completada",
+			date: "2024-01-15T08:30:00Z",
+			items: 4
+		},
+		{
+			id: "ORD-2024-005",
+			customer: "Minera Centinela",
+			amount: 650000,
+			status: "en_proceso",
+			date: "2024-01-15T08:15:00Z",
+			items: 8
+		}
+	]
+};
+
+const monthlyData = [
+	{ month: "Ene", sales: 1200000 },
+	{ month: "Feb", sales: 1350000 },
+	{ month: "Mar", sales: 1100000 },
+	{ month: "Abr", sales: 1450000 },
+	{ month: "May", sales: 1300000 },
+	{ month: "Jun", sales: 1600000 },
+	{ month: "Jul", sales: 1400000 },
+	{ month: "Ago", sales: 1550000 },
+	{ month: "Sep", sales: 1700000 },
+	{ month: "Oct", sales: 1650000 },
+	{ month: "Nov", sales: 1800000 },
+	{ month: "Dic", sales: 1542000 }
+];
+---
+
+<LayoutSidebar>
+	<div class="px-4 pt-6">
+		<!-- Header -->
+		<div class="mb-6">
+			<nav class="flex mb-5" aria-label="Breadcrumb">
+				<ol class="inline-flex items-center space-x-1 text-sm font-medium md:space-x-2">
+					<li class="inline-flex items-center">
+						<a href="/" class="inline-flex items-center text-gray-700 hover:text-primary-600 dark:text-gray-300 dark:hover:text-white">
+							<svg class="w-5 h-5 mr-2.5" fill="currentColor" viewBox="0 0 20 20">
+								<path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"/>
+							</svg>
+							Inicio
+						</a>
+					</li>
+					<li>
+						<div class="flex items-center">
+							<svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+								<path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"/>
+							</svg>
+							<span class="ml-1 text-gray-400 md:ml-2 dark:text-gray-500">Ventas</span>
+						</div>
+					</li>
+				</ol>
+			</nav>
+			<div class="flex items-center justify-between">
+				<div>
+					<h1 class="text-2xl font-bold text-gray-900 dark:text-white">
+						Panel de Ventas
+					</h1>
+					<p class="text-gray-600 dark:text-gray-400">
+						Gestión y análisis de ventas de Maestranzas Unidos S.A.
+					</p>
+				</div>
+				<div class="flex space-x-2">
+					<button class="px-4 py-2 text-sm font-medium text-white bg-primary-700 rounded-lg hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
+						Nueva Venta
+					</button>
+					<button class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:ring-4 focus:ring-primary-300 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700">
+						Exportar Reporte
+					</button>
+				</div>
+			</div>
+		</div>
+
+		<!-- Métricas principales -->
+		<div class="grid grid-cols-1 gap-4 mb-6 sm:grid-cols-2 lg:grid-cols-4">
+			<div class="p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
+				<div class="flex items-center">
+					<div class="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 text-green-500 bg-green-100 rounded-lg dark:bg-green-800 dark:text-green-200">
+						<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+							<path fill-rule="evenodd" d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"/>
+						</svg>
+					</div>
+					<div class="ml-4">
+						<span class="text-2xl font-bold leading-none text-gray-900 dark:text-white">
+							${(salesData.totalSales / 1000000).toFixed(1)}M
+						</span>
+						<p class="text-base font-normal text-gray-600 dark:text-gray-400">
+							Ventas Totales
+						</p>
+					</div>
+				</div>
+			</div>
+
+			<div class="p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
+				<div class="flex items-center">
+					<div class="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 text-blue-500 bg-blue-100 rounded-lg dark:bg-blue-800 dark:text-blue-200">
+						<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+							<path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+						</svg>
+					</div>
+					<div class="ml-4">
+						<span class="text-2xl font-bold leading-none text-gray-900 dark:text-white">
+							{salesData.totalOrders}
+						</span>
+						<p class="text-base font-normal text-gray-600 dark:text-gray-400">
+							Órdenes Totales
+						</p>
+					</div>
+				</div>
+			</div>
+
+			<div class="p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
+				<div class="flex items-center">
+					<div class="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 text-purple-500 bg-purple-100 rounded-lg dark:bg-purple-800 dark:text-purple-200">
+						<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+							<path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z"/>
+						</svg>
+					</div>
+					<div class="ml-4">
+						<span class="text-2xl font-bold leading-none text-gray-900 dark:text-white">
+							${(salesData.averageOrder / 1000).toFixed(0)}K
+						</span>
+						<p class="text-base font-normal text-gray-600 dark:text-gray-400">
+							Promedio por Orden
+						</p>
+					</div>
+				</div>
+			</div>
+
+			<div class="p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
+				<div class="flex items-center">
+					<div class="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 text-yellow-500 bg-yellow-100 rounded-lg dark:bg-yellow-800 dark:text-yellow-200">
+						<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+							<path fill-rule="evenodd" d="M12 7a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0V8.414l-4.293 4.293a1 1 0 01-1.414 0L8 10.414l-4.293 4.293a1 1 0 01-1.414-1.414l5-5a1 1 0 011.414 0L11 10.586 14.586 7H12z" clip-rule="evenodd"/>
+						</svg>
+					</div>
+					<div class="ml-4">
+						<span class="text-2xl font-bold leading-none text-gray-900 dark:text-white">
+							+{salesData.growthRate}%
+						</span>
+						<p class="text-base font-normal text-gray-600 dark:text-gray-400">
+							Crecimiento
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Gráfico de ventas mensuales -->
+		<div class="grid grid-cols-1 gap-6 mb-6 lg:grid-cols-2">
+			<div class="p-6 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
+				<h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+					Ventas Mensuales
+				</h3>
+				<div class="h-64 flex items-end justify-between space-x-2">
+					{monthlyData.map((data, index) => (
+						<div class="flex-1 flex flex-col items-center">
+							<div 
+								class="w-full bg-primary-600 rounded-t dark:bg-primary-500"
+								style={`height: ${(data.sales / 1800000) * 200}px`}
+							></div>
+							<span class="text-xs text-gray-600 dark:text-gray-400 mt-2">
+								{data.month}
+							</span>
+						</div>
+					))}
+				</div>
+				<div class="mt-4 text-center">
+					<span class="text-sm text-gray-600 dark:text-gray-400">
+						Ventas en millones de pesos chilenos
+					</span>
+				</div>
+			</div>
+
+			<!-- Productos más vendidos -->
+			<div class="p-6 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
+				<h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+					Productos Más Vendidos
+				</h3>
+				<div class="space-y-4">
+					{salesData.topProducts.map((product, index) => (
+						<div class="flex items-center justify-between">
+							<div class="flex items-center">
+								<span class="w-6 h-6 text-xs font-medium text-white bg-primary-600 rounded-full flex items-center justify-center mr-3">
+									{index + 1}
+								</span>
+								<div>
+									<p class="text-sm font-medium text-gray-900 dark:text-white">
+										{product.name}
+									</p>
+									<p class="text-xs text-gray-600 dark:text-gray-400">
+										{product.units} unidades
+									</p>
+								</div>
+							</div>
+							<span class="text-sm font-semibold text-gray-900 dark:text-white">
+								${(product.sales / 1000).toFixed(0)}K
+							</span>
+						</div>
+					))}
+				</div>
+			</div>
+		</div>
+
+		<!-- Órdenes recientes -->
+		<div class="bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
+			<div class="p-6">
+				<h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+					Órdenes Recientes
+				</h3>
+				
+				<div class="overflow-x-auto">
+					<table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+						<thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+							<tr>
+								<th class="px-6 py-3">ID Orden</th>
+								<th class="px-6 py-3">Cliente</th>
+								<th class="px-6 py-3">Monto</th>
+								<th class="px-6 py-3">Estado</th>
+								<th class="px-6 py-3">Fecha</th>
+								<th class="px-6 py-3">Items</th>
+								<th class="px-6 py-3">Acciones</th>
+							</tr>
+						</thead>
+						<tbody>
+							{salesData.recentOrders.map((order) => (
+								<tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700">
+									<td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+										{order.id}
+									</td>
+									<td class="px-6 py-4 whitespace-nowrap">
+										{order.customer}
+									</td>
+									<td class="px-6 py-4 whitespace-nowrap">
+										${(order.amount / 1000).toFixed(0)}K
+									</td>
+									<td class="px-6 py-4 whitespace-nowrap">
+										<span class={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+											order.status === 'completada' 
+												? 'text-green-800 bg-green-100 dark:bg-green-700 dark:text-green-100'
+												: order.status === 'en_proceso'
+												? 'text-yellow-800 bg-yellow-100 dark:bg-yellow-700 dark:text-yellow-100'
+												: 'text-red-800 bg-red-100 dark:bg-red-700 dark:text-red-100'
+										}`}>
+											{order.status === 'completada' ? 'Completada' : 
+											 order.status === 'en_proceso' ? 'En Proceso' : 'Pendiente'}
+										</span>
+									</td>
+									<td class="px-6 py-4 whitespace-nowrap">
+										{new Date(order.date).toLocaleDateString('es-CL')}
+									</td>
+									<td class="px-6 py-4 whitespace-nowrap">
+										{order.items}
+									</td>
+									<td class="px-6 py-4 whitespace-nowrap">
+										<button class="text-primary-600 hover:text-primary-900 dark:text-primary-500 dark:hover:text-primary-400">
+											Ver Detalles
+										</button>
+									</td>
+								</tr>
+							))}
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</LayoutSidebar> 

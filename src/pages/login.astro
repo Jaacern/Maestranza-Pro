@@ -1,0 +1,270 @@
+---
+import LoginLayout from '../layouts/LoginLayout.astro';
+import { login } from '../services/auth.js';
+
+// Procesar formulario de login
+if (Astro.request.method === 'POST') {
+	const formData = await Astro.request.formData();
+	const username = formData.get('username')?.toString() || '';
+	const password = formData.get('password')?.toString() || '';
+	const role = formData.get('role')?.toString() || '';
+
+	if (username && password && role) {
+		const result = await login(username, password, role);
+		
+		if (result.success) {
+			// Configurar cookie de sesión
+			Astro.cookies.set('maestranza-session', result.token, {
+				httpOnly: true,
+				secure: true,
+				sameSite: 'strict',
+				maxAge: 24 * 60 * 60 // 24 horas
+			});
+			
+			// Redirigir al dashboard
+			return Astro.redirect('/dashboard');
+		}
+	}
+}
+
+// Obtener mensaje de error si existe
+const errorMessage = Astro.url.searchParams.get('error') || '';
+---
+
+<LoginLayout title="Login - Maestranzas Unidos S.A.">
+	<div class="max-w-md mx-auto">
+		<!-- Selección de Rol -->
+		<div id="roleSelection" class="mb-8">
+			<h2 class="text-2xl font-bold text-white mb-6 text-center">Selecciona tu Rol</h2>
+			
+			<div class="grid grid-cols-1 gap-4">
+				<div class="role-card p-4 bg-white/10 backdrop-blur-sm rounded-lg border border-white/20 text-white cursor-pointer" data-role="Administrador">
+					<div class="flex items-center space-x-3">
+						<div class="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center">
+							<svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+								<path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd"/>
+							</svg>
+						</div>
+						<div>
+							<h3 class="font-semibold">Administrador</h3>
+							<p class="text-sm opacity-80">Acceso completo al sistema</p>
+						</div>
+					</div>
+				</div>
+
+				<div class="role-card p-4 bg-white/10 backdrop-blur-sm rounded-lg border border-white/20 text-white cursor-pointer" data-role="GestorInventario">
+					<div class="flex items-center space-x-3">
+						<div class="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center">
+							<svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+								<path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"/>
+							</svg>
+						</div>
+						<div>
+							<h3 class="font-semibold">Gestor de Inventario</h3>
+							<p class="text-sm opacity-80">Gestión de inventario y movimientos</p>
+						</div>
+					</div>
+				</div>
+
+				<div class="role-card p-4 bg-white/10 backdrop-blur-sm rounded-lg border border-white/20 text-white cursor-pointer" data-role="Comprador">
+					<div class="flex items-center space-x-3">
+						<div class="w-10 h-10 bg-purple-500 rounded-full flex items-center justify-center">
+							<svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+								<path d="M3 1a1 1 0 000 2h1.22l.305 1.222a.997.997 0 00.01.042l1.358 5.43-.893.892C3.74 11.846 4.632 14 6.414 14H15a1 1 0 000-2H6.414l1-1H14a1 1 0 00.894-.553l3-6A1 1 0 0017 3H6.28l-.31-1.243A1 1 0 005 1H3zM16 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM6.5 18a1.5 1.5 0 100-3 1.5 1.5 0 000 3z"/>
+							</svg>
+						</div>
+						<div>
+							<h3 class="font-semibold">Comprador</h3>
+							<p class="text-sm opacity-80">Gestión de compras y proveedores</p>
+						</div>
+					</div>
+				</div>
+
+				<div class="role-card p-4 bg-white/10 backdrop-blur-sm rounded-lg border border-white/20 text-white cursor-pointer" data-role="EncargadoLogistica">
+					<div class="flex items-center space-x-3">
+						<div class="w-10 h-10 bg-yellow-500 rounded-full flex items-center justify-center">
+							<svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+								<path d="M8 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM15 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM3 4a1 1 0 00-1 1v10a1 1 0 001 1h1.05a2.5 2.5 0 014.9 0H10a1 1 0 001-1V5a1 1 0 00-1-1H3zM14 7a1 1 0 00-1 1v6.05A2.5 2.5 0 0115.95 16H17a1 1 0 001-1V8a1 1 0 00-1-1h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z"/>
+							</svg>
+						</div>
+						<div>
+							<h3 class="font-semibold">Encargado de Logística</h3>
+							<p class="text-sm opacity-80">Gestión de entregas y transporte</p>
+						</div>
+					</div>
+				</div>
+
+				<div class="role-card p-4 bg-white/10 backdrop-blur-sm rounded-lg border border-white/20 text-white cursor-pointer" data-role="AuditorInventario">
+					<div class="flex items-center space-x-3">
+						<div class="w-10 h-10 bg-red-500 rounded-full flex items-center justify-center">
+							<svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+								<path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"/>
+							</svg>
+						</div>
+						<div>
+							<h3 class="font-semibold">Auditor de Inventario</h3>
+							<p class="text-sm opacity-80">Auditoría y control de inventario</p>
+						</div>
+					</div>
+				</div>
+
+				<div class="role-card p-4 bg-white/10 backdrop-blur-sm rounded-lg border border-white/20 text-white cursor-pointer" data-role="JefeProduccion">
+					<div class="flex items-center space-x-3">
+						<div class="w-10 h-10 bg-indigo-500 rounded-full flex items-center justify-center">
+							<svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+								<path fill-rule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V4a2 2 0 00-2-2H6zm1 2a1 1 0 000 2h6a1 1 0 100-2H7zm6 7a1 1 0 011 1v3a1 1 0 11-2 0v-3a1 1 0 011-1zm-3 3a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zm-3-1a1 1 0 100 2v1a1 1 0 11-2 0v-1a1 1 0 000-2z" clip-rule="evenodd"/>
+							</svg>
+						</div>
+						<div>
+							<h3 class="font-semibold">Jefe de Producción</h3>
+							<p class="text-sm opacity-80">Gestión de producción y kits</p>
+						</div>
+					</div>
+				</div>
+
+				<div class="role-card p-4 bg-white/10 backdrop-blur-sm rounded-lg border border-white/20 text-white cursor-pointer" data-role="GerenteProyectos">
+					<div class="flex items-center space-x-3">
+						<div class="w-10 h-10 bg-pink-500 rounded-full flex items-center justify-center">
+							<svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+								<path fill-rule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V4a2 2 0 00-2-2H6zm1 2a1 1 0 000 2h6a1 1 0 100-2H7zm6 7a1 1 0 011 1v3a1 1 0 11-2 0v-3a1 1 0 011-1zm-3 3a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zm-3-1a1 1 0 100 2v1a1 1 0 11-2 0v-1a1 1 0 000-2z" clip-rule="evenodd"/>
+							</svg>
+						</div>
+						<div>
+							<h3 class="font-semibold">Gerente de Proyectos</h3>
+							<p class="text-sm opacity-80">Gestión de proyectos y equipos</p>
+						</div>
+					</div>
+				</div>
+
+				<div class="role-card p-4 bg-white/10 backdrop-blur-sm rounded-lg border border-white/20 text-white cursor-pointer" data-role="UsuarioFinal">
+					<div class="flex items-center space-x-3">
+						<div class="w-10 h-10 bg-gray-500 rounded-full flex items-center justify-center">
+							<svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+								<path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/>
+							</svg>
+						</div>
+						<div>
+							<h3 class="font-semibold">Usuario Final</h3>
+							<p class="text-sm opacity-80">Acceso básico al sistema</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Formulario de Login -->
+		<div id="loginForm" class="hidden">
+			<h2 class="text-2xl font-bold text-white mb-6 text-center">Iniciar Sesión</h2>
+			
+			<form method="POST" class="space-y-6">
+				<input type="hidden" id="selectedRole" name="role" value="">
+				
+				<div>
+					<label for="username" class="block text-sm font-medium text-white mb-2">Usuario</label>
+					<input 
+						type="text" 
+						id="username" 
+						name="username" 
+						required
+						class="w-full px-4 py-3 bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+						placeholder="Ingresa tu usuario"
+					>
+				</div>
+				
+				<div>
+					<label for="password" class="block text-sm font-medium text-white mb-2">Contraseña</label>
+					<input 
+						type="password" 
+						id="password" 
+						name="password" 
+						required
+						class="w-full px-4 py-3 bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+						placeholder="Ingresa tu contraseña"
+					>
+				</div>
+				
+				<button 
+					type="submit"
+					class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-transparent"
+				>
+					Iniciar Sesión
+				</button>
+			</form>
+			
+			<button 
+				id="backToRoles"
+				class="w-full mt-4 text-white/80 hover:text-white text-sm transition-colors duration-200"
+			>
+				← Volver a selección de roles
+			</button>
+		</div>
+
+		<!-- Mensaje de Error -->
+		{errorMessage && (
+			<div class="mt-4 p-4 bg-red-500/20 border border-red-500/30 rounded-lg text-red-200 text-center">
+				{errorMessage}
+			</div>
+		)}
+
+		<!-- Información de Credenciales -->
+		<div class="mt-8 p-4 bg-white/10 backdrop-blur-sm rounded-lg border border-white/20">
+			<h3 class="text-white font-semibold mb-2">Credenciales de Prueba</h3>
+			<div class="text-white/80 text-sm space-y-1">
+				<p><strong>Administrador:</strong> admin / admin123</p>
+				<p><strong>Gestor:</strong> gestor / gestor123</p>
+				<p><strong>Comprador:</strong> comprador / comprador123</p>
+				<p><strong>Logística:</strong> logistica / logistica123</p>
+				<p><strong>Auditor:</strong> auditor / auditor123</p>
+				<p><strong>Producción:</strong> produccion / produccion123</p>
+				<p><strong>Proyectos:</strong> proyectos / proyectos123</p>
+				<p><strong>Usuario:</strong> usuario / usuario123</p>
+			</div>
+		</div>
+	</div>
+
+	<script>
+		// Funcionalidad de selección de rol
+		const roleCards = document.querySelectorAll('.role-card');
+		const roleSelection = document.getElementById('roleSelection');
+		const loginForm = document.getElementById('loginForm');
+		const selectedRoleInput = document.getElementById('selectedRole');
+		const backToRolesBtn = document.getElementById('backToRoles');
+
+		roleCards.forEach(card => {
+			card.addEventListener('click', function() {
+				const role = this.dataset.role;
+				selectedRoleInput.value = role;
+				
+				// Ocultar selección de roles y mostrar formulario
+				roleSelection.classList.add('hidden');
+				loginForm.classList.remove('hidden');
+				
+				// Agregar animación de entrada
+				loginForm.classList.add('fade-in');
+			});
+		});
+
+		backToRolesBtn.addEventListener('click', function() {
+			// Mostrar selección de roles y ocultar formulario
+			roleSelection.classList.remove('hidden');
+			loginForm.classList.add('hidden');
+			loginForm.classList.remove('fade-in');
+			
+			// Limpiar formulario
+			document.getElementById('username').value = '';
+			document.getElementById('password').value = '';
+			selectedRoleInput.value = '';
+		});
+
+		// Efectos hover en las tarjetas de rol
+		roleCards.forEach(card => {
+			card.addEventListener('mouseenter', function() {
+				this.classList.add('selected');
+			});
+			
+			card.addEventListener('mouseleave', function() {
+				this.classList.remove('selected');
+			});
+		});
+	</script>
+</LoginLayout>

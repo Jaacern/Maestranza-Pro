@@ -1,0 +1,513 @@
+---
+/* eslint max-lines: 'off' */
+
+import { asset } from '../lib/data';
+import { getProducts } from '../services/products.ts';
+import { getAlerts } from '../services/alerts.ts';
+import { getMovements } from '../services/movements.ts';
+import { getBatches } from '../services/batches.ts';
+
+// Obtener datos para el dashboard
+const products = await getProducts();
+const alerts = await getAlerts();
+const movements = await getMovements();
+const batches = await getBatches();
+
+// Calcular métricas
+const totalProducts = products.length;
+const lowStockProducts = products.filter(p => p.stock <= p.stockmin).length;
+const activeAlerts = alerts.filter(a => a.status === 'activa').length;
+const criticalAlerts = alerts.filter(a => a.priority === 'critica' && a.status === 'activa').length;
+const expiringBatches = batches.filter(b => b.status === 'por_vencer').length;
+const totalValue = products.reduce((sum, p) => {
+	const price = parseFloat(p.price.replace(/[$,]/g, ''));
+	return sum + (price * p.stock);
+}, 0);
+
+// Movimientos recientes (últimos 7 días)
+const recentMovements = movements.slice(0, 5);
+
+// Datos para gráficos
+const stockByCategory = [
+	{ category: "Rodamientos", stock: 450, value: 125000 },
+	{ category: "Válvulas", stock: 320, value: 89000 },
+	{ category: "Lubricantes", stock: 280, value: 67000 },
+	{ category: "Motores", stock: 150, value: 450000 },
+	{ category: "Filtros", stock: 200, value: 34000 }
+];
+
+const monthlyMovements = [
+	{ month: "Ene", entradas: 45, salidas: 32 },
+	{ month: "Feb", entradas: 52, salidas: 38 },
+	{ month: "Mar", entradas: 48, salidas: 41 },
+	{ month: "Abr", entradas: 61, salidas: 35 },
+	{ month: "May", entradas: 55, salidas: 42 },
+	{ month: "Jun", entradas: 67, salidas: 39 }
+];
+
+const userActivity = [
+	{ user: "Cristóbal Silva", movements: 45, lastActivity: "2024-01-15T10:30:00Z" },
+	{ user: "María González", movements: 38, lastActivity: "2024-01-15T09:15:00Z" },
+	{ user: "Roberto Méndez", movements: 32, lastActivity: "2024-01-15T08:45:00Z" },
+	{ user: "Ana Martínez", movements: 28, lastActivity: "2024-01-15T08:30:00Z" },
+	{ user: "Carlos Ramírez", movements: 25, lastActivity: "2024-01-15T08:15:00Z" }
+];
+
+const systemPerformance = {
+	today: 89,
+	week: 92,
+	month: 87,
+	uptime: 99.8
+};
+---
+
+<div class="px-4 pt-6">
+	<!-- Header del Dashboard -->
+	<div class="mb-6">
+		<h1 class="text-2xl font-bold text-gray-900 dark:text-white">
+			Dashboard - Maestranzas Unidos S.A.
+		</h1>
+		<p class="text-gray-600 dark:text-gray-400">
+			Sistema de Control de Inventarios - Copiapó
+		</p>
+	</div>
+
+	<!-- Métricas Principales -->
+	<div class="grid gap-4 xl:grid-cols-2 2xl:grid-cols-4 mb-6">
+		<!-- Total de Productos -->
+		<div class="p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
+			<div class="flex items-center">
+				<div class="flex-shrink-0">
+					<svg class="w-8 h-8 text-blue-600 dark:text-blue-500" fill="currentColor" viewBox="0 0 20 20">
+						<path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"></path>
+					</svg>
+				</div>
+				<div class="ml-4">
+					<p class="text-sm font-medium text-gray-500 dark:text-gray-400">Total Productos</p>
+					<p class="text-2xl font-bold text-gray-900 dark:text-white">{totalProducts}</p>
+				</div>
+			</div>
+		</div>
+
+		<!-- Stock Bajo -->
+		<div class="p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
+			<div class="flex items-center">
+				<div class="flex-shrink-0">
+					<svg class="w-8 h-8 text-yellow-600 dark:text-yellow-500" fill="currentColor" viewBox="0 0 20 20">
+						<path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+					</svg>
+				</div>
+				<div class="ml-4">
+					<p class="text-sm font-medium text-gray-500 dark:text-gray-400">Stock Bajo</p>
+					<p class="text-2xl font-bold text-gray-900 dark:text-white">{lowStockProducts}</p>
+				</div>
+			</div>
+		</div>
+
+		<!-- Alertas Activas -->
+		<div class="p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
+			<div class="flex items-center">
+				<div class="flex-shrink-0">
+					<svg class="w-8 h-8 text-red-600 dark:text-red-500" fill="currentColor" viewBox="0 0 20 20">
+						<path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+					</svg>
+				</div>
+				<div class="ml-4">
+					<p class="text-sm font-medium text-gray-500 dark:text-gray-400">Alertas Activas</p>
+					<p class="text-2xl font-bold text-gray-900 dark:text-white">{activeAlerts}</p>
+				</div>
+			</div>
+		</div>
+
+		<!-- Valor Total -->
+		<div class="p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
+			<div class="flex items-center">
+				<div class="flex-shrink-0">
+					<svg class="w-8 h-8 text-green-600 dark:text-green-500" fill="currentColor" viewBox="0 0 20 20">
+						<path d="M8.433 7.418c.155-.103.346-.196.567-.267v1.698a2.305 2.305 0 01-.567-.267C8.07 8.34 8 8.114 8 8c0-.114.07-.34.433-.582zM11 12.849v-1.698c.22.071.412.164.567.267.364.243.433.468.433.582 0 .114-.07.34-.433.582a2.305 2.305 0 01-.567.267z"></path>
+						<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.092a4.535 4.535 0 00-1.676.662C6.602 6.234 6 7.009 6 8c0 .99.602 1.765 1.324 2.246.48.32 1.054.545 1.676.662v1.941c-.391-.127-.68-.317-.843-.504a1 1 0 10-1.51 1.31c.562.649 1.413 1.076 2.353 1.253V15a1 1 0 102 0v-.092a4.535 4.535 0 001.676-.662C13.398 13.766 14 12.991 14 12c0-.99-.602-1.765-1.324-2.246A4.535 4.535 0 0011 9.092V7.151c.391.127.68.317.843.504a1 1 0 101.511-1.31c-.563-.649-1.413-1.076-2.354-1.253V5z" clip-rule="evenodd"></path>
+					</svg>
+				</div>
+				<div class="ml-4">
+					<p class="text-sm font-medium text-gray-500 dark:text-gray-400">Valor Total</p>
+					<p class="text-2xl font-bold text-gray-900 dark:text-white">${totalValue.toLocaleString()}</p>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Gráficos Principales -->
+	<div class="grid gap-6 mb-6 lg:grid-cols-2">
+		<!-- Gráfico de Inventario por Categoría (Torta) -->
+		<div class="p-6 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
+			<h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+				Inventario por Categoría
+			</h3>
+			<div class="h-64 flex items-center justify-center">
+				<div class="text-center">
+					<div class="w-32 h-32 mx-auto mb-4 relative">
+						<svg class="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
+							<path class="text-gray-200" stroke="currentColor" stroke-width="2" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+							<path class="text-blue-600" stroke="currentColor" stroke-width="2" stroke-dasharray="30, 100" stroke-linecap="round" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+						</svg>
+						<div class="absolute inset-0 flex items-center justify-center">
+							<span class="text-2xl font-bold text-gray-900 dark:text-white">{totalProducts}</span>
+						</div>
+					</div>
+					<p class="text-sm text-gray-600 dark:text-gray-400">Total Productos</p>
+				</div>
+			</div>
+			<div class="grid grid-cols-2 gap-4 mt-4">
+				{stockByCategory.slice(0, 4).map((item) => (
+					<div class="flex items-center justify-between">
+						<span class="text-sm text-gray-600 dark:text-gray-400">{item.category}</span>
+						<span class="text-sm font-medium text-gray-900 dark:text-white">{item.stock}</span>
+					</div>
+				))}
+			</div>
+		</div>
+
+		<!-- Gráfico de Movimientos Mensuales (Barras) -->
+		<div class="p-6 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
+			<h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+				Movimientos Mensuales
+			</h3>
+			<div class="h-64 flex items-end justify-between space-x-2">
+				{monthlyMovements.map((item) => (
+					<div class="flex flex-col items-center flex-1">
+						<div class="w-full bg-gray-200 rounded-t dark:bg-gray-700 mb-2" style="height: {(item.entradas / 70) * 200}px">
+							<div class="w-full bg-blue-600 rounded-t" style="height: {(item.entradas / 70) * 200}px"></div>
+						</div>
+						<div class="w-full bg-gray-200 rounded-t dark:bg-gray-700" style="height: {(item.salidas / 70) * 200}px">
+							<div class="w-full bg-red-600 rounded-t" style="height: {(item.salidas / 70) * 200}px"></div>
+						</div>
+						<span class="text-xs text-gray-600 dark:text-gray-400 mt-2">{item.month}</span>
+					</div>
+				))}
+			</div>
+			<div class="flex justify-center space-x-4 mt-4">
+				<div class="flex items-center">
+					<div class="w-3 h-3 bg-blue-600 rounded mr-2"></div>
+					<span class="text-xs text-gray-600 dark:text-gray-400">Entradas</span>
+				</div>
+				<div class="flex items-center">
+					<div class="w-3 h-3 bg-red-600 rounded mr-2"></div>
+					<span class="text-xs text-gray-600 dark:text-gray-400">Salidas</span>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Gráficos Adicionales -->
+	<div class="grid gap-6 mb-6 lg:grid-cols-3">
+		<!-- Gráfico de Usuarios Activos -->
+		<div class="p-6 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
+			<h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+				Usuarios Activos
+			</h3>
+			<div class="h-48 flex items-center justify-center">
+				<div class="text-center">
+					<div class="text-3xl font-bold text-green-600 dark:text-green-400 mb-2">{userActivity.length}</div>
+					<p class="text-sm text-gray-600 dark:text-gray-400">Usuarios en línea</p>
+					<div class="mt-4 space-y-2">
+						{userActivity.slice(0, 3).map((user) => (
+							<div class="flex justify-between text-xs">
+								<span>{user.user.split(' ')[0]}</span>
+								<span class="font-medium">{user.movements}</span>
+							</div>
+						))}
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Gráfico de Reportes Generados -->
+		<div class="p-6 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
+			<h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+				Reportes Generados
+			</h3>
+			<div class="h-48 flex items-center justify-center">
+				<div class="text-center">
+					<div class="text-3xl font-bold text-purple-600 dark:text-purple-400 mb-2">156</div>
+					<p class="text-sm text-gray-600 dark:text-gray-400">Este mes</p>
+					<div class="mt-4 space-y-2">
+						<div class="flex justify-between text-xs">
+							<span>Stock</span>
+							<span class="font-medium">45</span>
+						</div>
+						<div class="flex justify-between text-xs">
+							<span>Movimientos</span>
+							<span class="font-medium">67</span>
+						</div>
+						<div class="flex justify-between text-xs">
+							<span>Proveedores</span>
+							<span class="font-medium">23</span>
+						</div>
+						<div class="flex justify-between text-xs">
+							<span>Otros</span>
+							<span class="font-medium">21</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Gráfico de Actividad del Sistema -->
+		<div class="p-6 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
+			<h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+				Actividad del Sistema
+			</h3>
+			<div class="h-48 flex items-center justify-center">
+				<div class="w-full">
+					<div class="flex items-center justify-between mb-2">
+						<span class="text-xs text-gray-600 dark:text-gray-400">Hoy</span>
+						<span class="text-xs font-medium text-gray-900 dark:text-white">{systemPerformance.today}%</span>
+					</div>
+					<div class="w-full bg-gray-200 rounded-full h-2 dark:bg-gray-700">
+						<div class="bg-green-600 h-2 rounded-full" style="width: {systemPerformance.today}%"></div>
+					</div>
+					<div class="flex items-center justify-between mt-4 mb-2">
+						<span class="text-xs text-gray-600 dark:text-gray-400">Esta semana</span>
+						<span class="text-xs font-medium text-gray-900 dark:text-white">{systemPerformance.week}%</span>
+					</div>
+					<div class="w-full bg-gray-200 rounded-full h-2 dark:bg-gray-700">
+						<div class="bg-blue-600 h-2 rounded-full" style="width: {systemPerformance.week}%"></div>
+					</div>
+					<div class="flex items-center justify-between mt-4 mb-2">
+						<span class="text-xs text-gray-600 dark:text-gray-400">Este mes</span>
+						<span class="text-xs font-medium text-gray-900 dark:text-white">{systemPerformance.month}%</span>
+					</div>
+					<div class="w-full bg-gray-200 rounded-full h-2 dark:bg-gray-700">
+						<div class="bg-yellow-600 h-2 rounded-full" style="width: {systemPerformance.month}%"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="grid gap-4 xl:grid-cols-2 2xl:grid-cols-3">
+		<!-- Alertas Críticas -->
+		<div class="p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 sm:p-6 dark:bg-gray-800">
+			<div class="flex items-center justify-between mb-4">
+				<h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+					Alertas Críticas
+				</h3>
+				<span class="bg-red-100 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300">
+					{criticalAlerts} críticas
+				</span>
+			</div>
+			
+			<div class="space-y-3">
+				{criticalAlerts > 0 ? (
+					alerts.filter(a => a.priority === 'critica' && a.status === 'activa').slice(0, 3).map(alert => (
+						<div class="flex items-start p-3 bg-red-50 border border-red-200 rounded-lg dark:bg-red-900/20 dark:border-red-800">
+							<svg class="w-5 h-5 text-red-600 dark:text-red-400 mt-0.5 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+								<path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+							</svg>
+							<div class="flex-1 min-w-0">
+								<p class="text-sm font-medium text-red-800 dark:text-red-200">
+									{alert.productName}
+								</p>
+								<p class="text-xs text-red-600 dark:text-red-400">
+									{alert.message}
+								</p>
+							</div>
+						</div>
+					))
+				) : (
+					<div class="text-center py-4">
+						<svg class="w-8 h-8 text-green-500 mx-auto mb-2" fill="currentColor" viewBox="0 0 20 20">
+							<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+						</svg>
+						<p class="text-sm text-gray-500 dark:text-gray-400">No hay alertas críticas</p>
+					</div>
+				)}
+			</div>
+			
+			<div class="mt-4">
+				<a href="/inventory/alerts" class="text-sm text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300">
+					Ver todas las alertas →
+				</a>
+			</div>
+		</div>
+
+		<!-- Productos con Stock Bajo -->
+		<div class="p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 sm:p-6 dark:bg-gray-800">
+			<div class="flex items-center justify-between mb-4">
+				<h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+					Stock Bajo
+				</h3>
+				<span class="bg-yellow-100 text-yellow-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-yellow-900 dark:text-yellow-300">
+					{lowStockProducts} productos
+				</span>
+			</div>
+			
+			<div class="space-y-3">
+				{lowStockProducts > 0 ? (
+					products.filter(p => p.stock <= p.stockmin).slice(0, 3).map(product => (
+						<div class="flex items-center justify-between p-3 bg-yellow-50 border border-yellow-200 rounded-lg dark:bg-yellow-900/20 dark:border-yellow-800">
+							<div class="flex-1 min-w-0">
+								<p class="text-sm font-medium text-yellow-800 dark:text-yellow-200 truncate">
+									{product.name}
+								</p>
+								<p class="text-xs text-yellow-600 dark:text-yellow-400">
+									Stock: {product.stock} / Mín: {product.stockmin}
+								</p>
+							</div>
+							<span class="text-xs font-medium text-yellow-800 dark:text-yellow-200">
+								{product.ubicacion}
+							</span>
+						</div>
+					))
+				) : (
+					<div class="text-center py-4">
+						<svg class="w-8 h-8 text-green-500 mx-auto mb-2" fill="currentColor" viewBox="0 0 20 20">
+							<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+						</svg>
+						<p class="text-sm text-gray-500 dark:text-gray-400">Stock en niveles normales</p>
+					</div>
+				)}
+			</div>
+			
+			<div class="mt-4">
+				<a href="/inventory/register" class="text-sm text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300">
+					Ver inventario completo →
+				</a>
+			</div>
+		</div>
+
+		<!-- Lotes por Vencer -->
+		<div class="p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 sm:p-6 dark:bg-gray-800">
+			<div class="flex items-center justify-between mb-4">
+				<h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+					Lotes por Vencer
+				</h3>
+				<span class="bg-orange-100 text-orange-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-orange-900 dark:text-orange-300">
+					{expiringBatches} lotes
+				</span>
+			</div>
+			
+			<div class="space-y-3">
+				{expiringBatches > 0 ? (
+					batches.filter(b => b.status === 'por_vencer').slice(0, 3).map(batch => (
+						<div class="flex items-center justify-between p-3 bg-orange-50 border border-orange-200 rounded-lg dark:bg-orange-900/20 dark:border-orange-800">
+							<div class="flex-1 min-w-0">
+								<p class="text-sm font-medium text-orange-800 dark:text-orange-200 truncate">
+									{batch.productName}
+								</p>
+								<p class="text-xs text-orange-600 dark:text-orange-400">
+									Lote: {batch.lote} - Vence: {new Date(batch.expiryDate).toLocaleDateString()}
+								</p>
+							</div>
+							<span class="text-xs font-medium text-orange-800 dark:text-orange-200">
+								{batch.quantity} unid.
+							</span>
+						</div>
+					))
+				) : (
+					<div class="text-center py-4">
+						<svg class="w-8 h-8 text-green-500 mx-auto mb-2" fill="currentColor" viewBox="0 0 20 20">
+							<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+						</svg>
+						<p class="text-sm text-gray-500 dark:text-gray-400">No hay lotes por vencer</p>
+					</div>
+				)}
+			</div>
+			
+			<div class="mt-4">
+				<a href="/inventory/batch-control" class="text-sm text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300">
+					Control de lotes →
+				</a>
+			</div>
+		</div>
+	</div>
+
+	<!-- Movimientos Recientes -->
+	<div class="mt-6">
+		<div class="p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 sm:p-6 dark:bg-gray-800">
+			<div class="flex items-center justify-between mb-4">
+				<h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+					Movimientos Recientes
+				</h3>
+				<a href="/inventory/movement" class="text-sm text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300">
+					Ver todos →
+				</a>
+			</div>
+			
+			<div class="overflow-x-auto">
+				<table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+					<thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+						<tr>
+							<th scope="col" class="px-6 py-3">Producto</th>
+							<th scope="col" class="px-6 py-3">Tipo</th>
+							<th scope="col" class="px-6 py-3">Cantidad</th>
+							<th scope="col" class="px-6 py-3">Usuario</th>
+							<th scope="col" class="px-6 py-3">Fecha</th>
+						</tr>
+					</thead>
+					<tbody>
+						{recentMovements.map(movement => (
+							<tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+								<td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+									{movement.productName}
+								</td>
+								<td class="px-6 py-4">
+									<span class={`px-2 py-1 text-xs font-medium rounded-full ${
+										movement.type === 'entrada' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300' :
+										movement.type === 'salida' ? 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300' :
+										movement.type === 'transferencia' ? 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300' :
+										'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-300'
+									}`}>
+										{movement.type.charAt(0).toUpperCase() + movement.type.slice(1)}
+									</span>
+								</td>
+								<td class="px-6 py-4">{movement.quantity}</td>
+								<td class="px-6 py-4">{movement.user}</td>
+								<td class="px-6 py-4">{new Date(movement.date).toLocaleDateString()}</td>
+							</tr>
+						))}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+
+	<!-- Accesos Rápidos -->
+	<div class="mt-6">
+		<div class="p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 sm:p-6 dark:bg-gray-800">
+			<h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+				Accesos Rápidos
+			</h3>
+			
+			<div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+				<a href="/inventory/register" class="flex flex-col items-center p-4 text-gray-500 bg-gray-50 rounded-lg hover:bg-gray-100 dark:bg-gray-700 dark:text-gray-400 dark:hover:bg-gray-600">
+					<svg class="w-8 h-8 mb-2" fill="currentColor" viewBox="0 0 20 20">
+						<path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"></path>
+					</svg>
+					<span class="text-sm font-medium">Registro</span>
+				</a>
+				
+				<a href="/inventory/movement" class="flex flex-col items-center p-4 text-gray-500 bg-gray-50 rounded-lg hover:bg-gray-100 dark:bg-gray-700 dark:text-gray-400 dark:hover:bg-gray-600">
+					<svg class="w-8 h-8 mb-2" fill="currentColor" viewBox="0 0 20 20">
+						<path fill-rule="evenodd" d="M3 3a1 1 0 000 2v8a2 2 0 002 2h2.586l-1.293 1.293a1 1 0 101.414 1.414L10 15.414l2.293 2.293a1 1 0 001.414-1.414L12.414 15H15a2 2 0 002-2V5a1 1 0 100-2H3zm11.707 4.707a1 1 0 00-1.414-1.414L10 9.586 8.707 8.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+					</svg>
+					<span class="text-sm font-medium">Movimientos</span>
+				</a>
+				
+				<a href="/inventory/alerts" class="flex flex-col items-center p-4 text-gray-500 bg-gray-50 rounded-lg hover:bg-gray-100 dark:bg-gray-700 dark:text-gray-400 dark:hover:bg-gray-600">
+					<svg class="w-8 h-8 mb-2" fill="currentColor" viewBox="0 0 20 20">
+						<path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+					</svg>
+					<span class="text-sm font-medium">Alertas</span>
+				</a>
+				
+				<a href="/inventory/reports" class="flex flex-col items-center p-4 text-gray-500 bg-gray-50 rounded-lg hover:bg-gray-100 dark:bg-gray-700 dark:text-gray-400 dark:hover:bg-gray-600">
+					<svg class="w-8 h-8 mb-2" fill="currentColor" viewBox="0 0 20 20">
+						<path fill-rule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm2 6a1 1 0 000 2h4a1 1 0 100-2H8zm-1 5a1 1 0 011-1h3a1 1 0 110 2H9a1 1 0 01-1-1z" clip-rule="evenodd"></path>
+					</svg>
+					<span class="text-sm font-medium">Reportes</span>
+				</a>
+			</div>
+		</div>
+	</div>
+</div> 

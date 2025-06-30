@@ -1,0 +1,319 @@
+---
+import LayoutSidebar from '../app/LayoutSidebar.astro';
+import { getProducts } from '../services/products.ts';
+import { getMovements } from '../services/movements.ts';
+
+const products = await getProducts();
+const movements = await getMovements();
+---
+
+// Datos de ejemplo para tracking
+const trackingData = [
+	{
+		id: 1,
+		productId: 1,
+		productName: "Rodamiento SKF 6205",
+		serialNumber: "SKF-2024-001",
+		location: "Bodega Principal - Estante A1",
+		status: "en_ubicacion",
+		lastMovement: "2024-01-20T10:30:00",
+		user: "Juan Pérez",
+		notes: "Movimiento de entrada desde proveedor"
+	},
+	{
+		id: 2,
+		productId: 3,
+		productName: "Aceite Lubricante ISO 68",
+		serialNumber: "SHELL-2024-005",
+		location: "Bodega de Lubricantes - Estante L3",
+		status: "en_uso",
+		lastMovement: "2024-01-20T14:15:00",
+		user: "María González",
+		notes: "Retirado para mantenimiento preventivo"
+	},
+	{
+		id: 3,
+		productId: 5,
+		productName: "Filtro de Aire Industrial",
+		serialNumber: "FILTRO-2024-012",
+		location: "Taller de Mantenimiento",
+		status: "en_mantenimiento",
+		lastMovement: "2024-01-20T16:45:00",
+		user: "Carlos Silva",
+		notes: "Instalado en sistema de ventilación"
+	},
+	{
+		id: 4,
+		productId: 2,
+		productName: "Válvula de Control 3\"",
+		serialNumber: "PARKER-2024-003",
+		location: "Bodega Principal - Estante B2",
+		status: "en_ubicacion",
+		lastMovement: "2024-01-19T09:20:00",
+		user: "Ana Rodríguez",
+		notes: "Verificación de stock"
+	},
+	{
+		id: 5,
+		productId: 8,
+		productName: "Motor Eléctrico 50HP",
+		serialNumber: "WEG-2024-008",
+		location: "Planta de Producción - Área 3",
+		status: "en_operacion",
+		lastMovement: "2024-01-20T08:00:00",
+		user: "Pedro Herrera",
+		notes: "Instalado en línea de producción"
+	}
+];
+
+const totalTracked = trackingData.length;
+const inLocation = trackingData.filter(t => t.status === 'en_ubicacion').length;
+const inUse = trackingData.filter(t => t.status === 'en_uso').length;
+const inMaintenance = trackingData.filter(t => t.status === 'en_mantenimiento').length;
+
+<LayoutSidebar>
+	<div class="px-4 pt-6">
+		<div class="mb-6">
+			<h1 class="text-2xl font-bold text-gray-900 dark:text-white">
+				Rastreo de Inventario
+			</h1>
+			<p class="text-gray-600 dark:text-gray-400">
+				Seguimiento en tiempo real de la ubicación y estado de productos del inventario
+			</p>
+		</div>
+
+		<!-- Métricas de Tracking -->
+		<div class="grid gap-4 xl:grid-cols-2 2xl:grid-cols-4 mb-6">
+			<div class="p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
+				<div class="flex items-center">
+					<div class="flex-shrink-0">
+						<svg class="w-8 h-8 text-blue-600 dark:text-blue-500" fill="currentColor" viewBox="0 0 20 20">
+							<path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path>
+						</svg>
+					</div>
+					<div class="ml-4">
+						<p class="text-sm font-medium text-gray-500 dark:text-gray-400">Total Rastreados</p>
+						<p class="text-2xl font-bold text-gray-900 dark:text-white">{totalTracked}</p>
+					</div>
+				</div>
+			</div>
+
+			<div class="p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
+				<div class="flex items-center">
+					<div class="flex-shrink-0">
+						<svg class="w-8 h-8 text-green-600 dark:text-green-500" fill="currentColor" viewBox="0 0 20 20">
+							<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+						</svg>
+					</div>
+					<div class="ml-4">
+						<p class="text-sm font-medium text-gray-500 dark:text-gray-400">En Ubicación</p>
+						<p class="text-2xl font-bold text-gray-900 dark:text-white">{inLocation}</p>
+					</div>
+				</div>
+			</div>
+
+			<div class="p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
+				<div class="flex items-center">
+					<div class="flex-shrink-0">
+						<svg class="w-8 h-8 text-yellow-600 dark:text-yellow-500" fill="currentColor" viewBox="0 0 20 20">
+							<path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+						</svg>
+					</div>
+					<div class="ml-4">
+						<p class="text-sm font-medium text-gray-500 dark:text-gray-400">En Uso</p>
+						<p class="text-2xl font-bold text-gray-900 dark:text-white">{inUse}</p>
+					</div>
+				</div>
+			</div>
+
+			<div class="p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
+				<div class="flex items-center">
+					<div class="flex-shrink-0">
+						<svg class="w-8 h-8 text-orange-600 dark:text-orange-500" fill="currentColor" viewBox="0 0 20 20">
+							<path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd"></path>
+						</svg>
+					</div>
+					<div class="ml-4">
+						<p class="text-sm font-medium text-gray-500 dark:text-gray-400">En Mantenimiento</p>
+						<p class="text-2xl font-bold text-gray-900 dark:text-white">{inMaintenance}</p>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Filtros -->
+		<div class="mb-6 p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
+			<div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+				<div>
+					<label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+						Estado
+					</label>
+					<select class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
+						<option value="">Todos</option>
+						<option value="en_ubicacion">En Ubicación</option>
+						<option value="en_uso">En Uso</option>
+						<option value="en_mantenimiento">En Mantenimiento</option>
+						<option value="en_operacion">En Operación</option>
+					</select>
+				</div>
+				<div>
+					<label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+						Ubicación
+					</label>
+					<select class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
+						<option value="">Todas</option>
+						{Array.from(new Set(trackingData.map(t => t.location.split(' - ')[0]))).map(location => (
+							<option value={location}>{location}</option>
+						))}
+					</select>
+				</div>
+				<div>
+					<label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+						Buscar
+					</label>
+					<input type="text" placeholder="Producto o número de serie..." class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
+				</div>
+				<div>
+					<label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+						Fecha Desde
+					</label>
+					<input type="date" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
+				</div>
+			</div>
+			<div class="mt-4 flex gap-2">
+				<button class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:ring-4 focus:ring-blue-300">
+					Filtrar
+				</button>
+				<button class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-300">
+					Limpiar
+				</button>
+			</div>
+		</div>
+
+		<!-- Mapa de Ubicaciones -->
+		<div class="mb-6 p-6 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
+			<h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+				Mapa de Ubicaciones
+			</h3>
+			<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+				{Array.from(new Set(trackingData.map(t => t.location.split(' - ')[0]))).map(location => {
+					const itemsInLocation = trackingData.filter(t => t.location.startsWith(location));
+					
+					return (
+						<div class="p-4 border border-gray-200 rounded-lg dark:border-gray-600">
+							<h4 class="font-medium text-gray-900 dark:text-white mb-2">{location}</h4>
+							<div class="space-y-2">
+								{itemsInLocation.slice(0, 3).map(item => (
+									<div class="flex items-center justify-between text-sm">
+										<span class="text-gray-600 dark:text-gray-400 truncate">{item.productName}</span>
+										<span class={`px-2 py-1 text-xs font-medium rounded-full ${
+											item.status === 'en_ubicacion' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300' :
+											item.status === 'en_uso' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300' :
+											item.status === 'en_mantenimiento' ? 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-300' :
+											'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300'
+										}`}>
+											{item.status.replace('_', ' ')}
+										</span>
+									</div>
+								))}
+								{itemsInLocation.length > 3 && (
+									<p class="text-xs text-gray-500 dark:text-gray-400">
+										+{itemsInLocation.length - 3} más
+									</p>
+								)}
+							</div>
+						</div>
+					);
+				})}
+			</div>
+		</div>
+
+		<!-- Tabla de Tracking -->
+		<div class="bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
+			<div class="overflow-x-auto">
+				<table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+					<thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+						<tr>
+							<th scope="col" class="px-6 py-3">Producto</th>
+							<th scope="col" class="px-6 py-3">Número de Serie</th>
+							<th scope="col" class="px-6 py-3">Ubicación Actual</th>
+							<th scope="col" class="px-6 py-3">Estado</th>
+							<th scope="col" class="px-6 py-3">Último Movimiento</th>
+							<th scope="col" class="px-6 py-3">Usuario</th>
+							<th scope="col" class="px-6 py-3">Notas</th>
+							<th scope="col" class="px-6 py-3">Acciones</th>
+						</tr>
+					</thead>
+					<tbody>
+						{trackingData.map(item => (
+							<tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700">
+								<td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+									{item.productName}
+								</td>
+								<td class="px-6 py-4 font-mono text-sm">{item.serialNumber}</td>
+								<td class="px-6 py-4">{item.location}</td>
+								<td class="px-6 py-4">
+									<span class={`px-2 py-1 text-xs font-medium rounded-full ${
+										item.status === 'en_ubicacion' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300' :
+										item.status === 'en_uso' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300' :
+										item.status === 'en_mantenimiento' ? 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-300' :
+										'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300'
+									}`}>
+										{item.status.replace('_', ' ').charAt(0).toUpperCase() + item.status.replace('_', ' ').slice(1)}
+									</span>
+								</td>
+								<td class="px-6 py-4">
+									{new Date(item.lastMovement).toLocaleString()}
+								</td>
+								<td class="px-6 py-4">{item.user}</td>
+								<td class="px-6 py-4 max-w-xs truncate" title={item.notes}>
+									{item.notes}
+								</td>
+								<td class="px-6 py-4">
+									<button class="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300 mr-2">
+										<svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+											<path d="M10 12a2 2 0 100-4 2 2 0 000 4z"></path>
+											<path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"></path>
+										</svg>
+									</button>
+									<button class="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-300 mr-2">
+										<svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+											<path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"></path>
+										</svg>
+									</button>
+									<button class="text-green-600 hover:text-green-900 dark:text-green-400 dark:hover:text-green-300">
+										<svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+											<path fill-rule="evenodd" d="M3 4a1 1 0 000 2v8a2 2 0 002 2h2.586l-1.293 1.293a1 1 0 101.414 1.414L10 15.414l2.293 2.293a1 1 0 001.414-1.414L12.414 15H15a2 2 0 002-2V5a1 1 0 100-2H3zm11.707 4.707a1 1 0 00-1.414-1.414L10 9.586 8.707 8.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4a1 1 0 00-1.414-1.414l-4 4z" clip-rule="evenodd"></path>
+										</svg>
+									</button>
+								</td>
+							</tr>
+						))}
+					</tbody>
+				</table>
+			</div>
+		</div>
+
+		<!-- Botones de Acción -->
+		<div class="mt-6 flex gap-4">
+			<button class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 focus:ring-4 focus:ring-green-300 flex items-center">
+				<svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+					<path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"></path>
+				</svg>
+				Nuevo Tracking
+			</button>
+			<button class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 flex items-center">
+				<svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+					<path fill-rule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm2 6a1 1 0 000 2h4a1 1 0 100-2H8zm-1 5a1 1 0 011-1h3a1 1 0 110 2H9a1 1 0 01-1-1z" clip-rule="evenodd"></path>
+				</svg>
+				Generar Reporte
+			</button>
+			<button class="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 focus:ring-4 focus:ring-purple-300 flex items-center">
+				<svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+					<path fill-rule="evenodd" d="M3 4a1 1 0 000 2v8a2 2 0 002 2h2.586l-1.293 1.293a1 1 0 101.414 1.414L10 15.414l2.293 2.293a1 1 0 001.414-1.414L12.414 15H15a2 2 0 002-2V5a1 1 0 100-2H3zm11.707 4.707a1 1 0 00-1.414-1.414L10 9.586 8.707 8.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4a1 1 0 00-1.414-1.414l-4 4z" clip-rule="evenodd"></path>
+				</svg>
+				Exportar Datos
+			</button>
+		</div>
+	</div>
+</LayoutSidebar> 

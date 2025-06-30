@@ -1,0 +1,139 @@
+---
+import Code from 'astro/components/Code.astro';
+import GitHubButton from '../components/GitHubButton.astro';
+import ConfettiLauncher from '../components/ConfettiLauncher.astro';
+
+import AstroLogo from '../assets/astro-icon.svg?raw';
+import MaestranzaProLogo from '../assets/MaestranzaPro-logo.svg?raw';
+
+import * as readMe from '../../README.md';
+import { SITE_TITLE } from '../app/constants.js';
+---
+
+<div
+	class="bg-gradient-to-r from-slate-100 to-slate-200 dark:from-slate-900 dark:to-slate-800 text-slate-800 dark:text-slate-100 mb-20 p-4 lg:p-16 shadow-xl shadow-slate-200 dark:shadow-slate-900"
+>
+	<header
+		class="p-8 flex justify-center items-center flex-wrap flex-col w-full mt-16"
+	>
+		<div class="flex justify-center w-full">
+			<div
+				set:html={AstroLogo}
+				class="svg-inline w-16 h-16 text-violet-700 dark:text-violet-100"
+			/>
+		</div>
+
+		<div class="flex flex-col items-center justify-center mt-12">
+			<div class="flex items-center space-x-6">
+				<svg class="w-20 h-20 neon-ear" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+					<path d="M32 60c-8 0-18-6-18-18 0-8 6-18 18-18s18 10 18 18c0 12-10 18-18 18z" stroke="#00e6ff" stroke-width="4" fill="#0e1a2b"/>
+					<path d="M32 44c-2 0-6-2-6-6 0-2 2-6 6-6s6 4 6 6c0 4-4 6-6 6z" stroke="#00e6ff" stroke-width="2" fill="#1a2a3a"/>
+				</svg>
+				<h1 class="text-4xl font-bold text-center neon-text">Maestranzas Unidos S.A.</h1>
+			</div>
+
+			<div class="flex justify-center w-full">
+				<ConfettiLauncher>
+					<button
+						type="button"
+						class="text-blue-800 hover:text-white border border-blue-700 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-blue-500 dark:text-blue-100 dark:hover:text-white dark:hover:bg-blue-600 dark:focus:ring-blue-800"
+						>Click me!</button
+					>
+				</ConfettiLauncher>
+			</div>
+		</div>
+
+		<div class="flex justify-center w-full my-16">
+			<div set:html={MaestranzaProLogo} class="svg-inline w-16 h-16" />
+		</div>
+	</header>
+
+	<section class="flex justify-center w-full pb-24">
+		<div class="w-full format dark:format-invert">
+			<Code
+				lang={'powershell' /* Looks cool */}
+				code={`git clone \\
+https://github.com/themesberg/MaestranzaPro-astro-admin-dashboard.git`}
+			/>
+		</div>
+	</section>
+
+	<article class="flex justify-center pt-32 pb-32">
+		<div class="w-full readme format dark:format-invert lg:format-lg">
+			<h1 class="text-center">
+				<!-- {readMe.getHeadings()[0].text} -->
+				{SITE_TITLE}
+			</h1>
+			<div class="text-center max-w-4xl">
+				<h2 class="text-2xl font-semibold neon-text mb-6">Sistema de Control de Inventarios</h2>
+				<p class="text-lg neon-text mb-8">
+					Más de dos décadas de excelencia en la fabricación y mantenimiento de equipos pesados 
+					para la industria minera y construcción en la región de Atacama, Copiapó.
+				</p>
+				
+				<div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+					<div class="bg-gray-800 p-6 rounded-lg">
+						<h3 class="text-xl font-bold text-blue-400 mb-4">Nuestros Servicios</h3>
+						<ul class="text-gray-300 space-y-2">
+							<li>• Fabricación de equipos pesados</li>
+							<li>• Mantenimiento industrial</li>
+							<li>• Reparación de maquinaria</li>
+							<li>• Suministro de componentes</li>
+							<li>• Servicios de ingeniería</li>
+						</ul>
+					</div>
+					<div class="bg-gray-800 p-6 rounded-lg">
+						<h3 class="text-xl font-bold text-green-400 mb-4">Sistema de Inventario</h3>
+						<ul class="text-gray-300 space-y-2">
+							<li>• Control en tiempo real</li>
+							<li>• Alertas de stock bajo</li>
+							<li>• Seguimiento de lotes</li>
+							<li>• Gestión de proveedores</li>
+							<li>• Reportes automáticos</li>
+						</ul>
+					</div>
+				</div>
+
+				<div class="flex flex-col sm:flex-row gap-4 justify-center">
+					<a href="/crud/products" class="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-colors">
+						Gestionar Inventario
+					</a>
+					<a href="/dashboard" class="px-6 py-3 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg transition-colors">
+						Ver Dashboard
+					</a>
+				</div>
+			</div>
+		</div>
+	</article>
+</div>
+
+<style>
+	/* Override in Markdown H1 title */
+	.readme :global(h1:nth-of-type(2)) {
+		display: none;
+	}
+
+	.svg-inline :global(svg) {
+		height: 100%;
+		width: 100%;
+	}
+
+	@keyframes fadeInNeon {
+		0% { opacity: 0; filter: blur(8px); }
+		100% { opacity: 1; filter: blur(0); }
+	}
+	.neon-text {
+		color: #fff;
+		text-shadow:
+			0 0 8px #00e6ff,
+			0 0 16px #00e6ff,
+			0 0 32px #00e6ff,
+			0 0 64px #00e6ff;
+		animation: fadeInNeon 1.5s ease-out;
+	}
+
+	.neon-ear {
+		filter: drop-shadow(0 0 8px #00e6ff) drop-shadow(0 0 16px #00e6ff);
+		animation: fadeInNeon 1.5s ease-out;
+	}
+</style>

@@ -1,0 +1,232 @@
+---
+import LayoutSidebar from '../../app/LayoutSidebar.astro';
+---
+
+<LayoutSidebar>
+	<div class="px-4 pt-6">
+		<!-- Header -->
+		<div class="mb-6">
+			<nav class="flex mb-5" aria-label="Breadcrumb">
+				<ol class="inline-flex items-center space-x-1 text-sm font-medium md:space-x-2">
+					<li class="inline-flex items-center">
+						<a href="/" class="inline-flex items-center text-gray-700 hover:text-primary-600 dark:text-gray-300 dark:hover:text-white">
+							<svg class="w-5 h-5 mr-2.5" fill="currentColor" viewBox="0 0 20 20">
+								<path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"/>
+							</svg>
+							Inicio
+						</a>
+					</li>
+					<li>
+						<div class="flex items-center">
+							<svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+								<path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"/>
+							</svg>
+							<a href="/inventory" class="ml-1 text-gray-700 hover:text-primary-600 md:ml-2 dark:text-gray-300 dark:hover:text-white">Inventario</a>
+						</div>
+					</li>
+					<li>
+						<div class="flex items-center">
+							<svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+								<path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"/>
+							</svg>
+							<span class="ml-1 text-gray-400 md:ml-2 dark:text-gray-500">Registro</span>
+						</div>
+					</li>
+				</ol>
+			</nav>
+			<h1 class="text-2xl font-bold text-gray-900 dark:text-white">
+				Registro de Inventario
+			</h1>
+			<p class="text-gray-600 dark:text-gray-400">
+				Registrar nuevas piezas y componentes en el inventario
+			</p>
+		</div>
+
+		<!-- Formulario de Registro -->
+		<div class="bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
+			<div class="p-6">
+				<form class="space-y-6">
+					<!-- Información Básica -->
+					<div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+						<div>
+							<label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+								Nombre del Artículo *
+							</label>
+							<input type="text" id="name" name="name" required
+								class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+								placeholder="Ej: Rodamiento SKF 6205"/>
+						</div>
+
+						<div>
+							<label for="category" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+								Categoría *
+							</label>
+							<select id="category" name="category" required
+								class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+								<option value="">Seleccionar categoría</option>
+								<option value="Rodamientos">Rodamientos</option>
+								<option value="Válvulas">Válvulas</option>
+								<option value="Lubricantes">Lubricantes</option>
+								<option value="Motores">Motores</option>
+								<option value="Cables">Cables</option>
+								<option value="Bombas">Bombas</option>
+								<option value="Filtros">Filtros</option>
+								<option value="Sensores">Sensores</option>
+								<option value="Cilindros">Cilindros</option>
+								<option value="Kits">Kits</option>
+								<option value="Terminales">Terminales</option>
+								<option value="Mangueras">Mangueras</option>
+								<option value="Relés">Relés</option>
+								<option value="Correas">Correas</option>
+								<option value="Ventiladores">Ventiladores</option>
+								<option value="Interruptores">Interruptores</option>
+							</select>
+						</div>
+
+						<div>
+							<label for="serial" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+								Número de Serie
+							</label>
+							<input type="text" id="serial" name="serial"
+								class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+								placeholder="Ej: SKF-6205-001"/>
+						</div>
+
+						<div>
+							<label for="technology" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+								Tecnología/Tipo
+							</label>
+							<select id="technology" name="technology"
+								class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+								<option value="">Seleccionar tipo</option>
+								<option value="Industrial">Industrial</option>
+								<option value="Hidráulica">Hidráulica</option>
+								<option value="Químico">Químico</option>
+								<option value="Eléctrico">Eléctrico</option>
+								<option value="Filtración">Filtración</option>
+								<option value="Electrónico">Electrónico</option>
+								<option value="Mecánico">Mecánico</option>
+								<option value="Hidráulico">Hidráulico</option>
+							</select>
+						</div>
+					</div>
+
+					<!-- Descripción -->
+					<div>
+						<label for="description" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+							Descripción *
+						</label>
+						<textarea id="description" name="description" rows="3" required
+							class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+							placeholder="Descripción detallada del artículo..."></textarea>
+					</div>
+
+					<!-- Información de Ubicación y Lote -->
+					<div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+						<div>
+							<label for="ubicacion" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+								Ubicación en Bodega *
+							</label>
+							<input type="text" id="ubicacion" name="ubicacion" required
+								class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+								placeholder="Ej: Bodega A - Estante 3"/>
+						</div>
+
+						<div>
+							<label for="lote" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+								Número de Lote
+							</label>
+							<input type="text" id="lote" name="lote"
+								class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+								placeholder="Ej: L2024-001"/>
+						</div>
+					</div>
+
+					<!-- Fecha de Vencimiento y Proveedor -->
+					<div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+						<div>
+							<label for="vencimiento" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+								Fecha de Vencimiento
+							</label>
+							<input type="date" id="vencimiento" name="vencimiento"
+								class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"/>
+						</div>
+
+						<div>
+							<label for="proveedor" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+								Proveedor *
+							</label>
+							<input type="text" id="proveedor" name="proveedor" required
+								class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+								placeholder="Nombre del proveedor"/>
+						</div>
+					</div>
+
+					<!-- Etiquetas y Precio -->
+					<div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+						<div>
+							<label for="etiquetas" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+								Etiquetas
+							</label>
+							<input type="text" id="etiquetas" name="etiquetas"
+								class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+								placeholder="Ej: rodamiento, industrial, acero"/>
+						</div>
+
+						<div>
+							<label for="price" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+								Precio Unitario *
+							</label>
+							<input type="number" id="price" name="price" step="0.01" required
+								class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+								placeholder="0.00"/>
+						</div>
+					</div>
+
+					<!-- Stock y Stock Mínimo -->
+					<div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+						<div>
+							<label for="stock" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+								Cantidad Inicial *
+							</label>
+							<input type="number" id="stock" name="stock" required
+								class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+								placeholder="0"/>
+						</div>
+
+						<div>
+							<label for="stockmin" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+								Stock Mínimo *
+							</label>
+							<input type="number" id="stockmin" name="stockmin" required
+								class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+								placeholder="0"/>
+						</div>
+					</div>
+
+					<!-- Información Adicional -->
+					<div>
+						<label for="additional_info" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+							Información Adicional
+						</label>
+						<textarea id="additional_info" name="additional_info" rows="3"
+							class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+							placeholder="Información adicional, especificaciones técnicas, notas..."></textarea>
+					</div>
+
+					<!-- Botones de Acción -->
+					<div class="flex items-center justify-end space-x-4 pt-6 border-t border-gray-200 dark:border-gray-700">
+						<button type="button" onclick="history.back()"
+							class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:ring-4 focus:ring-primary-300 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-600">
+							Cancelar
+						</button>
+						<button type="submit"
+							class="px-4 py-2 text-sm font-medium text-white bg-primary-700 rounded-lg hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
+							Registrar Artículo
+						</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</LayoutSidebar> 

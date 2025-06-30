@@ -1,0 +1,434 @@
+---
+import LayoutSidebar from '../app/LayoutSidebar.astro';
+
+// Datos específicos para gerentes de proyectos
+const gerenteProyectosData = {
+	projectStats: {
+		totalProjects: 18,
+		activeProjects: 12,
+		completedProjects: 6,
+		projectBudget: 45000000,
+		spentBudget: 32000000
+	},
+	recentProjects: [
+		{
+			id: "PROJ-2024-001",
+			name: "Modernización Sistema Hidráulico",
+			status: "en_ejecucion",
+			progress: 65,
+			manager: "Carlos Mendoza",
+			startDate: "2024-01-01T08:00:00Z",
+			endDate: "2024-06-30T17:00:00Z",
+			budget: 8500000,
+			spent: 5200000,
+			priority: "alta"
+		},
+		{
+			id: "PROJ-2024-002",
+			name: "Instalación Nuevos Compresores",
+			status: "planificacion",
+			progress: 25,
+			manager: "Ana Silva",
+			startDate: "2024-02-01T08:00:00Z",
+			endDate: "2024-08-31T17:00:00Z",
+			budget: 12000000,
+			spent: 1800000,
+			priority: "media"
+		},
+		{
+			id: "PROJ-2024-003",
+			name: "Actualización Sistema Eléctrico",
+			status: "completado",
+			progress: 100,
+			manager: "Roberto Torres",
+			startDate: "2023-09-01T08:00:00Z",
+			endDate: "2024-01-15T17:00:00Z",
+			budget: 6500000,
+			spent: 6200000,
+			priority: "baja"
+		}
+	],
+	projectCategories: [
+		{ category: "Mantenimiento", projects: 8, budget: 18000000, spent: 12500000 },
+		{ category: "Modernización", projects: 5, budget: 15000000, spent: 9800000 },
+		{ category: "Nuevas Instalaciones", projects: 3, budget: 8000000, spent: 6500000 },
+		{ category: "Reparaciones", projects: 2, budget: 4000000, spent: 3200000 }
+	],
+	projectTimeline: [
+		{ month: "Ene", started: 3, completed: 1 },
+		{ month: "Feb", started: 2, completed: 0 },
+		{ month: "Mar", started: 1, completed: 1 },
+		{ month: "Abr", started: 2, completed: 0 },
+		{ month: "May", started: 1, completed: 1 },
+		{ month: "Jun", started: 3, completed: 2 },
+		{ month: "Jul", started: 2, completed: 1 },
+		{ month: "Ago", started: 1, completed: 0 },
+		{ month: "Sep", started: 2, completed: 1 },
+		{ month: "Oct", started: 1, completed: 1 },
+		{ month: "Nov", started: 2, completed: 0 },
+		{ month: "Dic", started: 1, completed: 1 }
+	]
+};
+---
+
+<LayoutSidebar>
+	<div class="px-4 pt-6">
+		<!-- Header -->
+		<div class="mb-6">
+			<nav class="flex mb-5" aria-label="Breadcrumb">
+				<ol class="inline-flex items-center space-x-1 text-sm font-medium md:space-x-2">
+					<li class="inline-flex items-center">
+						<a href="/" class="inline-flex items-center text-gray-700 hover:text-primary-600 dark:text-gray-300 dark:hover:text-white">
+							<svg class="w-5 h-5 mr-2.5" fill="currentColor" viewBox="0 0 20 20">
+								<path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"/>
+							</svg>
+							Inicio
+						</a>
+					</li>
+					<li>
+						<div class="flex items-center">
+							<svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+								<path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"/>
+							</svg>
+							<span class="ml-1 text-gray-400 md:ml-2 dark:text-gray-500">Dashboard Proyectos</span>
+						</div>
+					</li>
+				</ol>
+			</nav>
+			<div class="flex items-center justify-between">
+				<div>
+					<h1 class="text-2xl font-bold text-gray-900 dark:text-white">
+						Panel de Gestión de Proyectos
+					</h1>
+					<p class="text-gray-600 dark:text-gray-400">
+						Integración de compras, gestión de proyectos y control presupuestario
+					</p>
+				</div>
+				<div class="flex space-x-2">
+					<a href="/purchase-integration" class="px-4 py-2 text-sm font-medium text-white bg-primary-700 rounded-lg hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
+						Nuevo Proyecto
+					</a>
+					<a href="/purchase-history" class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:ring-4 focus:ring-primary-300 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700">
+						Historial de Compras
+					</a>
+				</div>
+			</div>
+		</div>
+
+		<!-- Métricas de Proyectos -->
+		<div class="grid grid-cols-1 gap-4 mb-6 sm:grid-cols-2 lg:grid-cols-4">
+			<div class="p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
+				<div class="flex items-center">
+					<div class="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 text-blue-500 bg-blue-100 rounded-lg dark:bg-blue-800 dark:text-blue-200">
+						<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+							<path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+						</svg>
+					</div>
+					<div class="ml-4">
+						<span class="text-2xl font-bold leading-none text-gray-900 dark:text-white">
+							{gerenteProyectosData.projectStats.totalProjects}
+						</span>
+						<p class="text-base font-normal text-gray-600 dark:text-gray-400">
+							Total Proyectos
+						</p>
+					</div>
+				</div>
+			</div>
+
+			<div class="p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
+				<div class="flex items-center">
+					<div class="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 text-yellow-500 bg-yellow-100 rounded-lg dark:bg-yellow-800 dark:text-yellow-200">
+						<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+							<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
+						</svg>
+					</div>
+					<div class="ml-4">
+						<span class="text-2xl font-bold leading-none text-gray-900 dark:text-white">
+							{gerenteProyectosData.projectStats.activeProjects}
+						</span>
+						<p class="text-base font-normal text-gray-600 dark:text-gray-400">
+							Activos
+						</p>
+					</div>
+				</div>
+			</div>
+
+			<div class="p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
+				<div class="flex items-center">
+					<div class="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 text-green-500 bg-green-100 rounded-lg dark:bg-green-800 dark:text-green-200">
+						<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+							<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+						</svg>
+					</div>
+					<div class="ml-4">
+						<span class="text-2xl font-bold leading-none text-gray-900 dark:text-white">
+							{gerenteProyectosData.projectStats.completedProjects}
+						</span>
+						<p class="text-base font-normal text-gray-600 dark:text-gray-400">
+							Completados
+						</p>
+					</div>
+				</div>
+			</div>
+
+			<div class="p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
+				<div class="flex items-center">
+					<div class="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 text-purple-500 bg-purple-100 rounded-lg dark:bg-purple-800 dark:text-purple-200">
+						<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+							<path d="M8.433 7.418c.155-.103.346-.196.567-.267v1.698a2.305 2.305 0 01-.567-.267C8.07 8.34 8 8.114 8 8c0-.114.07-.34.433-.582zM11 12.849v-1.698c.22.071.412.164.567.267.364.243.433.468.433.582 0 .114-.07.34-.433.582a2.305 2.305 0 01-.567.267z"></path>
+							<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.092a4.535 4.535 0 00-1.676.662C6.602 6.234 6 7.009 6 8c0 .99.602 1.765 1.324 2.246.48.32 1.054.545 1.676.662v1.941c-.391-.127-.68-.317-.843-.504a1 1 0 10-1.51 1.31c.562.649 1.413 1.076 2.353 1.253V15a1 1 0 102 0v-.092a4.535 4.535 0 001.676-.662C13.398 13.766 14 12.991 14 12c0-.99-.602-1.765-1.324-2.246A4.535 4.535 0 0011 9.092V7.151c.391.127.68.317.843.504a1 1 0 101.511-1.31c-.563-.649-1.413-1.076-2.354-1.253V5z" clip-rule="evenodd"></path>
+						</svg>
+					</div>
+					<div class="ml-4">
+						<span class="text-2xl font-bold leading-none text-gray-900 dark:text-white">
+							${(gerenteProyectosData.projectStats.spentBudget / 1000000).toFixed(1)}M
+						</span>
+						<p class="text-base font-normal text-gray-600 dark:text-gray-400">
+							Gastado
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Gráficos y Estadísticas -->
+		<div class="grid grid-cols-1 gap-6 mb-6 lg:grid-cols-2">
+			<!-- Cronograma de Proyectos -->
+			<div class="p-6 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
+				<h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+					Cronograma de Proyectos Mensual
+				</h3>
+				<div class="h-64 flex items-end justify-between space-x-2">
+					{gerenteProyectosData.projectTimeline.map((data, index) => (
+						<div class="flex-1 flex flex-col items-center">
+							<div class="w-full flex flex-col space-y-1">
+								<div 
+									class="w-full bg-blue-500 rounded-t"
+									style={`height: ${data.started * 8}px`}
+								></div>
+								<div 
+									class="w-full bg-green-500 rounded-t"
+									style={`height: ${data.completed * 8}px`}
+								></div>
+							</div>
+							<span class="text-xs text-gray-600 dark:text-gray-400 mt-2">
+								{data.month}
+							</span>
+						</div>
+					))}
+				</div>
+				<div class="mt-4 flex justify-center space-x-4">
+					<div class="flex items-center">
+						<div class="w-3 h-3 bg-blue-500 rounded mr-2"></div>
+						<span class="text-xs text-gray-600 dark:text-gray-400">Iniciados</span>
+					</div>
+					<div class="flex items-center">
+						<div class="w-3 h-3 bg-green-500 rounded mr-2"></div>
+						<span class="text-xs text-gray-600 dark:text-gray-400">Completados</span>
+					</div>
+				</div>
+			</div>
+
+			<!-- Categorías de Proyectos -->
+			<div class="p-6 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
+				<h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+					Proyectos por Categoría
+				</h3>
+				<div class="space-y-4">
+					{gerenteProyectosData.projectCategories.map((category, index) => (
+						<div class="p-3 bg-gray-50 rounded-lg dark:bg-gray-700">
+							<div class="flex items-center justify-between mb-2">
+								<h4 class="text-sm font-medium text-gray-900 dark:text-white">
+									{category.category}
+								</h4>
+								<span class="text-xs text-gray-600 dark:text-gray-400">
+									{category.projects} proyectos
+								</span>
+							</div>
+							<div class="flex items-center justify-between text-xs text-gray-600 dark:text-gray-400 mb-2">
+								<span>Presupuesto: ${(category.budget / 1000000).toFixed(1)}M</span>
+								<span>Gastado: ${(category.spent / 1000000).toFixed(1)}M</span>
+							</div>
+							<div class="w-full bg-gray-200 rounded-full h-2 dark:bg-gray-600">
+								<div 
+									class={`h-2 rounded-full ${
+										(category.spent / category.budget) > 0.9 ? 'bg-red-500' : 
+										(category.spent / category.budget) > 0.7 ? 'bg-yellow-500' : 'bg-green-500'
+									}`}
+									style={`width: ${(category.spent / category.budget) * 100}%`}
+								></div>
+							</div>
+						</div>
+					))}
+				</div>
+			</div>
+		</div>
+
+		<!-- Proyectos Recientes -->
+		<div class="bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
+			<div class="p-6">
+				<h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+					Proyectos Recientes
+				</h3>
+				
+				<div class="overflow-x-auto">
+					<table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+						<thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+							<tr>
+								<th class="px-6 py-3">ID Proyecto</th>
+								<th class="px-6 py-3">Nombre</th>
+								<th class="px-6 py-3">Estado</th>
+								<th class="px-6 py-3">Progreso</th>
+								<th class="px-6 py-3">Gerente</th>
+								<th class="px-6 py-3">Presupuesto</th>
+								<th class="px-6 py-3">Gastado</th>
+								<th class="px-6 py-3">Prioridad</th>
+								<th class="px-6 py-3">Fecha Fin</th>
+								<th class="px-6 py-3">Acciones</th>
+							</tr>
+						</thead>
+						<tbody>
+							{gerenteProyectosData.recentProjects.map((project) => (
+								<tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700">
+									<td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+										{project.id}
+									</td>
+									<td class="px-6 py-4 whitespace-nowrap">
+										{project.name}
+									</td>
+									<td class="px-6 py-4 whitespace-nowrap">
+										<span class={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+											project.status === 'completado' 
+												? 'text-green-800 bg-green-100 dark:bg-green-700 dark:text-green-100'
+												: project.status === 'en_ejecucion'
+												? 'text-yellow-800 bg-yellow-100 dark:bg-yellow-700 dark:text-yellow-100'
+												: 'text-blue-800 bg-blue-100 dark:bg-blue-700 dark:text-blue-100'
+										}`}>
+											{project.status === 'completado' ? 'Completado' : 
+											 project.status === 'en_ejecucion' ? 'En Ejecución' : 'Planificación'}
+										</span>
+									</td>
+									<td class="px-6 py-4 whitespace-nowrap">
+										<div class="flex items-center">
+											<div class="w-16 bg-gray-200 rounded-full h-2 mr-2 dark:bg-gray-600">
+												<div 
+													class={`h-2 rounded-full ${
+														project.progress >= 100 ? 'bg-green-500' : 
+														project.progress >= 75 ? 'bg-yellow-500' : 'bg-blue-500'
+													}`}
+													style={`width: ${project.progress}%`}
+												></div>
+											</div>
+											<span class="text-xs text-gray-600 dark:text-gray-400">
+												{project.progress}%
+											</span>
+										</div>
+									</td>
+									<td class="px-6 py-4 whitespace-nowrap">
+										{project.manager}
+									</td>
+									<td class="px-6 py-4 whitespace-nowrap">
+										${(project.budget / 1000).toFixed(0)}K
+									</td>
+									<td class="px-6 py-4 whitespace-nowrap">
+										<span class={`font-medium ${
+											(project.spent / project.budget) > 0.9 ? 'text-red-600 dark:text-red-400' :
+											(project.spent / project.budget) > 0.7 ? 'text-yellow-600 dark:text-yellow-400' :
+											'text-green-600 dark:text-green-400'
+										}`}>
+											${(project.spent / 1000).toFixed(0)}K
+										</span>
+									</td>
+									<td class="px-6 py-4 whitespace-nowrap">
+										<span class={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+											project.priority === 'alta' 
+												? 'text-red-800 bg-red-100 dark:bg-red-700 dark:text-red-100'
+												: project.priority === 'media'
+												? 'text-yellow-800 bg-yellow-100 dark:bg-yellow-700 dark:text-yellow-100'
+												: 'text-green-800 bg-green-100 dark:bg-green-700 dark:text-green-100'
+										}`}>
+											{project.priority === 'alta' ? 'Alta' : 
+											 project.priority === 'media' ? 'Media' : 'Baja'}
+										</span>
+									</td>
+									<td class="px-6 py-4 whitespace-nowrap">
+										{new Date(project.endDate).toLocaleDateString('es-CL')}
+									</td>
+									<td class="px-6 py-4 whitespace-nowrap">
+										<div class="flex space-x-2">
+											<button class="text-primary-600 hover:text-primary-900 dark:text-primary-500 dark:hover:text-primary-400">
+												Ver
+											</button>
+											<button class="text-green-600 hover:text-green-900 dark:text-green-500 dark:hover:text-green-400">
+												Editar
+											</button>
+										</div>
+									</td>
+								</tr>
+							))}
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+
+		<!-- Acciones Rápidas -->
+		<div class="mt-6 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
+			<div class="p-6">
+				<h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+					Acciones de Proyectos
+				</h3>
+				
+				<div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+					<a href="/purchase-integration" class="p-4 border border-gray-200 rounded-lg hover:bg-gray-50 dark:border-gray-700 dark:hover:bg-gray-700">
+						<div class="flex items-center">
+							<svg class="w-8 h-8 text-blue-600 dark:text-blue-400 mr-3" fill="currentColor" viewBox="0 0 20 20">
+								<path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+							</svg>
+							<div>
+								<h4 class="text-sm font-medium text-gray-900 dark:text-white">Integración Compras</h4>
+								<p class="text-xs text-gray-600 dark:text-gray-400">Proyectos y contratos</p>
+							</div>
+						</div>
+					</a>
+					
+					<a href="/purchase-history" class="p-4 border border-gray-200 rounded-lg hover:bg-gray-50 dark:border-gray-700 dark:hover:bg-gray-700">
+						<div class="flex items-center">
+							<svg class="w-8 h-8 text-green-600 dark:text-green-400 mr-3" fill="currentColor" viewBox="0 0 20 20">
+								<path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"/>
+							</svg>
+							<div>
+								<h4 class="text-sm font-medium text-gray-900 dark:text-white">Historial Compras</h4>
+								<p class="text-xs text-gray-600 dark:text-gray-400">Compras realizadas</p>
+							</div>
+						</div>
+					</a>
+					
+					<a href="/inventory-reports" class="p-4 border border-gray-200 rounded-lg hover:bg-gray-50 dark:border-gray-700 dark:hover:bg-gray-700">
+						<div class="flex items-center">
+							<svg class="w-8 h-8 text-purple-600 dark:text-purple-400 mr-3" fill="currentColor" viewBox="0 0 20 20">
+								<path fill-rule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm2 10a1 1 0 10-2 0 1 1 0 012 0zm2-3a1 1 0 011-1h3a1 1 0 110 2h-3a1 1 0 01-1-1z" clip-rule="evenodd"/>
+							</svg>
+							<div>
+								<h4 class="text-sm font-medium text-gray-900 dark:text-white">Reportes</h4>
+								<p class="text-xs text-gray-600 dark:text-gray-400">Análisis de proyectos</p>
+							</div>
+						</div>
+					</a>
+					
+					<a href="/dashboard" class="p-4 border border-gray-200 rounded-lg hover:bg-gray-50 dark:border-gray-700 dark:hover:bg-gray-700">
+						<div class="flex items-center">
+							<svg class="w-8 h-8 text-yellow-600 dark:text-yellow-400 mr-3" fill="currentColor" viewBox="0 0 20 20">
+								<path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"/>
+							</svg>
+							<div>
+								<h4 class="text-sm font-medium text-gray-900 dark:text-white">Dashboard</h4>
+								<p class="text-xs text-gray-600 dark:text-gray-400">Vista general</p>
+							</div>
+						</div>
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</LayoutSidebar> 

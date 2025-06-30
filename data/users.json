@@ -1,0 +1,202 @@
+[
+	{
+		"name": "Carlos Mendoza",
+		"email": "carlos.mendoza@maestranzasunidos.cl",
+		"role": "Gerente de Operaciones",
+		"department": "Gerencia",
+		"location": "Copiapó",
+		"status": "Activo",
+		"phone": "+56 9 1234 5678",
+		"avatar": "https://MaestranzaPro.com/docs/images/people/profile-picture-1.jpg"
+	},
+	{
+		"name": "María González",
+		"email": "maria.gonzalez@maestranzasunidos.cl",
+		"role": "Jefa de Inventario",
+		"department": "Logística",
+		"location": "Copiapó",
+		"status": "Activo",
+		"phone": "+56 9 2345 6789",
+		"avatar": "https://MaestranzaPro.com/docs/images/people/profile-picture-2.jpg"
+	},
+	{
+		"name": "Roberto Silva",
+		"email": "roberto.silva@maestranzasunidos.cl",
+		"role": "Técnico Mecánico",
+		"department": "Mantenimiento",
+		"location": "Copiapó",
+		"status": "Activo",
+		"phone": "+56 9 3456 7890",
+		"avatar": "https://MaestranzaPro.com/docs/images/people/profile-picture-3.jpg"
+	},
+	{
+		"name": "Ana Rodríguez",
+		"email": "ana.rodriguez@maestranzasunidos.cl",
+		"role": "Ingeniera de Proyectos",
+		"department": "Ingeniería",
+		"location": "Copiapó",
+		"status": "Activo",
+		"phone": "+56 9 4567 8901",
+		"avatar": "https://MaestranzaPro.com/docs/images/people/profile-picture-4.jpg"
+	},
+	{
+		"name": "Pedro Herrera",
+		"email": "pedro.herrera@maestranzasunidos.cl",
+		"role": "Técnico Eléctrico",
+		"department": "Mantenimiento",
+		"location": "Copiapó",
+		"status": "Activo",
+		"phone": "+56 9 5678 9012",
+		"avatar": "https://MaestranzaPro.com/docs/images/people/profile-picture-5.jpg"
+	},
+	{
+		"name": "Carmen López",
+		"email": "carmen.lopez@maestranzasunidos.cl",
+		"role": "Administradora de Compras",
+		"department": "Compras",
+		"location": "Copiapó",
+		"status": "Activo",
+		"phone": "+56 9 6789 0123",
+		"avatar": "https://MaestranzaPro.com/docs/images/people/profile-picture-1.jpg"
+	},
+	{
+		"name": "Jorge Torres",
+		"email": "jorge.torres@maestranzasunidos.cl",
+		"role": "Supervisor de Taller",
+		"department": "Producción",
+		"location": "Copiapó",
+		"status": "Activo",
+		"phone": "+56 9 7890 1234",
+		"avatar": "https://MaestranzaPro.com/docs/images/people/profile-picture-2.jpg"
+	},
+	{
+		"name": "Patricia Morales",
+		"email": "patricia.morales@maestranzasunidos.cl",
+		"role": "Contadora",
+		"department": "Finanzas",
+		"location": "Copiapó",
+		"status": "Activo",
+		"phone": "+56 9 8901 2345",
+		"avatar": "https://MaestranzaPro.com/docs/images/people/profile-picture-3.jpg"
+	},
+	{
+		"name": "Miguel Rojas",
+		"email": "miguel.rojas@maestranzasunidos.cl",
+		"role": "Técnico Hidráulico",
+		"department": "Mantenimiento",
+		"location": "Copiapó",
+		"status": "Activo",
+		"phone": "+56 9 9012 3456",
+		"avatar": "https://MaestranzaPro.com/docs/images/people/profile-picture-4.jpg"
+	},
+	{
+		"name": "Sofía Vargas",
+		"email": "sofia.vargas@maestranzasunidos.cl",
+		"role": "Analista de Calidad",
+		"department": "Calidad",
+		"location": "Copiapó",
+		"status": "Activo",
+		"phone": "+56 9 0123 4567",
+		"avatar": "https://MaestranzaPro.com/docs/images/people/profile-picture-5.jpg"
+	},
+	{
+		"name": "Fernando Díaz",
+		"email": "fernando.diaz@maestranzasunidos.cl",
+		"role": "Operador de Máquinas",
+		"department": "Producción",
+		"location": "Copiapó",
+		"status": "Activo",
+		"phone": "+56 9 1234 5679",
+		"avatar": "https://MaestranzaPro.com/docs/images/people/profile-picture-1.jpg"
+	},
+	{
+		"name": "Valentina Soto",
+		"email": "valentina.soto@maestranzasunidos.cl",
+		"role": "Asistente de Logística",
+		"department": "Logística",
+		"location": "Copiapó",
+		"status": "Activo",
+		"phone": "+56 9 2345 6780",
+		"avatar": "https://MaestranzaPro.com/docs/images/people/profile-picture-2.jpg"
+	},
+	{
+		"name": "Diego Contreras",
+		"email": "diego.contreras@maestranzasunidos.cl",
+		"role": "Técnico de Soldadura",
+		"department": "Producción",
+		"location": "Copiapó",
+		"status": "Activo",
+		"phone": "+56 9 3456 7891",
+		"avatar": "https://MaestranzaPro.com/docs/images/people/profile-picture-3.jpg"
+	},
+	{
+		"name": "Camila Fuentes",
+		"email": "camila.fuentes@maestranzasunidos.cl",
+		"role": "Coordinadora de Proyectos",
+		"department": "Ingeniería",
+		"location": "Copiapó",
+		"status": "Activo",
+		"phone": "+56 9 4567 8902",
+		"avatar": "https://MaestranzaPro.com/docs/images/people/profile-picture-4.jpg"
+	},
+	{
+		"name": "Alejandro Castro",
+		"email": "alejandro.castro@maestranzasunidos.cl",
+		"role": "Técnico de Instrumentación",
+		"department": "Mantenimiento",
+		"location": "Copiapó",
+		"status": "Activo",
+		"phone": "+56 9 5678 9013",
+		"avatar": "https://MaestranzaPro.com/docs/images/people/profile-picture-5.jpg"
+	},
+	{
+		"name": "Natalia Paredes",
+		"email": "natalia.paredes@maestranzasunidos.cl",
+		"role": "Asistente de Recursos Humanos",
+		"department": "RRHH",
+		"location": "Copiapó",
+		"status": "Activo",
+		"phone": "+56 9 6789 0124",
+		"avatar": "https://MaestranzaPro.com/docs/images/people/profile-picture-1.jpg"
+	},
+	{
+		"name": "Ricardo Muñoz",
+		"email": "ricardo.munoz@maestranzasunidos.cl",
+		"role": "Técnico de Refrigeración",
+		"department": "Mantenimiento",
+		"location": "Copiapó",
+		"status": "Activo",
+		"phone": "+56 9 7890 1235",
+		"avatar": "https://MaestranzaPro.com/docs/images/people/profile-picture-2.jpg"
+	},
+	{
+		"name": "Daniela Ramírez",
+		"email": "daniela.ramirez@maestranzasunidos.cl",
+		"role": "Analista de Seguridad",
+		"department": "Seguridad",
+		"location": "Copiapó",
+		"status": "Activo",
+		"phone": "+56 9 8901 2346",
+		"avatar": "https://MaestranzaPro.com/docs/images/people/profile-picture-3.jpg"
+	},
+	{
+		"name": "Francisco Espinoza",
+		"email": "francisco.espinoza@maestranzasunidos.cl",
+		"role": "Operador de Grúa",
+		"department": "Producción",
+		"location": "Copiapó",
+		"status": "Activo",
+		"phone": "+56 9 9012 3457",
+		"avatar": "https://MaestranzaPro.com/docs/images/people/profile-picture-4.jpg"
+	},
+	{
+		"name": "Gabriela Ruiz",
+		"email": "gabriela.ruiz@maestranzasunidos.cl",
+		"role": "Asistente de Ventas",
+		"department": "Ventas",
+		"location": "Copiapó",
+		"status": "Activo",
+		"phone": "+56 9 0123 4568",
+		"avatar": "https://MaestranzaPro.com/docs/images/people/profile-picture-5.jpg"
+	}
+]

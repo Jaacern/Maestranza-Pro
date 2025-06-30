@@ -1,0 +1,303 @@
+---
+import LayoutSidebar from '../app/LayoutSidebar.astro';
+
+// Datos de ejemplo para historial de compras
+const purchases = [
+	{
+		id: "PO-2024-001",
+		date: "2024-01-15",
+		supplier: "SKF Chile S.A.",
+		items: [
+			{ name: "Rodamiento SKF 6205", quantity: 50, unitPrice: 45.50, total: 2275.00 }
+		],
+		total: 2275.00,
+		status: "completada",
+		paymentStatus: "pagado"
+	},
+	{
+		id: "PO-2024-002",
+		date: "2024-01-20",
+		supplier: "Shell Chile",
+		items: [
+			{ name: "Aceite Lubricante ISO 68", quantity: 20, unitPrice: 85.00, total: 1700.00 }
+		],
+		total: 1700.00,
+		status: "completada",
+		paymentStatus: "pagado"
+	},
+	{
+		id: "PO-2024-003",
+		date: "2024-01-25",
+		supplier: "WEG Motors",
+		items: [
+			{ name: "Motor Eléctrico 50HP", quantity: 2, unitPrice: 8500.00, total: 17000.00 }
+		],
+		total: 17000.00,
+		status: "en_proceso",
+		paymentStatus: "pendiente"
+	},
+	{
+		id: "PO-2024-004",
+		date: "2024-01-28",
+		supplier: "Parker Hannifin",
+		items: [
+			{ name: "Válvula de Control 3\"", quantity: 5, unitPrice: 1250.00, total: 6250.00 },
+			{ name: "Cilindro Hidráulico 100mm", quantity: 3, unitPrice: 1850.00, total: 5550.00 }
+		],
+		total: 11800.00,
+		status: "completada",
+		paymentStatus: "pagado"
+	},
+	{
+		id: "PO-2024-005",
+		date: "2024-02-01",
+		supplier: "Prysmian Chile",
+		items: [
+			{ name: "Cable de Potencia 4x25mm²", quantity: 200, unitPrice: 12.50, total: 2500.00 }
+		],
+		total: 2500.00,
+		status: "pendiente",
+		paymentStatus: "pendiente"
+	}
+];
+
+const totalPurchases = purchases.length;
+const totalAmount = purchases.reduce((sum, p) => sum + p.total, 0);
+const completedPurchases = purchases.filter(p => p.status === 'completada').length;
+const pendingPayments = purchases.filter(p => p.paymentStatus === 'pendiente').length;
+---
+
+<LayoutSidebar>
+	<div class="px-4 pt-6">
+		<div class="mb-6">
+			<h1 class="text-2xl font-bold text-gray-900 dark:text-white">
+				Historial de Compras
+			</h1>
+			<p class="text-gray-600 dark:text-gray-400">
+				Seguimiento de órdenes de compra y transacciones con proveedores
+			</p>
+		</div>
+
+		<!-- Métricas de Compras -->
+		<div class="grid gap-4 xl:grid-cols-2 2xl:grid-cols-4 mb-6">
+			<div class="p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
+				<div class="flex items-center">
+					<div class="flex-shrink-0">
+						<svg class="w-8 h-8 text-blue-600 dark:text-blue-500" fill="currentColor" viewBox="0 0 20 20">
+							<path fill-rule="evenodd" d="M3 3a1 1 0 000 2v8a2 2 0 002 2h2.586l-1.293 1.293a1 1 0 101.414 1.414L10 15.414l2.293 2.293a1 1 0 001.414-1.414L12.414 15H15a2 2 0 002-2V5a1 1 0 100-2H3zm11.707 4.707a1 1 0 00-1.414-1.414L10 9.586 8.707 8.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4a1 1 0 00-1.414-1.414l-4 4z" clip-rule="evenodd"></path>
+						</svg>
+					</div>
+					<div class="ml-4">
+						<p class="text-sm font-medium text-gray-500 dark:text-gray-400">Total Órdenes</p>
+						<p class="text-2xl font-bold text-gray-900 dark:text-white">{totalPurchases}</p>
+					</div>
+				</div>
+			</div>
+
+			<div class="p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
+				<div class="flex items-center">
+					<div class="flex-shrink-0">
+						<svg class="w-8 h-8 text-green-600 dark:text-green-500" fill="currentColor" viewBox="0 0 20 20">
+							<path d="M8.433 7.418c.155-.103.346-.196.567-.267v1.698a2.305 2.305 0 01-.567-.267C8.07 8.34 8 8.114 8 8c0-.114.07-.34.433-.582zM11 12.849v-1.698c.22.071.412.164.567.267.364.243.433.468.433.582 0 .114-.07.34-.433.582a2.305 2.305 0 01-.567.267z"></path>
+							<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.092a4.535 4.535 0 00-1.676.662C6.602 6.234 6 7.009 6 8c0 .99.602 1.765 1.324 2.246.48.32 1.054.545 1.676.662v1.941c-.391-.127-.68-.317-.843-.504a1 1 0 10-1.51 1.31c.562.649 1.413 1.076 2.353 1.253V15a1 1 0 102 0v-.092a4.535 4.535 0 001.676-.662C13.398 13.766 14 12.991 14 12c0-.99-.602-1.765-1.324-2.246A4.535 4.535 0 0011 9.092V7.151c.391.127.68.317.843.504a1 1 0 101.511-1.31c-.563-.649-1.413-1.076-2.354-1.253V5z" clip-rule="evenodd"></path>
+						</svg>
+					</div>
+					<div class="ml-4">
+						<p class="text-sm font-medium text-gray-500 dark:text-gray-400">Monto Total</p>
+						<p class="text-2xl font-bold text-gray-900 dark:text-white">${totalAmount.toLocaleString()}</p>
+					</div>
+				</div>
+			</div>
+
+			<div class="p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
+				<div class="flex items-center">
+					<div class="flex-shrink-0">
+						<svg class="w-8 h-8 text-green-600 dark:text-green-500" fill="currentColor" viewBox="0 0 20 20">
+							<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+						</svg>
+					</div>
+					<div class="ml-4">
+						<p class="text-sm font-medium text-gray-500 dark:text-gray-400">Completadas</p>
+						<p class="text-2xl font-bold text-gray-900 dark:text-white">{completedPurchases}</p>
+					</div>
+				</div>
+			</div>
+
+			<div class="p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
+				<div class="flex items-center">
+					<div class="flex-shrink-0">
+						<svg class="w-8 h-8 text-yellow-600 dark:text-yellow-500" fill="currentColor" viewBox="0 0 20 20">
+							<path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+						</svg>
+					</div>
+					<div class="ml-4">
+						<p class="text-sm font-medium text-gray-500 dark:text-gray-400">Pagos Pendientes</p>
+						<p class="text-2xl font-bold text-gray-900 dark:text-white">{pendingPayments}</p>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Filtros -->
+		<div class="mb-6 p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
+			<div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+				<div>
+					<label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+						Estado de Orden
+					</label>
+					<select class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
+						<option value="">Todos</option>
+						<option value="completada">Completada</option>
+						<option value="en_proceso">En Proceso</option>
+						<option value="pendiente">Pendiente</option>
+						<option value="cancelada">Cancelada</option>
+					</select>
+				</div>
+				<div>
+					<label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+						Estado de Pago
+					</label>
+					<select class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
+						<option value="">Todos</option>
+						<option value="pagado">Pagado</option>
+						<option value="pendiente">Pendiente</option>
+						<option value="parcial">Parcial</option>
+					</select>
+				</div>
+				<div>
+					<label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+						Fecha Desde
+					</label>
+					<input type="date" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
+				</div>
+				<div>
+					<label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+						Fecha Hasta
+					</label>
+					<input type="date" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
+				</div>
+			</div>
+			<div class="mt-4 flex gap-2">
+				<button class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:ring-4 focus:ring-blue-300">
+					Filtrar
+				</button>
+				<button class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-300">
+					Limpiar
+				</button>
+			</div>
+		</div>
+
+		<!-- Botón Nueva Orden -->
+		<div class="mb-6">
+			<button class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 focus:ring-4 focus:ring-green-300 flex items-center">
+				<svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+					<path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"></path>
+				</svg>
+				Nueva Orden de Compra
+			</button>
+		</div>
+
+		<!-- Lista de Compras -->
+		<div class="space-y-4">
+			{purchases.map(purchase => (
+				<div class="bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
+					<div class="p-4 border-b border-gray-200 dark:border-gray-700">
+						<div class="flex items-center justify-between">
+							<div class="flex items-center space-x-4">
+								<div>
+									<h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+										{purchase.id}
+									</h3>
+									<p class="text-sm text-gray-500 dark:text-gray-400">
+										{purchase.supplier} • {new Date(purchase.date).toLocaleDateString()}
+									</p>
+								</div>
+							</div>
+							<div class="flex items-center space-x-2">
+								<span class={`px-2 py-1 text-xs font-medium rounded-full ${
+									purchase.status === 'completada' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300' :
+									purchase.status === 'en_proceso' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300' :
+									purchase.status === 'pendiente' ? 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300' :
+									'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300'
+								}`}>
+									{purchase.status.replace('_', ' ').charAt(0).toUpperCase() + purchase.status.replace('_', ' ').slice(1)}
+								</span>
+								<span class={`px-2 py-1 text-xs font-medium rounded-full ${
+									purchase.paymentStatus === 'pagado' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300' :
+									purchase.paymentStatus === 'pendiente' ? 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300' :
+									'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300'
+								}`}>
+									{purchase.paymentStatus.charAt(0).toUpperCase() + purchase.paymentStatus.slice(1)}
+								</span>
+							</div>
+						</div>
+					</div>
+					
+					<div class="p-4">
+						<div class="overflow-x-auto">
+							<table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+								<thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+									<tr>
+										<th scope="col" class="px-6 py-3">Producto</th>
+										<th scope="col" class="px-6 py-3">Cantidad</th>
+										<th scope="col" class="px-6 py-3">Precio Unitario</th>
+										<th scope="col" class="px-6 py-3">Total</th>
+									</tr>
+								</thead>
+								<tbody>
+									{purchase.items.map(item => (
+										<tr class="bg-white dark:bg-gray-800">
+											<td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+												{item.name}
+											</td>
+											<td class="px-6 py-4">{item.quantity}</td>
+											<td class="px-6 py-4">${item.unitPrice.toLocaleString()}</td>
+											<td class="px-6 py-4 font-medium">${item.total.toLocaleString()}</td>
+										</tr>
+									))}
+								</tbody>
+							</table>
+						</div>
+						
+						<div class="mt-4 flex items-center justify-between">
+							<div class="text-lg font-bold text-gray-900 dark:text-white">
+								Total: ${purchase.total.toLocaleString()}
+							</div>
+							<div class="flex space-x-2">
+								<button class="px-3 py-1 text-sm bg-blue-600 text-white rounded hover:bg-blue-700">
+									Ver Detalles
+								</button>
+								<button class="px-3 py-1 text-sm bg-gray-600 text-white rounded hover:bg-gray-700">
+									Descargar PDF
+								</button>
+								{purchase.status === 'pendiente' && (
+									<button class="px-3 py-1 text-sm bg-green-600 text-white rounded hover:bg-green-700">
+										Aprobar
+									</button>
+								)}
+							</div>
+						</div>
+					</div>
+				</div>
+			))}
+		</div>
+
+		<!-- Paginación -->
+		<div class="mt-6 flex items-center justify-between">
+			<div class="text-sm text-gray-700 dark:text-gray-400">
+				Mostrando <span class="font-medium">1</span> a <span class="font-medium">{purchases.length}</span> de <span class="font-medium">{purchases.length}</span> resultados
+			</div>
+			<div class="flex space-x-2">
+				<button class="px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-gray-50 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-400 dark:hover:bg-gray-700">
+					Anterior
+				</button>
+				<button class="px-3 py-2 text-sm font-medium text-white bg-blue-600 border border-blue-600 rounded-md hover:bg-blue-700">
+					1
+				</button>
+				<button class="px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-gray-50 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-400 dark:hover:bg-gray-700">
+					Siguiente
+				</button>
+			</div>
+		</div>
+	</div>
+</LayoutSidebar> 

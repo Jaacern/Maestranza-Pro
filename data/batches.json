@@ -1,0 +1,72 @@
+[
+	{
+		"id": 1,
+		"productId": 1,
+		"productName": "Rodamiento SKF 6205",
+		"batchNumber": "SKF-2024-001",
+		"quantity": 50,
+		"manufacturingDate": "2023-12-01",
+		"expiryDate": "2026-12-01",
+		"supplier": "SKF Chile S.A.",
+		"location": "Almacén Principal",
+		"status": "activo",
+		"daysUntilExpiry": 730,
+		"notes": "Lote de alta calidad"
+	},
+	{
+		"id": 2,
+		"productId": 3,
+		"productName": "Aceite Lubricante Mobil",
+		"batchNumber": "MOB-2024-003",
+		"quantity": 200,
+		"manufacturingDate": "2023-10-15",
+		"expiryDate": "2024-02-15",
+		"supplier": "Mobil Chile",
+		"location": "Almacén de Lubricantes",
+		"status": "próximo_vencer",
+		"daysUntilExpiry": 15,
+		"notes": "Lote próximo a vencer"
+	},
+	{
+		"id": 3,
+		"productId": 5,
+		"productName": "Filtro de Aire Donaldson",
+		"batchNumber": "DON-2024-002",
+		"quantity": 25,
+		"manufacturingDate": "2023-11-20",
+		"expiryDate": "2025-11-20",
+		"supplier": "Donaldson Chile",
+		"location": "Almacén de Filtros",
+		"status": "activo",
+		"daysUntilExpiry": 680,
+		"notes": "Filtros de alta eficiencia"
+	},
+	{
+		"id": 4,
+		"productId": 2,
+		"productName": "Válvula de Control Parker",
+		"batchNumber": "PAR-2023-015",
+		"quantity": 10,
+		"manufacturingDate": "2023-08-10",
+		"expiryDate": "2024-01-10",
+		"supplier": "Parker Hannifin Chile",
+		"location": "Almacén Principal",
+		"status": "vencido",
+		"daysUntilExpiry": -5,
+		"notes": "Lote vencido - requiere disposición"
+	},
+	{
+		"id": 5,
+		"productId": 4,
+		"productName": "Motor Eléctrico ABB 15HP",
+		"batchNumber": "ABB-2023-008",
+		"quantity": 5,
+		"manufacturingDate": "2023-06-15",
+		"expiryDate": "2024-02-15",
+		"supplier": "ABB Chile",
+		"location": "Almacén de Motores",
+		"status": "próximo_vencer",
+		"daysUntilExpiry": 30,
+		"notes": "Garantía próxima a vencer"
+	}
+] 

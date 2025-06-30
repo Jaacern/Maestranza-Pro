@@ -1,0 +1,359 @@
+---
+import LayoutSidebar from '../app/LayoutSidebar.astro';
+import { getProducts } from '../services/products.js';
+
+const products = await getProducts();
+
+// Datos de ejemplo para categorías
+const categories = [
+	{
+		id: 1,
+		name: "Rodamientos",
+		description: "Rodamientos y cojinetes para maquinaria industrial",
+		code: "ROD",
+		parentCategory: null,
+		productCount: 15,
+		totalValue: 45000,
+		status: "activa"
+	},
+	{
+		id: 2,
+		name: "Lubricantes",
+		description: "Aceites y grasas lubricantes para equipos",
+		code: "LUB",
+		parentCategory: null,
+		productCount: 8,
+		totalValue: 12000,
+		status: "activa"
+	},
+	{
+		id: 3,
+		name: "Hidráulica",
+		description: "Componentes hidráulicos y neumáticos",
+		code: "HID",
+		parentCategory: null,
+		productCount: 12,
+		totalValue: 35000,
+		status: "activa"
+	},
+	{
+		id: 4,
+		name: "Eléctricos",
+		description: "Componentes y equipos eléctricos",
+		code: "ELE",
+		parentCategory: null,
+		productCount: 20,
+		totalValue: 85000,
+		status: "activa"
+	},
+	{
+		id: 5,
+		name: "Rodamientos SKF",
+		description: "Rodamientos específicos de la marca SKF",
+		code: "ROD-SKF",
+		parentCategory: 1,
+		productCount: 8,
+		totalValue: 25000,
+		status: "activa"
+	},
+	{
+		id: 6,
+		name: "Aceites Industriales",
+		description: "Aceites lubricantes para uso industrial",
+		code: "LUB-IND",
+		parentCategory: 2,
+		productCount: 5,
+		totalValue: 8000,
+		status: "activa"
+	}
+];
+
+const totalCategories = categories.length;
+const activeCategories = categories.filter(c => c.status === 'activa').length;
+const mainCategories = categories.filter(c => !c.parentCategory).length;
+const subCategories = categories.filter(c => c.parentCategory).length;
+---
+
+<LayoutSidebar>
+	<div class="px-4 pt-6">
+		<div class="mb-6">
+			<h1 class="text-2xl font-bold text-gray-900 dark:text-white">
+				Categorización de Inventario
+			</h1>
+			<p class="text-gray-600 dark:text-gray-400">
+				Organización y clasificación de productos por categorías y subcategorías
+			</p>
+		</div>
+
+		<!-- Métricas de Categorías -->
+		<div class="grid gap-4 xl:grid-cols-2 2xl:grid-cols-4 mb-6">
+			<div class="p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
+				<div class="flex items-center">
+					<div class="flex-shrink-0">
+						<svg class="w-8 h-8 text-blue-600 dark:text-blue-500" fill="currentColor" viewBox="0 0 20 20">
+							<path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"></path>
+						</svg>
+					</div>
+					<div class="ml-4">
+						<p class="text-sm font-medium text-gray-500 dark:text-gray-400">Total Categorías</p>
+						<p class="text-2xl font-bold text-gray-900 dark:text-white">{totalCategories}</p>
+					</div>
+				</div>
+			</div>
+
+			<div class="p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
+				<div class="flex items-center">
+					<div class="flex-shrink-0">
+						<svg class="w-8 h-8 text-green-600 dark:text-green-500" fill="currentColor" viewBox="0 0 20 20">
+							<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+						</svg>
+					</div>
+					<div class="ml-4">
+						<p class="text-sm font-medium text-gray-500 dark:text-gray-400">Activas</p>
+						<p class="text-2xl font-bold text-gray-900 dark:text-white">{activeCategories}</p>
+					</div>
+				</div>
+			</div>
+
+			<div class="p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
+				<div class="flex items-center">
+					<div class="flex-shrink-0">
+						<svg class="w-8 h-8 text-purple-600 dark:text-purple-500" fill="currentColor" viewBox="0 0 20 20">
+							<path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z" clip-rule="evenodd"></path>
+						</svg>
+					</div>
+					<div class="ml-4">
+						<p class="text-sm font-medium text-gray-500 dark:text-gray-400">Principales</p>
+						<p class="text-2xl font-bold text-gray-900 dark:text-white">{mainCategories}</p>
+					</div>
+				</div>
+			</div>
+
+			<div class="p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
+				<div class="flex items-center">
+					<div class="flex-shrink-0">
+						<svg class="w-8 h-8 text-indigo-600 dark:text-indigo-500" fill="currentColor" viewBox="0 0 20 20">
+							<path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z" clip-rule="evenodd"></path>
+						</svg>
+					</div>
+					<div class="ml-4">
+						<p class="text-sm font-medium text-gray-500 dark:text-gray-400">Subcategorías</p>
+						<p class="text-2xl font-bold text-gray-900 dark:text-white">{subCategories}</p>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Formulario Nueva Categoría -->
+		<div class="mb-6 p-6 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
+			<h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+				Nueva Categoría
+			</h3>
+			<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+				<div>
+					<label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+						Nombre de Categoría
+					</label>
+					<input type="text" placeholder="Ej: Rodamientos" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
+				</div>
+				<div>
+					<label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+						Código
+					</label>
+					<input type="text" placeholder="Ej: ROD" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
+				</div>
+				<div>
+					<label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+						Categoría Padre
+					</label>
+					<select class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
+						<option value="">Sin categoría padre</option>
+						{categories.filter(c => !c.parentCategory).map(category => (
+							<option value={category.id}>{category.name}</option>
+						))}
+					</select>
+				</div>
+			</div>
+			<div class="mt-4">
+				<label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+					Descripción
+				</label>
+				<textarea rows="3" placeholder="Descripción de la categoría..." class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"></textarea>
+			</div>
+			<div class="mt-4 flex gap-2">
+				<button class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:ring-4 focus:ring-blue-300">
+					Crear Categoría
+				</button>
+				<button class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-300">
+					Limpiar
+				</button>
+			</div>
+		</div>
+
+		<!-- Estructura de Categorías -->
+		<div class="mb-6">
+			<h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+				Estructura de Categorías
+			</h3>
+			<div class="space-y-4">
+				{categories.filter(c => !c.parentCategory).map(mainCategory => {
+					const subCategories = categories.filter(sc => sc.parentCategory === mainCategory.id);
+					
+					return (
+						<div class="bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
+							<div class="p-4 border-b border-gray-200 dark:border-gray-700">
+								<div class="flex items-center justify-between">
+									<div class="flex items-center">
+										<svg class="w-6 h-6 text-blue-600 dark:text-blue-500 mr-3" fill="currentColor" viewBox="0 0 20 20">
+											<path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"></path>
+										</svg>
+										<div>
+											<h4 class="text-lg font-semibold text-gray-900 dark:text-white">
+												{mainCategory.name}
+											</h4>
+											<p class="text-sm text-gray-500 dark:text-gray-400">
+												{mainCategory.description}
+											</p>
+										</div>
+									</div>
+									<div class="text-right">
+										<p class="text-sm font-medium text-gray-900 dark:text-white">
+											{mainCategory.productCount} productos
+										</p>
+										<p class="text-sm text-gray-500 dark:text-gray-400">
+											${mainCategory.totalValue.toLocaleString()}
+										</p>
+									</div>
+								</div>
+							</div>
+							
+							{subCategories.length > 0 && (
+								<div class="p-4">
+									<h5 class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
+										Subcategorías ({subCategories.length})
+									</h5>
+									<div class="grid gap-4 md:grid-cols-2">
+										{subCategories.map(subCategory => (
+											<div class="p-3 bg-gray-50 rounded-lg dark:bg-gray-700">
+												<div class="flex items-center justify-between">
+													<div>
+														<p class="font-medium text-gray-900 dark:text-white">
+															{subCategory.name}
+														</p>
+														<p class="text-xs text-gray-500 dark:text-gray-400">
+															{subCategory.description}
+														</p>
+													</div>
+													<div class="text-right">
+														<p class="text-sm font-medium text-gray-900 dark:text-white">
+															{subCategory.productCount} productos
+														</p>
+														<p class="text-xs text-gray-500 dark:text-gray-400">
+															${subCategory.totalValue.toLocaleString()}
+														</p>
+													</div>
+												</div>
+											</div>
+										))}
+									</div>
+								</div>
+							)}
+						</div>
+					);
+				})}
+			</div>
+		</div>
+
+		<!-- Tabla de Categorías -->
+		<div class="bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
+			<div class="overflow-x-auto">
+				<table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+					<thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+						<tr>
+							<th scope="col" class="px-6 py-3">Categoría</th>
+							<th scope="col" class="px-6 py-3">Código</th>
+							<th scope="col" class="px-6 py-3">Categoría Padre</th>
+							<th scope="col" class="px-6 py-3">Productos</th>
+							<th scope="col" class="px-6 py-3">Valor Total</th>
+							<th scope="col" class="px-6 py-3">Estado</th>
+							<th scope="col" class="px-6 py-3">Acciones</th>
+						</tr>
+					</thead>
+					<tbody>
+						{categories.map(category => (
+							<tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700">
+								<td class="px-6 py-4">
+									<div>
+										<p class="font-medium text-gray-900 dark:text-white">
+											{category.name}
+										</p>
+										<p class="text-sm text-gray-500 dark:text-gray-400">
+											{category.description}
+										</p>
+									</div>
+								</td>
+								<td class="px-6 py-4 font-mono text-sm">{category.code}</td>
+								<td class="px-6 py-4">
+									{category.parentCategory ? 
+										categories.find(c => c.id === category.parentCategory)?.name || 'N/A' :
+										'Categoría Principal'
+									}
+								</td>
+								<td class="px-6 py-4">{category.productCount}</td>
+								<td class="px-6 py-4">${category.totalValue.toLocaleString()}</td>
+								<td class="px-6 py-4">
+									<span class={`px-2 py-1 text-xs font-medium rounded-full ${
+										category.status === 'activa' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300' :
+										'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300'
+									}`}>
+										{category.status.charAt(0).toUpperCase() + category.status.slice(1)}
+									</span>
+								</td>
+								<td class="px-6 py-4">
+									<button class="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300 mr-2">
+										<svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+											<path d="M10 12a2 2 0 100-4 2 2 0 000 4z"></path>
+											<path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"></path>
+										</svg>
+									</button>
+									<button class="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-300 mr-2">
+										<svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+											<path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"></path>
+										</svg>
+									</button>
+									<button class="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300">
+										<svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+											<path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+										</svg>
+									</button>
+								</td>
+							</tr>
+						))}
+					</tbody>
+				</table>
+			</div>
+		</div>
+
+		<!-- Botones de Acción -->
+		<div class="mt-6 flex gap-4">
+			<button class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 focus:ring-4 focus:ring-green-300 flex items-center">
+				<svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+					<path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"></path>
+				</svg>
+				Nueva Categoría
+			</button>
+			<button class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 flex items-center">
+				<svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+					<path fill-rule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm2 6a1 1 0 000 2h4a1 1 0 100-2H8zm-1 5a1 1 0 011-1h3a1 1 0 110 2H9a1 1 0 01-1-1z" clip-rule="evenodd"></path>
+				</svg>
+				Generar Reporte
+			</button>
+			<button class="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 focus:ring-4 focus:ring-purple-300 flex items-center">
+				<svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+					<path fill-rule="evenodd" d="M3 4a1 1 0 000 2v8a2 2 0 002 2h2.586l-1.293 1.293a1 1 0 101.414 1.414L10 15.414l2.293 2.293a1 1 0 001.414-1.414L12.414 15H15a2 2 0 002-2V5a1 1 0 100-2H3zm11.707 4.707a1 1 0 00-1.414-1.414L10 9.586 8.707 8.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4a1 1 0 00-1.414-1.414l-4 4z" clip-rule="evenodd"></path>
+				</svg>
+				Exportar Estructura
+			</button>
+		</div>
+	</div>
+</LayoutSidebar> 

@@ -1,0 +1,62 @@
+[
+	{
+		"id": 1,
+		"type": "stock_bajo",
+		"productId": 1,
+		"productName": "Rodamiento SKF 6205",
+		"message": "Stock bajo: Solo quedan 5 unidades",
+		"severity": "alta",
+		"status": "activa",
+		"createdAt": "2024-01-15T08:00:00Z",
+		"resolvedAt": null,
+		"assignedTo": "Cristóbal Silva"
+	},
+	{
+		"id": 2,
+		"type": "vencimiento",
+		"productId": 3,
+		"productName": "Aceite Lubricante Mobil",
+		"message": "Lote próximo a vencer: 15 días restantes",
+		"severity": "media",
+		"status": "activa",
+		"createdAt": "2024-01-14T10:30:00Z",
+		"resolvedAt": null,
+		"assignedTo": "María González"
+	},
+	{
+		"id": 3,
+		"type": "stock_critico",
+		"productId": 5,
+		"productName": "Filtro de Aire Donaldson",
+		"message": "Stock crítico: Solo quedan 2 unidades",
+		"severity": "crítica",
+		"status": "activa",
+		"createdAt": "2024-01-13T14:15:00Z",
+		"resolvedAt": null,
+		"assignedTo": "Roberto Méndez"
+	},
+	{
+		"id": 4,
+		"type": "movimiento_sospechoso",
+		"productId": 2,
+		"productName": "Válvula de Control Parker",
+		"message": "Movimiento de salida sin autorización",
+		"severity": "alta",
+		"status": "resuelta",
+		"createdAt": "2024-01-12T16:45:00Z",
+		"resolvedAt": "2024-01-12T17:30:00Z",
+		"assignedTo": "Carlos Ramírez"
+	},
+	{
+		"id": 5,
+		"type": "vencimiento",
+		"productId": 4,
+		"productName": "Motor Eléctrico ABB 15HP",
+		"message": "Garantía próxima a vencer: 30 días restantes",
+		"severity": "baja",
+		"status": "activa",
+		"createdAt": "2024-01-11T09:20:00Z",
+		"resolvedAt": null,
+		"assignedTo": "Ana Martínez"
+	}
+] 

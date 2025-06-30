@@ -1,0 +1,257 @@
+---
+import LayoutSidebar from '../app/LayoutSidebar.astro';
+
+// Datos de ejemplo para inbox
+const messages = [
+	{
+		id: 1,
+		sender: "Cristóbal Silva",
+		subject: "Solicitud de materiales para proyecto minero",
+		message: "Necesitamos urgentemente rodamientos SKF 6205 para el mantenimiento de la bomba principal. ¿Podrían confirmar disponibilidad?",
+		timestamp: "2024-01-15T10:30:00Z",
+		priority: "alta",
+		read: false,
+		avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face"
+	},
+	{
+		id: 2,
+		sender: "María González",
+		subject: "Reporte de inventario mensual",
+		message: "Adjunto el reporte de inventario del mes de enero. Se detectaron algunas discrepancias que requieren revisión.",
+		timestamp: "2024-01-15T09:15:00Z",
+		priority: "media",
+		read: true,
+		avatar: "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face"
+	},
+	{
+		id: 3,
+		sender: "Roberto Méndez",
+		subject: "Alerta de stock bajo - Válvulas Parker",
+		message: "El stock de válvulas Parker ha llegado al mínimo. Se requiere orden de compra inmediata.",
+		timestamp: "2024-01-15T08:45:00Z",
+		priority: "alta",
+		read: false,
+		avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face"
+	},
+	{
+		id: 4,
+		sender: "Ana Martínez",
+		subject: "Confirmación de entrega",
+		message: "Confirmamos la entrega de los motores eléctricos para el proyecto de expansión. Todo en orden.",
+		timestamp: "2024-01-15T08:30:00Z",
+		priority: "baja",
+		read: true,
+		avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face"
+	},
+	{
+		id: 5,
+		sender: "Carlos Ramírez",
+		subject: "Reunión de coordinación semanal",
+		message: "Recordatorio: Reunión de coordinación mañana a las 9:00 AM. Tema: Optimización de inventario.",
+		timestamp: "2024-01-15T08:15:00Z",
+		priority: "media",
+		read: true,
+		avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&h=150&fit=crop&crop=face"
+	}
+];
+
+const unreadCount = messages.filter(m => !m.read).length;
+---
+
+<LayoutSidebar>
+	<div class="px-4 pt-6">
+		<!-- Header -->
+		<div class="mb-6">
+			<nav class="flex mb-5" aria-label="Breadcrumb">
+				<ol class="inline-flex items-center space-x-1 text-sm font-medium md:space-x-2">
+					<li class="inline-flex items-center">
+						<a href="/" class="inline-flex items-center text-gray-700 hover:text-primary-600 dark:text-gray-300 dark:hover:text-white">
+							<svg class="w-5 h-5 mr-2.5" fill="currentColor" viewBox="0 0 20 20">
+								<path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"/>
+							</svg>
+							Inicio
+						</a>
+					</li>
+					<li>
+						<div class="flex items-center">
+							<svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+								<path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"/>
+							</svg>
+							<span class="ml-1 text-gray-400 md:ml-2 dark:text-gray-500">Bandeja de Entrada</span>
+						</div>
+					</li>
+				</ol>
+			</nav>
+			<div class="flex items-center justify-between">
+				<div>
+					<h1 class="text-2xl font-bold text-gray-900 dark:text-white">
+						Bandeja de Entrada
+					</h1>
+					<p class="text-gray-600 dark:text-gray-400">
+						Mensajes y notificaciones del sistema
+					</p>
+				</div>
+				<div class="flex space-x-2">
+					<button class="px-4 py-2 text-sm font-medium text-white bg-primary-700 rounded-lg hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
+						Nuevo Mensaje
+					</button>
+					<button class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:ring-4 focus:ring-primary-300 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700">
+						Marcar como leído
+					</button>
+				</div>
+			</div>
+		</div>
+
+		<!-- Métricas -->
+		<div class="grid grid-cols-1 gap-4 mb-6 sm:grid-cols-3">
+			<div class="p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
+				<div class="flex items-center">
+					<div class="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 text-blue-500 bg-blue-100 rounded-lg dark:bg-blue-800 dark:text-blue-200">
+						<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+							<path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/>
+							<path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"/>
+						</svg>
+					</div>
+					<div class="ml-4">
+						<span class="text-2xl font-bold leading-none text-gray-900 dark:text-white">
+							{messages.length}
+						</span>
+						<p class="text-base font-normal text-gray-600 dark:text-gray-400">
+							Total Mensajes
+						</p>
+					</div>
+				</div>
+			</div>
+
+			<div class="p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
+				<div class="flex items-center">
+					<div class="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 text-red-500 bg-red-100 rounded-lg dark:bg-red-800 dark:text-red-200">
+						<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+							<path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+						</svg>
+					</div>
+					<div class="ml-4">
+						<span class="text-2xl font-bold leading-none text-gray-900 dark:text-white">
+							{unreadCount}
+						</span>
+						<p class="text-base font-normal text-gray-600 dark:text-gray-400">
+							No Leídos
+						</p>
+					</div>
+				</div>
+			</div>
+
+			<div class="p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
+				<div class="flex items-center">
+					<div class="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 text-yellow-500 bg-yellow-100 rounded-lg dark:bg-yellow-800 dark:text-yellow-200">
+						<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+							<path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+						</svg>
+					</div>
+					<div class="ml-4">
+						<span class="text-2xl font-bold leading-none text-gray-900 dark:text-white">
+							{messages.filter(m => m.priority === 'alta').length}
+						</span>
+						<p class="text-base font-normal text-gray-600 dark:text-gray-400">
+							Prioridad Alta
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Lista de Mensajes -->
+		<div class="bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
+			<div class="p-6">
+				<h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+					Mensajes Recientes
+				</h3>
+				
+				<div class="space-y-4">
+					{messages.map((message) => (
+						<div class={`flex items-start p-4 border rounded-lg cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 ${
+							message.read 
+								? 'bg-white border-gray-200 dark:bg-gray-800 dark:border-gray-700' 
+								: 'bg-blue-50 border-blue-200 dark:bg-blue-900/20 dark:border-blue-800'
+						}`}>
+							<div class="flex-shrink-0 mr-4">
+								<img 
+									class="w-10 h-10 rounded-full" 
+									src={message.avatar} 
+									alt={message.sender}
+								/>
+								{!message.read && (
+									<div class="w-3 h-3 bg-blue-600 rounded-full border-2 border-white -mt-2 ml-7"></div>
+								)}
+							</div>
+							
+							<div class="flex-1 min-w-0">
+								<div class="flex items-center justify-between mb-2">
+									<div class="flex items-center space-x-2">
+										<p class={`text-sm font-medium ${
+											message.read 
+												? 'text-gray-900 dark:text-white' 
+												: 'text-blue-900 dark:text-blue-100'
+										}`}>
+											{message.sender}
+										</p>
+										<span class={`inline-flex items-center px-2 py-1 text-xs font-semibold rounded ${
+											message.priority === 'alta' 
+												? 'text-red-800 bg-red-200 dark:bg-red-700 dark:text-red-100'
+												: message.priority === 'media'
+												? 'text-yellow-800 bg-yellow-200 dark:bg-yellow-700 dark:text-yellow-100'
+												: 'text-green-800 bg-green-200 dark:bg-green-700 dark:text-green-100'
+										}`}>
+											{message.priority === 'alta' ? 'Alta' : message.priority === 'media' ? 'Media' : 'Baja'}
+										</span>
+									</div>
+									<span class="text-xs text-gray-500 dark:text-gray-400">
+										{new Date(message.timestamp).toLocaleString('es-CL')}
+									</span>
+								</div>
+								
+								<p class={`text-sm font-medium mb-1 ${
+									message.read 
+										? 'text-gray-900 dark:text-white' 
+										: 'text-blue-900 dark:text-blue-100'
+								}`}>
+									{message.subject}
+								</p>
+								
+								<p class="text-sm text-gray-600 dark:text-gray-400 line-clamp-2">
+									{message.message}
+								</p>
+							</div>
+							
+							<div class="flex-shrink-0 ml-4">
+								<button class="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
+									<svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+										<path d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z"/>
+									</svg>
+								</button>
+							</div>
+						</div>
+					))}
+				</div>
+				
+				<!-- Paginación -->
+				<div class="mt-6 flex items-center justify-between">
+					<div class="text-sm text-gray-700 dark:text-gray-400">
+						Mostrando 1 a {messages.length} de {messages.length} mensajes
+					</div>
+					<div class="flex space-x-2">
+						<button class="px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-400 dark:hover:bg-gray-700">
+							Anterior
+						</button>
+						<button class="px-3 py-2 text-sm font-medium text-white bg-primary-600 border border-primary-600 rounded-lg hover:bg-primary-700">
+							1
+						</button>
+						<button class="px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-400 dark:hover:bg-gray-700">
+							Siguiente
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</LayoutSidebar> 

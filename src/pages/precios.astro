@@ -1,0 +1,287 @@
+---
+import LayoutSidebar from '../app/LayoutSidebar.astro';
+
+// Datos de planes de precios
+const pricingPlans = [
+	{
+		name: "Plan Básico",
+		price: 150000,
+		period: "mensual",
+		description: "Ideal para pequeñas maestranzas y talleres",
+		features: [
+			"Gestión básica de inventario",
+			"Hasta 500 productos",
+			"Reportes básicos",
+			"Soporte por email",
+			"1 usuario",
+			"Backup semanal"
+		],
+		popular: false,
+		recommended: false
+	},
+	{
+		name: "Plan Profesional",
+		price: 350000,
+		period: "mensual",
+		description: "Perfecto para medianas empresas de maestranza",
+		features: [
+			"Gestión completa de inventario",
+			"Hasta 2000 productos",
+			"Reportes avanzados",
+			"Soporte telefónico",
+			"Hasta 5 usuarios",
+			"Backup diario",
+			"Integración con proveedores",
+			"Alertas automáticas"
+		],
+		popular: true,
+		recommended: true
+	},
+	{
+		name: "Plan Empresarial",
+		price: 750000,
+		period: "mensual",
+		description: "Para grandes empresas y mineras",
+		features: [
+			"Gestión completa de inventario",
+			"Productos ilimitados",
+			"Reportes personalizados",
+			"Soporte 24/7",
+			"Usuarios ilimitados",
+			"Backup en tiempo real",
+			"Integración completa",
+			"API personalizada",
+			"Capacitación incluida",
+			"Implementación dedicada"
+		],
+		popular: false,
+		recommended: false
+	}
+];
+
+const additionalServices = [
+	{
+		name: "Implementación",
+		price: 500000,
+		description: "Configuración inicial y migración de datos",
+		features: ["Análisis de requerimientos", "Migración de datos", "Capacitación inicial", "Soporte post-implementación"]
+	},
+	{
+		name: "Capacitación",
+		price: 250000,
+		description: "Capacitación especializada para tu equipo",
+		features: ["Capacitación presencial", "Material de apoyo", "Certificación de usuarios", "Soporte post-capacitación"]
+	},
+	{
+		name: "Soporte Premium",
+		price: 200000,
+		description: "Soporte técnico prioritario y dedicado",
+		features: ["Soporte 24/7", "Tiempo de respuesta garantizado", "Consultoría técnica", "Actualizaciones prioritarias"]
+	},
+	{
+		name: "Personalización",
+		price: 400000,
+		description: "Desarrollo de funcionalidades específicas",
+		features: ["Análisis de requerimientos", "Desarrollo a medida", "Pruebas exhaustivas", "Documentación técnica"]
+	}
+];
+---
+
+<LayoutSidebar>
+	<div class="px-4 pt-6">
+		<!-- Header -->
+		<div class="mb-6">
+			<nav class="flex mb-5" aria-label="Breadcrumb">
+				<ol class="inline-flex items-center space-x-1 text-sm font-medium md:space-x-2">
+					<li class="inline-flex items-center">
+						<a href="/" class="inline-flex items-center text-gray-700 hover:text-primary-600 dark:text-gray-300 dark:hover:text-white">
+							<svg class="w-5 h-5 mr-2.5" fill="currentColor" viewBox="0 0 20 20">
+								<path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"/>
+							</svg>
+							Inicio
+						</a>
+					</li>
+					<li>
+						<div class="flex items-center">
+							<svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+								<path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"/>
+							</svg>
+							<span class="ml-1 text-gray-400 md:ml-2 dark:text-gray-500">Precios</span>
+						</div>
+					</li>
+				</ol>
+			</nav>
+			<div class="text-center mb-8">
+				<h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">
+					Planes y Precios
+				</h1>
+				<p class="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+					Elige el plan que mejor se adapte a las necesidades de tu maestranza. 
+					Todos nuestros planes incluyen soporte técnico y actualizaciones regulares.
+				</p>
+			</div>
+		</div>
+
+		<!-- Planes principales -->
+		<div class="grid grid-cols-1 gap-6 mb-12 lg:grid-cols-3">
+			{pricingPlans.map((plan) => (
+				<div class={`relative p-6 bg-white border rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700 ${
+					plan.recommended 
+						? 'border-primary-500 ring-2 ring-primary-500' 
+						: 'border-gray-200'
+				}`}>
+					{plan.recommended && (
+						<div class="absolute -top-3 left-1/2 transform -translate-x-1/2">
+							<span class="bg-primary-600 text-white text-xs font-medium px-3 py-1 rounded-full">
+								Recomendado
+							</span>
+						</div>
+					)}
+					
+					<div class="text-center mb-6">
+						<h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+							{plan.name}
+						</h3>
+						<p class="text-gray-600 dark:text-gray-400 mb-4">
+							{plan.description}
+						</p>
+						<div class="mb-4">
+							<span class="text-4xl font-bold text-gray-900 dark:text-white">
+								${(plan.price / 1000).toFixed(0)}K
+							</span>
+							<span class="text-gray-600 dark:text-gray-400">/{plan.period}</span>
+						</div>
+					</div>
+					
+					<ul class="space-y-3 mb-6">
+						{plan.features.map((feature) => (
+							<li class="flex items-center">
+								<svg class="w-5 h-5 text-green-500 mr-3" fill="currentColor" viewBox="0 0 20 20">
+									<path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+								</svg>
+								<span class="text-gray-700 dark:text-gray-300">{feature}</span>
+							</li>
+						))}
+					</ul>
+					
+					<button class={`w-full py-2 px-4 rounded-lg font-medium ${
+						plan.recommended
+							? 'bg-primary-600 text-white hover:bg-primary-700'
+							: 'bg-gray-100 text-gray-900 hover:bg-gray-200 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600'
+					}`}>
+						{plan.recommended ? 'Comenzar Ahora' : 'Seleccionar Plan'}
+					</button>
+				</div>
+			))}
+		</div>
+
+		<!-- Servicios adicionales -->
+		<div class="mb-8">
+			<h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-6 text-center">
+				Servicios Adicionales
+			</h2>
+			<div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
+				{additionalServices.map((service) => (
+					<div class="p-6 bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700">
+						<div class="text-center mb-4">
+							<h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+								{service.name}
+							</h3>
+							<div class="mb-2">
+								<span class="text-2xl font-bold text-gray-900 dark:text-white">
+									${(service.price / 1000).toFixed(0)}K
+								</span>
+							</div>
+							<p class="text-sm text-gray-600 dark:text-gray-400">
+								{service.description}
+							</p>
+						</div>
+						
+						<ul class="space-y-2 mb-4">
+							{service.features.map((feature) => (
+								<li class="flex items-center text-sm">
+									<svg class="w-4 h-4 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+										<path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+									</svg>
+									<span class="text-gray-700 dark:text-gray-300">{feature}</span>
+								</li>
+							))}
+						</ul>
+						
+						<button class="w-full py-2 px-4 text-sm font-medium text-primary-600 bg-primary-50 border border-primary-200 rounded-lg hover:bg-primary-100 dark:bg-primary-900/20 dark:border-primary-800 dark:text-primary-400 dark:hover:bg-primary-900/40">
+							Agregar Servicio
+						</button>
+					</div>
+				))}
+			</div>
+		</div>
+
+		<!-- FAQ -->
+		<div class="bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700">
+			<div class="p-6">
+				<h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-6">
+					Preguntas Frecuentes
+				</h2>
+				
+				<div class="space-y-6">
+					<div>
+						<h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+							¿Puedo cambiar de plan en cualquier momento?
+						</h3>
+						<p class="text-gray-600 dark:text-gray-400">
+							Sí, puedes cambiar de plan en cualquier momento. Los cambios se aplicarán en el próximo ciclo de facturación.
+						</p>
+					</div>
+					
+					<div>
+						<h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+							¿Incluyen soporte técnico todos los planes?
+						</h3>
+						<p class="text-gray-600 dark:text-gray-400">
+							Sí, todos los planes incluyen soporte técnico. El nivel de soporte varía según el plan elegido.
+						</p>
+					</div>
+					
+					<div>
+						<h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+							¿Hay descuentos para contratos anuales?
+						</h3>
+						<p class="text-gray-600 dark:text-gray-400">
+							Sí, ofrecemos un descuento del 20% para contratos anuales en todos nuestros planes.
+						</p>
+					</div>
+					
+					<div>
+						<h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+							¿Puedo probar el sistema antes de contratar?
+						</h3>
+						<p class="text-gray-600 dark:text-gray-400">
+							Sí, ofrecemos una prueba gratuita de 30 días sin compromiso para que puedas evaluar el sistema.
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- CTA -->
+		<div class="mt-8 text-center">
+			<div class="bg-primary-50 border border-primary-200 rounded-lg p-8 dark:bg-primary-900/20 dark:border-primary-800">
+				<h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+					¿Necesitas un plan personalizado?
+				</h2>
+				<p class="text-gray-600 dark:text-gray-400 mb-6 max-w-2xl mx-auto">
+					Si tienes necesidades específicas que no se ajustan a nuestros planes estándar, 
+					contáctanos para crear una solución personalizada para tu empresa.
+				</p>
+				<div class="flex flex-col sm:flex-row gap-4 justify-center">
+					<button class="px-6 py-3 text-white bg-primary-600 rounded-lg hover:bg-primary-700 font-medium">
+						Contactar Ventas
+					</button>
+					<button class="px-6 py-3 text-primary-600 bg-white border border-primary-600 rounded-lg hover:bg-primary-50 font-medium">
+						Solicitar Demo
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</LayoutSidebar> 

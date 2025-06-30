@@ -1,0 +1,341 @@
+---
+import LayoutSidebar from '../app/LayoutSidebar.astro';
+import { getProducts } from '../services/products.ts';
+import { getMovements } from '../services/movements.ts';
+import { getAlerts } from '../services/alerts.ts';
+import { getBatches } from '../services/batches.ts';
+
+const products = await getProducts();
+const movements = await getMovements();
+const alerts = await getAlerts();
+const batches = await getBatches();
+
+// Calcular métricas para reportes
+const totalProducts = products.length;
+const totalValue = products.reduce((sum, p) => {
+	const price = parseFloat(p.price.replace(/[$,]/g, ''));
+	return sum + (price * p.stock);
+}, 0);
+const lowStockProducts = products.filter(p => p.stock <= p.stockmin).length;
+const activeAlerts = alerts.filter(a => a.status === 'activa').length;
+const expiringBatches = batches.filter(b => b.status === 'por_vencer').length;
+---
+
+<LayoutSidebar>
+	<div class="px-4 pt-6">
+		<div class="mb-6">
+			<h1 class="text-2xl font-bold text-gray-900 dark:text-white">
+				Reportes de Inventario
+			</h1>
+			<p class="text-gray-600 dark:text-gray-400">
+				Generación y visualización de reportes detallados del sistema de inventarios
+			</p>
+		</div>
+
+		<!-- Métricas Resumen -->
+		<div class="grid gap-4 xl:grid-cols-2 2xl:grid-cols-4 mb-6">
+			<div class="p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
+				<div class="flex items-center">
+					<div class="flex-shrink-0">
+						<svg class="w-8 h-8 text-blue-600 dark:text-blue-500" fill="currentColor" viewBox="0 0 20 20">
+							<path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"></path>
+						</svg>
+					</div>
+					<div class="ml-4">
+						<p class="text-sm font-medium text-gray-500 dark:text-gray-400">Total Productos</p>
+						<p class="text-2xl font-bold text-gray-900 dark:text-white">{totalProducts}</p>
+					</div>
+				</div>
+			</div>
+
+			<div class="p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
+				<div class="flex items-center">
+					<div class="flex-shrink-0">
+						<svg class="w-8 h-8 text-green-600 dark:text-green-500" fill="currentColor" viewBox="0 0 20 20">
+							<path d="M8.433 7.418c.155-.103.346-.196.567-.267v1.698a2.305 2.305 0 01-.567-.267C8.07 8.34 8 8.114 8 8c0-.114.07-.34.433-.582zM11 12.849v-1.698c.22.071.412.164.567.267.364.243.433.468.433.582 0 .114-.07.34-.433.582a2.305 2.305 0 01-.567.267z"></path>
+							<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.092a4.535 4.535 0 00-1.676.662C6.602 6.234 6 7.009 6 8c0 .99.602 1.765 1.324 2.246.48.32 1.054.545 1.676.662v1.941c-.391-.127-.68-.317-.843-.504a1 1 0 10-1.51 1.31c.562.649 1.413 1.076 2.353 1.253V15a1 1 0 102 0v-.092a4.535 4.535 0 001.676-.662C13.398 13.766 14 12.991 14 12c0-.99-.602-1.765-1.324-2.246A4.535 4.535 0 0011 9.092V7.151c.391.127.68.317.843.504a1 1 0 101.511-1.31c-.563-.649-1.413-1.076-2.354-1.253V5z" clip-rule="evenodd"></path>
+						</svg>
+					</div>
+					<div class="ml-4">
+						<p class="text-sm font-medium text-gray-500 dark:text-gray-400">Valor Total</p>
+						<p class="text-2xl font-bold text-gray-900 dark:text-white">${totalValue.toLocaleString()}</p>
+					</div>
+				</div>
+			</div>
+
+			<div class="p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
+				<div class="flex items-center">
+					<div class="flex-shrink-0">
+						<svg class="w-8 h-8 text-yellow-600 dark:text-yellow-500" fill="currentColor" viewBox="0 0 20 20">
+							<path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+						</svg>
+					</div>
+					<div class="ml-4">
+						<p class="text-sm font-medium text-gray-500 dark:text-gray-400">Stock Bajo</p>
+						<p class="text-2xl font-bold text-gray-900 dark:text-white">{lowStockProducts}</p>
+					</div>
+				</div>
+			</div>
+
+			<div class="p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
+				<div class="flex items-center">
+					<div class="flex-shrink-0">
+						<svg class="w-8 h-8 text-red-600 dark:text-red-500" fill="currentColor" viewBox="0 0 20 20">
+							<path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+						</svg>
+					</div>
+					<div class="ml-4">
+						<p class="text-sm font-medium text-gray-500 dark:text-gray-400">Alertas Activas</p>
+						<p class="text-2xl font-bold text-gray-900 dark:text-white">{activeAlerts}</p>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Tipos de Reportes -->
+		<div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3 mb-6">
+			<!-- Reporte de Inventario General -->
+			<div class="p-6 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
+				<div class="flex items-center mb-4">
+					<svg class="w-8 h-8 text-blue-600 dark:text-blue-500 mr-3" fill="currentColor" viewBox="0 0 20 20">
+						<path fill-rule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm2 6a1 1 0 000 2h4a1 1 0 100-2H8zm-1 5a1 1 0 011-1h3a1 1 0 110 2H9a1 1 0 01-1-1z" clip-rule="evenodd"></path>
+					</svg>
+					<h3 class="text-lg font-semibold text-gray-900 dark:text-white">Inventario General</h3>
+				</div>
+				<p class="text-gray-600 dark:text-gray-400 mb-4">
+					Reporte completo del estado actual del inventario con stock, valores y ubicaciones.
+				</p>
+				<div class="space-y-2">
+					<button class="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:ring-4 focus:ring-blue-300">
+						Generar Reporte
+					</button>
+					<button class="w-full px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 focus:ring-4 focus:ring-gray-300">
+						Descargar PDF
+					</button>
+				</div>
+			</div>
+
+			<!-- Reporte de Movimientos -->
+			<div class="p-6 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
+				<div class="flex items-center mb-4">
+					<svg class="w-8 h-8 text-green-600 dark:text-green-500 mr-3" fill="currentColor" viewBox="0 0 20 20">
+						<path fill-rule="evenodd" d="M3 3a1 1 0 000 2v8a2 2 0 002 2h2.586l-1.293 1.293a1 1 0 101.414 1.414L10 15.414l2.293 2.293a1 1 0 001.414-1.414L12.414 15H15a2 2 0 002-2V5a1 1 0 100-2H3zm11.707 4.707a1 1 0 00-1.414-1.414L10 9.586 8.707 8.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4a1 1 0 00-1.414-1.414l-4 4z" clip-rule="evenodd"></path>
+					</svg>
+					<h3 class="text-lg font-semibold text-gray-900 dark:text-white">Movimientos</h3>
+				</div>
+				<p class="text-gray-600 dark:text-gray-400 mb-4">
+					Análisis detallado de entradas, salidas y transferencias de inventario.
+				</p>
+				<div class="space-y-2">
+					<button class="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:ring-4 focus:ring-blue-300">
+						Generar Reporte
+					</button>
+					<button class="w-full px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 focus:ring-4 focus:ring-gray-300">
+						Descargar PDF
+					</button>
+				</div>
+			</div>
+
+			<!-- Reporte de Alertas -->
+			<div class="p-6 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
+				<div class="flex items-center mb-4">
+					<svg class="w-8 h-8 text-red-600 dark:text-red-500 mr-3" fill="currentColor" viewBox="0 0 20 20">
+						<path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+					</svg>
+					<h3 class="text-lg font-semibold text-gray-900 dark:text-white">Alertas y Stock Bajo</h3>
+				</div>
+				<p class="text-gray-600 dark:text-gray-400 mb-4">
+					Reporte de productos con stock bajo y alertas activas del sistema.
+				</p>
+				<div class="space-y-2">
+					<button class="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:ring-4 focus:ring-blue-300">
+						Generar Reporte
+					</button>
+					<button class="w-full px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 focus:ring-4 focus:ring-gray-300">
+						Descargar PDF
+					</button>
+				</div>
+			</div>
+
+			<!-- Reporte de Lotes -->
+			<div class="p-6 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
+				<div class="flex items-center mb-4">
+					<svg class="w-8 h-8 text-orange-600 dark:text-orange-500 mr-3" fill="currentColor" viewBox="0 0 20 20">
+						<path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"></path>
+					</svg>
+					<h3 class="text-lg font-semibold text-gray-900 dark:text-white">Control de Lotes</h3>
+				</div>
+				<p class="text-gray-600 dark:text-gray-400 mb-4">
+					Estado de lotes, fechas de vencimiento y productos por vencer.
+				</p>
+				<div class="space-y-2">
+					<button class="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:ring-4 focus:ring-blue-300">
+						Generar Reporte
+					</button>
+					<button class="w-full px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 focus:ring-4 focus:ring-gray-300">
+						Descargar PDF
+					</button>
+				</div>
+			</div>
+
+			<!-- Reporte de Valorización -->
+			<div class="p-6 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
+				<div class="flex items-center mb-4">
+					<svg class="w-8 h-8 text-purple-600 dark:text-purple-500 mr-3" fill="currentColor" viewBox="0 0 20 20">
+						<path d="M8.433 7.418c.155-.103.346-.196.567-.267v1.698a2.305 2.305 0 01-.567-.267C8.07 8.34 8 8.114 8 8c0-.114.07-.34.433-.582zM11 12.849v-1.698c.22.071.412.164.567.267.364.243.433.468.433.582 0 .114-.07.34-.433.582a2.305 2.305 0 01-.567.267z"></path>
+						<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.092a4.535 4.535 0 00-1.676.662C6.602 6.234 6 7.009 6 8c0 .99.602 1.765 1.324 2.246.48.32 1.054.545 1.676.662v1.941c-.391-.127-.68-.317-.843-.504a1 1 0 10-1.51 1.31c.562.649 1.413 1.076 2.353 1.253V15a1 1 0 102 0v-.092a4.535 4.535 0 001.676-.662C13.398 13.766 14 12.991 14 12c0-.99-.602-1.765-1.324-2.246A4.535 4.535 0 0011 9.092V7.151c.391.127.68.317.843.504a1 1 0 101.511-1.31c-.563-.649-1.413-1.076-2.354-1.253V5z" clip-rule="evenodd"></path>
+					</svg>
+					<h3 class="text-lg font-semibold text-gray-900 dark:text-white">Valorización</h3>
+				</div>
+				<p class="text-gray-600 dark:text-gray-400 mb-4">
+					Valorización del inventario por categorías, ubicaciones y proveedores.
+				</p>
+				<div class="space-y-2">
+					<button class="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:ring-4 focus:ring-blue-300">
+						Generar Reporte
+					</button>
+					<button class="w-full px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 focus:ring-4 focus:ring-gray-300">
+						Descargar PDF
+					</button>
+				</div>
+			</div>
+
+			<!-- Reporte de Tendencias -->
+			<div class="p-6 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
+				<div class="flex items-center mb-4">
+					<svg class="w-8 h-8 text-indigo-600 dark:text-indigo-500 mr-3" fill="currentColor" viewBox="0 0 20 20">
+						<path fill-rule="evenodd" d="M3 3a1 1 0 000 2v8a2 2 0 002 2h2.586l-1.293 1.293a1 1 0 101.414 1.414L10 15.414l2.293 2.293a1 1 0 001.414-1.414L12.414 15H15a2 2 0 002-2V5a1 1 0 100-2H3zm11.707 4.707a1 1 0 00-1.414-1.414L10 9.586 8.707 8.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4a1 1 0 00-1.414-1.414l-4 4z" clip-rule="evenodd"></path>
+					</svg>
+					<h3 class="text-lg font-semibold text-gray-900 dark:text-white">Tendencias</h3>
+				</div>
+				<p class="text-gray-600 dark:text-gray-400 mb-4">
+					Análisis de tendencias de consumo y rotación de inventario.
+				</p>
+				<div class="space-y-2">
+					<button class="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:ring-4 focus:ring-blue-300">
+						Generar Reporte
+					</button>
+					<button class="w-full px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 focus:ring-4 focus:ring-gray-300">
+						Descargar PDF
+					</button>
+				</div>
+			</div>
+		</div>
+
+		<!-- Filtros para Reportes -->
+		<div class="mb-6 p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
+			<h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Filtros de Reporte</h3>
+			<div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+				<div>
+					<label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+						Fecha Desde
+					</label>
+					<input type="date" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
+				</div>
+				<div>
+					<label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+						Fecha Hasta
+					</label>
+					<input type="date" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
+				</div>
+				<div>
+					<label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+						Categoría
+					</label>
+					<select class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
+						<option value="">Todas</option>
+						{Array.from(new Set(products.map(p => p.category))).map(category => (
+							<option value={category}>{category}</option>
+						))}
+					</select>
+				</div>
+				<div>
+					<label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+						Ubicación
+					</label>
+					<select class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
+						<option value="">Todas</option>
+						{Array.from(new Set(products.map(p => p.ubicacion.split(' - ')[0]))).map(location => (
+							<option value={location}>{location}</option>
+						))}
+					</select>
+				</div>
+			</div>
+		</div>
+
+		<!-- Reportes Programados -->
+		<div class="mb-6">
+			<h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Reportes Programados</h3>
+			<div class="bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
+				<div class="overflow-x-auto">
+					<table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+						<thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+							<tr>
+								<th scope="col" class="px-6 py-3">Nombre del Reporte</th>
+								<th scope="col" class="px-6 py-3">Frecuencia</th>
+								<th scope="col" class="px-6 py-3">Última Ejecución</th>
+								<th scope="col" class="px-6 py-3">Próxima Ejecución</th>
+								<th scope="col" class="px-6 py-3">Estado</th>
+								<th scope="col" class="px-6 py-3">Acciones</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+								<td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+									Reporte Semanal de Inventario
+								</td>
+								<td class="px-6 py-4">Semanal</td>
+								<td class="px-6 py-4">15/01/2024</td>
+								<td class="px-6 py-4">22/01/2024</td>
+								<td class="px-6 py-4">
+									<span class="px-2 py-1 text-xs font-medium bg-green-100 text-green-800 rounded-full dark:bg-green-900 dark:text-green-300">
+										Activo
+									</span>
+								</td>
+								<td class="px-6 py-4">
+									<button class="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300 mr-2">
+										Editar
+									</button>
+									<button class="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300">
+										Desactivar
+									</button>
+								</td>
+							</tr>
+							<tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+								<td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+									Reporte Mensual de Valorización
+								</td>
+								<td class="px-6 py-4">Mensual</td>
+								<td class="px-6 py-4">01/01/2024</td>
+								<td class="px-6 py-4">01/02/2024</td>
+								<td class="px-6 py-4">
+									<span class="px-2 py-1 text-xs font-medium bg-green-100 text-green-800 rounded-full dark:bg-green-900 dark:text-green-300">
+										Activo
+									</span>
+								</td>
+								<td class="px-6 py-4">
+									<button class="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300 mr-2">
+										Editar
+									</button>
+									<button class="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300">
+										Desactivar
+									</button>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+
+		<!-- Botón Programar Reporte -->
+		<div class="mb-6">
+			<button class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 focus:ring-4 focus:ring-green-300 flex items-center">
+				<svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+					<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"></path>
+				</svg>
+				Programar Nuevo Reporte
+			</button>
+		</div>
+	</div>
+</LayoutSidebar> 

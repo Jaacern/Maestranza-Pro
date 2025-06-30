@@ -1,0 +1,134 @@
+# .cursorrules
+
+# 1. Estructura de carpetas
+folders:
+  type: always
+  pages: "Contendrá únicamente archivos .astro o .js que representen rutas del sitio"
+  components: "Componentes UI reutilizables en PascalCase"
+  services: "Lógica de negocio y llamadas a API"
+  layouts: "Plantillas globales y estructura de página"
+  data: "Mocks y datos estáticos"
+  types: "Definiciones de TypeScript"
+
+# 2. Nomenclatura de archivos
+naming:
+  type: always
+  pages: "PascalCase. Ej: InventoryRegistration.astro, LowStockAlerts.astro"
+  components: "PascalCase con sufijo Component. Ej: NavBarComponent.astro"
+  services: "camelCase. Ej: inventoryService.js"
+
+# 3. Rutas permitidas y dinámicas
+routes:
+  type: always
+  pattern: "^/(dashboard|login|inventory-registration|inventory-movement|low-stock-alerts|suppliers-management|purchase-history|batch-control|kits-management|inventory-reports|energy-supply-control|inventory-tracking|inventory-threshold-notifications|inventory-categorization|purchase-integration)/?$"
+  errorMessage: "La ruta debe coincidir con las funcionalidades definidas, /dashboard o /login."
+dynamicPages:
+  type: always
+  rule: "Si un botón o enlace apunta a una ruta no existente, crear automáticamente la página con la nomenclatura PascalCase."
+
+# 4. Calidad de código
+lint:
+  type: manual
+  eslint: true
+  rules:
+    max-len: ["error", { "code": 120 }]
+    no-console: "warn"
+
+# 5. Seguridad, autenticación y roles
+authentication:
+  type: always
+  loginPage: "/login"
+  dashboardPage: "/dashboard"
+  guards:
+    - path: "/**"
+      requireAuth: true
+      exclude: ["/login"]
+  roles:
+    - name: Administrador
+      permissions: ["all"]
+    - name: GestorInventario
+      permissions: ["inventory", "movements", "alerts", "reports"]
+    - name: Comprador
+      permissions: ["purchases", "suppliers", "reports"]
+    - name: EncargadoLogistica
+      permissions: ["logistics", "tracking", "movements"]
+    - name: AuditorInventario
+      permissions: ["audit", "reports", "inventory"]
+    - name: JefeProduccion
+      permissions: ["production", "kits", "inventory"]
+    - name: GerenteProyectos
+      permissions: ["projects", "teams", "reports"]
+    - name: UsuarioFinal
+      permissions: ["basic", "requests"]
+  rolesAllowed:
+    "/dashboard": ["Administrador", "GestorInventario", "Comprador", "EncargadoLogistica", "AuditorInventario", "JefeProduccion", "GerenteProyectos", "UsuarioFinal"]
+    "/inventory-registration": ["Administrador", "GestorInventario", "UsuarioFinal"]
+    "/inventory-movement": ["Administrador", "GestorInventario"]
+    "/low-stock-alerts": ["Administrador", "GestorInventario"]
+    "/suppliers-management": ["Administrador", "Comprador"]
+    "/purchase-history": ["Administrador", "Comprador"]
+    "/batch-control": ["Administrador", "GestorInventario"]
+    "/kits-management": ["Administrador", "JefeProduccion"]
+    "/inventory-reports": ["Administrador", "AuditorInventario"]
+    "/energy-supply-control": ["Administrador"]
+    "/inventory-tracking": ["Administrador", "EncargadoLogistica"]
+    "/inventory-threshold-notifications": ["Administrador", "GestorInventario"]
+    "/inventory-categorization": ["Administrador", "GestorInventario"]
+    "/purchase-integration": ["Administrador", "GerenteProyectos"]
+
+# 6. Layouts de autenticación
+authLayout:
+  type: always
+  dashboardLayout: "src/layouts/DashboardLayout.astro"
+  loginLayout: "src/layouts/LoginLayout.astro"
+  rule: "Usar DashboardLayout para páginas protegidas y LoginLayout para login."
+
+# 7. Componentes de dashboard
+dashboardComponents:
+  type: always
+  location: "src/components/dashboards/"
+  components:
+    - "AdminDashboard.jsx"
+    - "GestorDashboard.jsx"
+    - "CompradorDashboard.jsx"
+    - "LogisticaDashboard.jsx"
+    - "AuditorDashboard.jsx"
+    - "ProduccionDashboard.jsx"
+    - "ProyectosDashboard.jsx"
+    - "UsuarioDashboard.jsx"
+  rule: "Cada componente debe recibir session como prop y renderizar widgets específicos del rol."
+
+# 8. Tests
+testing:
+  type: auto_attached
+  unit:
+    pattern: "src/**/*.(test|spec).{js,ts,astro}"
+  integration:
+    pattern: "tests/integration/**"
+
+# 9. Documentación
+docs:
+  type: manual
+  requireJsDoc: true
+  includeExamples: true
+
+# 10. No duplicar archivos
+noDuplication:
+  type: always
+  enabled: true
+
+# 11. Documentación Ágil
+agileDocs:
+  type: agent_request
+  files:
+    - path: "src/docs/BACKLOG.md"
+      template: "backlog"
+    - path: "src/docs/ROLES.md"
+      template: "roles"
+    - path: "src/docs/MVP.md"
+      template: "mvp"
+    - path: "src/docs/DEMO_PLAN.md"
+      template: "demoPlan"
+  rule: |
+    Cuando se reciba un prompt con type: agent_request y tema 'agileDocs',
+    generar o actualizar cada archivo con contenido completo según su template. 

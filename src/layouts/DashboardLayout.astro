@@ -1,0 +1,169 @@
+---
+import { getSession, hasAccess } from '../services/auth.js';
+import { redirect } from 'astro/runtime';
+
+// Obtener sesión del usuario
+const session = await getSession(Astro.request);
+
+// Si no hay sesión, redirigir a login
+if (!session) {
+	throw redirect(302, '/login');
+}
+
+// Verificar acceso al dashboard
+if (!hasAccess(session.role, '/dashboard')) {
+	throw redirect(302, '/login');
+}
+
+// Mapear rol a componente de dashboard
+const dashboardComponents = {
+	'Administrador': 'AdminDashboard',
+	'GestorInventario': 'GestorDashboard',
+	'Comprador': 'CompradorDashboard',
+	'EncargadoLogistica': 'LogisticaDashboard',
+	'AuditorInventario': 'AuditorDashboard',
+	'JefeProduccion': 'ProduccionDashboard',
+	'GerenteProyectos': 'ProyectosDashboard',
+	'UsuarioFinal': 'UsuarioDashboard'
+};
+
+const dashboardComponent = dashboardComponents[session.role] || 'UsuarioDashboard';
+---
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Dashboard - {session.role} | Maestranzas Unidos S.A.</title>
+	
+	<!-- Tailwind CSS -->
+	<script src="https://cdn.tailwindcss.com"></script>
+	
+	<!-- Flowbite -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.js"></script>
+	
+	<!-- ApexCharts -->
+	<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+	
+	<style>
+		@import url('https://fonts.cdnfonts.com/css/inter');
+		
+		/* Estilos personalizados */
+		.dashboard-container {
+			min-height: 100vh;
+			background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+		}
+		
+		.dashboard-card {
+			backdrop-filter: blur(10px);
+			background: rgba(255, 255, 255, 0.1);
+			border: 1px solid rgba(255, 255, 255, 0.2);
+		}
+		
+		/* Animaciones */
+		.fade-in {
+			animation: fadeIn 0.5s ease-in;
+		}
+		
+		@keyframes fadeIn {
+			from { opacity: 0; transform: translateY(20px); }
+			to { opacity: 1; transform: translateY(0); }
+		}
+	</style>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900">
+	<!-- Navbar -->
+	<nav class="bg-white border-b border-gray-200 px-4 py-2.5 dark:bg-gray-800 dark:border-gray-700 fixed left-0 right-0 top-0 z-50">
+		<div class="flex flex-wrap justify-between items-center">
+			<div class="flex justify-start items-center">
+				<a href="/dashboard" class="flex items-center justify-between mr-4">
+					<img src="/favicon.svg" class="mr-3 h-6 sm:h-7" alt="Maestranzas Unidos S.A. Logo" />
+					<span class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:text-white">
+						Maestranzas Unidos S.A.
+					</span>
+				</a>
+			</div>
+			
+			<div class="flex items-center lg:order-2 space-x-4">
+				<!-- Información del usuario -->
+				<div class="text-sm text-gray-700 dark:text-gray-300">
+					<span class="font-medium">{session.username}</span>
+					<span class="mx-2">•</span>
+					<span>{session.role}</span>
+				</div>
+				
+				<!-- Botón de logout -->
+				<button 
+					id="logoutBtn"
+					class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-white transition-colors"
+				>
+					<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+					</svg>
+				</button>
+			</div>
+		</div>
+	</nav>
+
+	<!-- Contenido principal -->
+	<div class="pt-16 min-h-screen">
+		<div class="container mx-auto px-4 py-8">
+			<!-- Header del dashboard -->
+			<div class="mb-8 fade-in">
+				<div class="flex items-center justify-between">
+					<div>
+						<h1 class="text-3xl font-bold text-gray-900 dark:text-white">
+							Dashboard - {session.role}
+						</h1>
+						<p class="text-gray-600 dark:text-gray-400 mt-2">
+							Bienvenido, {session.username}. Panel de control personalizado para tu rol.
+						</p>
+					</div>
+					<div class="text-right">
+						<p class="text-sm text-gray-500 dark:text-gray-400">
+							Último acceso
+						</p>
+						<p class="text-sm font-medium text-gray-900 dark:text-white">
+							{new Date().toLocaleDateString('es-CL')}
+						</p>
+					</div>
+				</div>
+			</div>
+
+			<!-- Componente de dashboard específico -->
+			<div class="fade-in" style="animation-delay: 0.1s;">
+				<astro-island 
+					component={dashboardComponent}
+					client:load
+					session={JSON.stringify(session)}
+				/>
+			</div>
+		</div>
+	</div>
+
+	<!-- Script de logout -->
+	<script>
+		document.getElementById('logoutBtn').addEventListener('click', async function() {
+			try {
+				const response = await fetch('/api/logout', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json'
+					}
+				});
+				
+				if (response.ok) {
+					window.location.href = '/login';
+				} else {
+					console.error('Error al cerrar sesión');
+				}
+			} catch (error) {
+				console.error('Error:', error);
+				// Fallback: redirigir directamente
+				window.location.href = '/login';
+			}
+		});
+	</script>
+</body>
+</html> 

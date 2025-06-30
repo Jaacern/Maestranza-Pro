@@ -1,0 +1,397 @@
+---
+import LayoutSidebar from '../app/LayoutSidebar.astro';
+
+// Datos específicos para auditores de inventario
+const auditorData = {
+	auditStats: {
+		totalAudits: 28,
+		completedAudits: 25,
+		pendingAudits: 3,
+		discrepancies: 12,
+		accuracy: 98.5
+	},
+	recentAudits: [
+		{
+			id: "AUD-2024-001",
+			warehouse: "Bodega Principal",
+			auditor: "María González",
+			itemsAudited: 450,
+			discrepancies: 2,
+			status: "completado",
+			date: "2024-01-15T16:30:00Z",
+			accuracy: 99.6
+		},
+		{
+			id: "AUD-2024-002",
+			warehouse: "Bodega Secundaria",
+			auditor: "Pedro Ramírez",
+			itemsAudited: 320,
+			discrepancies: 1,
+			status: "en_proceso",
+			date: "2024-01-15T14:15:00Z",
+			accuracy: 99.7
+		},
+		{
+			id: "AUD-2024-003",
+			warehouse: "Bodega de Repuestos",
+			auditor: "Ana Silva",
+			itemsAudited: 280,
+			discrepancies: 3,
+			status: "pendiente",
+			date: "2024-01-15T12:45:00Z",
+			accuracy: 98.9
+		}
+	],
+	discrepancyTypes: [
+		{ type: "Stock Físico vs Sistema", count: 5, percentage: 41.7 },
+		{ type: "Ubicación Incorrecta", count: 3, percentage: 25.0 },
+		{ type: "Código de Barras Dañado", count: 2, percentage: 16.7 },
+		{ type: "Item No Encontrado", count: 1, percentage: 8.3 },
+		{ type: "Cantidad Incorrecta", count: 1, percentage: 8.3 }
+	],
+	accuracyTrend: [
+		{ month: "Ene", accuracy: 98.2 },
+		{ month: "Feb", accuracy: 98.5 },
+		{ month: "Mar", accuracy: 98.8 },
+		{ month: "Abr", accuracy: 99.1 },
+		{ month: "May", accuracy: 99.3 },
+		{ month: "Jun", accuracy: 99.5 },
+		{ month: "Jul", accuracy: 99.2 },
+		{ month: "Ago", accuracy: 99.4 },
+		{ month: "Sep", accuracy: 99.6 },
+		{ month: "Oct", accuracy: 99.3 },
+		{ month: "Nov", accuracy: 99.7 },
+		{ month: "Dic", accuracy: 98.5 }
+	]
+};
+---
+
+<LayoutSidebar>
+	<div class="px-4 pt-6">
+		<!-- Header -->
+		<div class="mb-6">
+			<nav class="flex mb-5" aria-label="Breadcrumb">
+				<ol class="inline-flex items-center space-x-1 text-sm font-medium md:space-x-2">
+					<li class="inline-flex items-center">
+						<a href="/" class="inline-flex items-center text-gray-700 hover:text-primary-600 dark:text-gray-300 dark:hover:text-white">
+							<svg class="w-5 h-5 mr-2.5" fill="currentColor" viewBox="0 0 20 20">
+								<path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"/>
+							</svg>
+							Inicio
+						</a>
+					</li>
+					<li>
+						<div class="flex items-center">
+							<svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+								<path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"/>
+							</svg>
+							<span class="ml-1 text-gray-400 md:ml-2 dark:text-gray-500">Dashboard Auditor</span>
+						</div>
+					</li>
+				</ol>
+			</nav>
+			<div class="flex items-center justify-between">
+				<div>
+					<h1 class="text-2xl font-bold text-gray-900 dark:text-white">
+						Panel de Auditoría de Inventario
+					</h1>
+					<p class="text-gray-600 dark:text-gray-400">
+						Reportes, auditorías y análisis de precisión del inventario
+					</p>
+				</div>
+				<div class="flex space-x-2">
+					<a href="/inventory-reports" class="px-4 py-2 text-sm font-medium text-white bg-primary-700 rounded-lg hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
+						Nueva Auditoría
+					</a>
+					<a href="/inventory-reports" class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:ring-4 focus:ring-primary-300 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700">
+						Generar Reporte
+					</a>
+				</div>
+			</div>
+		</div>
+
+		<!-- Métricas de Auditoría -->
+		<div class="grid grid-cols-1 gap-4 mb-6 sm:grid-cols-2 lg:grid-cols-4">
+			<div class="p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
+				<div class="flex items-center">
+					<div class="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 text-blue-500 bg-blue-100 rounded-lg dark:bg-blue-800 dark:text-blue-200">
+						<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+							<path fill-rule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm2 10a1 1 0 10-2 0 1 1 0 012 0zm2-3a1 1 0 011-1h3a1 1 0 110 2h-3a1 1 0 01-1-1z" clip-rule="evenodd"/>
+						</svg>
+					</div>
+					<div class="ml-4">
+						<span class="text-2xl font-bold leading-none text-gray-900 dark:text-white">
+							{auditorData.auditStats.totalAudits}
+						</span>
+						<p class="text-base font-normal text-gray-600 dark:text-gray-400">
+							Total Auditorías
+						</p>
+					</div>
+				</div>
+			</div>
+
+			<div class="p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
+				<div class="flex items-center">
+					<div class="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 text-green-500 bg-green-100 rounded-lg dark:bg-green-800 dark:text-green-200">
+						<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+							<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+						</svg>
+					</div>
+					<div class="ml-4">
+						<span class="text-2xl font-bold leading-none text-gray-900 dark:text-white">
+							{auditorData.auditStats.completedAudits}
+						</span>
+						<p class="text-base font-normal text-gray-600 dark:text-gray-400">
+							Completadas
+						</p>
+					</div>
+				</div>
+			</div>
+
+			<div class="p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
+				<div class="flex items-center">
+					<div class="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 text-yellow-500 bg-yellow-100 rounded-lg dark:bg-yellow-800 dark:text-yellow-200">
+						<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+							<path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+						</svg>
+					</div>
+					<div class="ml-4">
+						<span class="text-2xl font-bold leading-none text-gray-900 dark:text-white">
+							{auditorData.auditStats.discrepancies}
+						</span>
+						<p class="text-base font-normal text-gray-600 dark:text-gray-400">
+							Discrepancias
+						</p>
+					</div>
+				</div>
+			</div>
+
+			<div class="p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
+				<div class="flex items-center">
+					<div class="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 text-purple-500 bg-purple-100 rounded-lg dark:bg-purple-800 dark:text-purple-200">
+						<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+							<path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+						</svg>
+					</div>
+					<div class="ml-4">
+						<span class="text-2xl font-bold leading-none text-gray-900 dark:text-white">
+							{auditorData.auditStats.accuracy}%
+						</span>
+						<p class="text-base font-normal text-gray-600 dark:text-gray-400">
+							Precisión
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Gráficos y Estadísticas -->
+		<div class="grid grid-cols-1 gap-6 mb-6 lg:grid-cols-2">
+			<!-- Tendencia de Precisión -->
+			<div class="p-6 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
+				<h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+					Tendencia de Precisión Mensual
+				</h3>
+				<div class="h-64 flex items-end justify-between space-x-2">
+					{auditorData.accuracyTrend.map((data, index) => (
+						<div class="flex-1 flex flex-col items-center">
+							<div 
+								class="w-full bg-blue-500 rounded-t"
+								style={`height: ${(data.accuracy - 97) * 20}px`}
+							></div>
+							<span class="text-xs text-gray-600 dark:text-gray-400 mt-2">
+								{data.month}
+							</span>
+						</div>
+					))}
+				</div>
+				<div class="mt-4 text-center">
+					<span class="text-sm text-gray-600 dark:text-gray-400">
+						Precisión promedio: {auditorData.auditStats.accuracy}%
+					</span>
+				</div>
+			</div>
+
+			<!-- Tipos de Discrepancias -->
+			<div class="p-6 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
+				<h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+					Tipos de Discrepancias
+				</h3>
+				<div class="space-y-4">
+					{auditorData.discrepancyTypes.map((discrepancy, index) => (
+						<div class="flex items-center justify-between">
+							<div class="flex items-center">
+								<div class={`w-3 h-3 rounded-full mr-3 ${
+									index === 0 ? 'bg-red-500' :
+									index === 1 ? 'bg-yellow-500' :
+									index === 2 ? 'bg-blue-500' :
+									index === 3 ? 'bg-green-500' : 'bg-purple-500'
+								}`}></div>
+								<span class="text-sm text-gray-900 dark:text-white">
+									{discrepancy.type}
+								</span>
+							</div>
+							<div class="flex items-center space-x-2">
+								<span class="text-sm font-medium text-gray-900 dark:text-white">
+									{discrepancy.count}
+								</span>
+								<span class="text-xs text-gray-600 dark:text-gray-400">
+									({discrepancy.percentage}%)
+								</span>
+							</div>
+						</div>
+					))}
+				</div>
+			</div>
+		</div>
+
+		<!-- Auditorías Recientes -->
+		<div class="bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
+			<div class="p-6">
+				<h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+					Auditorías Recientes
+				</h3>
+				
+				<div class="overflow-x-auto">
+					<table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+						<thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+							<tr>
+								<th class="px-6 py-3">ID Auditoría</th>
+								<th class="px-6 py-3">Bodega</th>
+								<th class="px-6 py-3">Auditor</th>
+								<th class="px-6 py-3">Items Auditados</th>
+								<th class="px-6 py-3">Discrepancias</th>
+								<th class="px-6 py-3">Precisión</th>
+								<th class="px-6 py-3">Estado</th>
+								<th class="px-6 py-3">Fecha</th>
+								<th class="px-6 py-3">Acciones</th>
+							</tr>
+						</thead>
+						<tbody>
+							{auditorData.recentAudits.map((audit) => (
+								<tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700">
+									<td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+										{audit.id}
+									</td>
+									<td class="px-6 py-4 whitespace-nowrap">
+										{audit.warehouse}
+									</td>
+									<td class="px-6 py-4 whitespace-nowrap">
+										{audit.auditor}
+									</td>
+									<td class="px-6 py-4 whitespace-nowrap">
+										{audit.itemsAudited}
+									</td>
+									<td class="px-6 py-4 whitespace-nowrap">
+										<span class={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+											audit.discrepancies === 0 
+												? 'text-green-800 bg-green-100 dark:bg-green-700 dark:text-green-100'
+												: audit.discrepancies <= 2
+												? 'text-yellow-800 bg-yellow-100 dark:bg-yellow-700 dark:text-yellow-100'
+												: 'text-red-800 bg-red-100 dark:bg-red-700 dark:text-red-100'
+										}`}>
+											{audit.discrepancies}
+										</span>
+									</td>
+									<td class="px-6 py-4 whitespace-nowrap">
+										<span class={`font-medium ${
+											audit.accuracy >= 99.5 ? 'text-green-600 dark:text-green-400' :
+											audit.accuracy >= 99.0 ? 'text-yellow-600 dark:text-yellow-400' :
+											'text-red-600 dark:text-red-400'
+										}`}>
+											{audit.accuracy}%
+										</span>
+									</td>
+									<td class="px-6 py-4 whitespace-nowrap">
+										<span class={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+											audit.status === 'completado' 
+												? 'text-green-800 bg-green-100 dark:bg-green-700 dark:text-green-100'
+												: audit.status === 'en_proceso'
+												? 'text-yellow-800 bg-yellow-100 dark:bg-yellow-700 dark:text-yellow-100'
+												: 'text-blue-800 bg-blue-100 dark:bg-blue-700 dark:text-blue-100'
+										}`}>
+											{audit.status === 'completado' ? 'Completado' : 
+											 audit.status === 'en_proceso' ? 'En Proceso' : 'Pendiente'}
+										</span>
+									</td>
+									<td class="px-6 py-4 whitespace-nowrap">
+										{new Date(audit.date).toLocaleDateString('es-CL')}
+									</td>
+									<td class="px-6 py-4 whitespace-nowrap">
+										<div class="flex space-x-2">
+											<button class="text-primary-600 hover:text-primary-900 dark:text-primary-500 dark:hover:text-primary-400">
+												Ver
+											</button>
+											<button class="text-green-600 hover:text-green-900 dark:text-green-500 dark:hover:text-green-400">
+												PDF
+											</button>
+										</div>
+									</td>
+								</tr>
+							))}
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+
+		<!-- Acciones Rápidas -->
+		<div class="mt-6 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
+			<div class="p-6">
+				<h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+					Acciones de Auditoría
+				</h3>
+				
+				<div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+					<a href="/inventory-reports" class="p-4 border border-gray-200 rounded-lg hover:bg-gray-50 dark:border-gray-700 dark:hover:bg-gray-700">
+						<div class="flex items-center">
+							<svg class="w-8 h-8 text-blue-600 dark:text-blue-400 mr-3" fill="currentColor" viewBox="0 0 20 20">
+								<path fill-rule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm2 10a1 1 0 10-2 0 1 1 0 012 0zm2-3a1 1 0 011-1h3a1 1 0 110 2h-3a1 1 0 01-1-1z" clip-rule="evenodd"/>
+							</svg>
+							<div>
+								<h4 class="text-sm font-medium text-gray-900 dark:text-white">Reportes</h4>
+								<p class="text-xs text-gray-600 dark:text-gray-400">Análisis detallado</p>
+							</div>
+						</div>
+					</a>
+					
+					<a href="/inventory-categorization" class="p-4 border border-gray-200 rounded-lg hover:bg-gray-50 dark:border-gray-700 dark:hover:bg-gray-700">
+						<div class="flex items-center">
+							<svg class="w-8 h-8 text-green-600 dark:text-green-400 mr-3" fill="currentColor" viewBox="0 0 20 20">
+								<path d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 7a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1zM2 11a2 2 0 012-2h12a2 2 0 012 2v4a2 2 0 01-2 2H4a2 2 0 01-2-2v-4z"/>
+							</svg>
+							<div>
+								<h4 class="text-sm font-medium text-gray-900 dark:text-white">Categorización</h4>
+								<p class="text-xs text-gray-600 dark:text-gray-400">Clasificar items</p>
+							</div>
+						</div>
+					</a>
+					
+					<a href="/inventory-threshold-notifications" class="p-4 border border-gray-200 rounded-lg hover:bg-gray-50 dark:border-gray-700 dark:hover:bg-gray-700">
+						<div class="flex items-center">
+							<svg class="w-8 h-8 text-purple-600 dark:text-purple-400 mr-3" fill="currentColor" viewBox="0 0 20 20">
+								<path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"/>
+							</svg>
+							<div>
+								<h4 class="text-sm font-medium text-gray-900 dark:text-white">Notificaciones</h4>
+								<p class="text-xs text-gray-600 dark:text-gray-400">Alertas y umbrales</p>
+							</div>
+						</div>
+					</a>
+					
+					<a href="/dashboard" class="p-4 border border-gray-200 rounded-lg hover:bg-gray-50 dark:border-gray-700 dark:hover:bg-gray-700">
+						<div class="flex items-center">
+							<svg class="w-8 h-8 text-yellow-600 dark:text-yellow-400 mr-3" fill="currentColor" viewBox="0 0 20 20">
+								<path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+							</svg>
+							<div>
+								<h4 class="text-sm font-medium text-gray-900 dark:text-white">Dashboard</h4>
+								<p class="text-xs text-gray-600 dark:text-gray-400">Vista general</p>
+							</div>
+						</div>
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</LayoutSidebar> 

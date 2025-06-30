@@ -1,0 +1,313 @@
+---
+import LayoutSidebar from '../app/LayoutSidebar.astro';
+import { getBatches } from '../services/batches.ts';
+import { getProducts } from '../services/products.ts';
+
+const batches = await getBatches();
+const products = await getProducts();
+---
+
+// Calcular métricas
+const totalBatches = batches.length;
+const activeBatches = batches.filter(b => b.status === 'activo').length;
+const expiringBatches = batches.filter(b => b.status === 'por_vencer').length;
+const expiredBatches = batches.filter(b => b.status === 'vencido').length;
+
+<LayoutSidebar>
+	<div class="px-4 pt-6">
+		<div class="mb-6">
+			<h1 class="text-2xl font-bold text-gray-900 dark:text-white">
+				Control de Lotes
+			</h1>
+			<p class="text-gray-600 dark:text-gray-400">
+				Gestión de lotes y fechas de vencimiento para trazabilidad
+			</p>
+		</div>
+
+		<!-- Métricas de Lotes -->
+		<div class="grid gap-4 xl:grid-cols-2 2xl:grid-cols-4 mb-6">
+			<div class="p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
+				<div class="flex items-center">
+					<div class="flex-shrink-0">
+						<svg class="w-8 h-8 text-blue-600 dark:text-blue-500" fill="currentColor" viewBox="0 0 20 20">
+							<path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"></path>
+						</svg>
+					</div>
+					<div class="ml-4">
+						<p class="text-sm font-medium text-gray-500 dark:text-gray-400">Total Lotes</p>
+						<p class="text-2xl font-bold text-gray-900 dark:text-white">{totalBatches}</p>
+					</div>
+				</div>
+			</div>
+
+			<div class="p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
+				<div class="flex items-center">
+					<div class="flex-shrink-0">
+						<svg class="w-8 h-8 text-green-600 dark:text-green-500" fill="currentColor" viewBox="0 0 20 20">
+							<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+						</svg>
+					</div>
+					<div class="ml-4">
+						<p class="text-sm font-medium text-gray-500 dark:text-gray-400">Activos</p>
+						<p class="text-2xl font-bold text-gray-900 dark:text-white">{activeBatches}</p>
+					</div>
+				</div>
+			</div>
+
+			<div class="p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
+				<div class="flex items-center">
+					<div class="flex-shrink-0">
+						<svg class="w-8 h-8 text-orange-600 dark:text-orange-500" fill="currentColor" viewBox="0 0 20 20">
+							<path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+						</svg>
+					</div>
+					<div class="ml-4">
+						<p class="text-sm font-medium text-gray-500 dark:text-gray-400">Por Vencer</p>
+						<p class="text-2xl font-bold text-gray-900 dark:text-white">{expiringBatches}</p>
+					</div>
+				</div>
+			</div>
+
+			<div class="p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
+				<div class="flex items-center">
+					<div class="flex-shrink-0">
+						<svg class="w-8 h-8 text-red-600 dark:text-red-500" fill="currentColor" viewBox="0 0 20 20">
+							<path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+						</svg>
+					</div>
+					<div class="ml-4">
+						<p class="text-sm font-medium text-gray-500 dark:text-gray-400">Vencidos</p>
+						<p class="text-2xl font-bold text-gray-900 dark:text-white">{expiredBatches}</p>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Filtros -->
+		<div class="mb-6 p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
+			<div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+				<div>
+					<label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+						Estado del Lote
+					</label>
+					<select class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
+						<option value="">Todos</option>
+						<option value="activo">Activo</option>
+						<option value="por_vencer">Por Vencer</option>
+						<option value="vencido">Vencido</option>
+					</select>
+				</div>
+				<div>
+					<label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+						Ubicación
+					</label>
+					<select class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
+						<option value="">Todas</option>
+						{Array.from(new Set(batches.map(b => b.location.split(' - ')[0]))).map(location => (
+							<option value={location}>{location}</option>
+						))}
+					</select>
+				</div>
+				<div>
+					<label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+						Vencimiento Desde
+					</label>
+					<input type="date" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
+				</div>
+				<div>
+					<label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+						Vencimiento Hasta
+					</label>
+					<input type="date" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
+				</div>
+			</div>
+			<div class="mt-4 flex gap-2">
+				<button class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:ring-4 focus:ring-blue-300">
+					Filtrar
+				</button>
+				<button class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 focus:ring-4 focus:ring-gray-300">
+					Limpiar
+				</button>
+			</div>
+		</div>
+
+		<!-- Botón Nuevo Lote -->
+		<div class="mb-6">
+			<button class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 focus:ring-4 focus:ring-green-300 flex items-center">
+				<svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+					<path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"></path>
+				</svg>
+				Nuevo Lote
+			</button>
+		</div>
+
+		<!-- Tabla de Lotes -->
+		<div class="bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
+			<div class="overflow-x-auto">
+				<table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+					<thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+						<tr>
+							<th scope="col" class="px-6 py-3">Producto</th>
+							<th scope="col" class="px-6 py-3">Lote</th>
+							<th scope="col" class="px-6 py-3">Cantidad</th>
+							<th scope="col" class="px-6 py-3">Fabricación</th>
+							<th scope="col" class="px-6 py-3">Vencimiento</th>
+							<th scope="col" class="px-6 py-3">Estado</th>
+							<th scope="col" class="px-6 py-3">Ubicación</th>
+							<th scope="col" class="px-6 py-3">Acciones</th>
+						</tr>
+					</thead>
+					<tbody>
+						{batches.map(batch => {
+							const expiryDate = new Date(batch.expiryDate);
+							const today = new Date();
+							const daysUntilExpiry = Math.ceil((expiryDate - today) / (1000 * 60 * 60 * 24));
+							
+							return (
+								<tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700">
+									<td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+										{batch.productName}
+									</td>
+									<td class="px-6 py-4 font-mono text-sm">{batch.lote}</td>
+									<td class="px-6 py-4">{batch.quantity} unid.</td>
+									<td class="px-6 py-4">{new Date(batch.manufactureDate).toLocaleDateString()}</td>
+									<td class="px-6 py-4">
+										<div class="flex items-center">
+											<span class="mr-2">{new Date(batch.expiryDate).toLocaleDateString()}</span>
+											{batch.status === 'por_vencer' && (
+												<span class="text-xs text-orange-600 dark:text-orange-400">
+													({daysUntilExpiry} días)
+												</span>
+											)}
+										</div>
+									</td>
+									<td class="px-6 py-4">
+										<span class={`px-2 py-1 text-xs font-medium rounded-full ${
+											batch.status === 'activo' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300' :
+											batch.status === 'por_vencer' ? 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-300' :
+											'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300'
+										}`}>
+											{batch.status.replace('_', ' ').charAt(0).toUpperCase() + batch.status.replace('_', ' ').slice(1)}
+										</span>
+									</td>
+									<td class="px-6 py-4">{batch.location}</td>
+									<td class="px-6 py-4">
+										<button class="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300 mr-2">
+											<svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+												<path d="M10 12a2 2 0 100-4 2 2 0 000 4z"></path>
+												<path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"></path>
+											</svg>
+										</button>
+										<button class="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-300 mr-2">
+											<svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+												<path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"></path>
+											</svg>
+										</button>
+										{batch.status === 'vencido' && (
+											<button class="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300">
+												<svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+													<path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+												</svg>
+											</button>
+										)}
+									</td>
+								</tr>
+							);
+						})}
+					</tbody>
+				</table>
+			</div>
+		</div>
+
+		<!-- Alertas de Vencimiento -->
+		<div class="mt-6">
+			<h2 class="text-xl font-bold text-gray-900 dark:text-white mb-4">
+				Alertas de Vencimiento
+			</h2>
+			
+			<div class="grid gap-4 md:grid-cols-2">
+				<!-- Lotes por Vencer -->
+				<div class="p-4 bg-orange-50 border border-orange-200 rounded-lg dark:bg-orange-900/20 dark:border-orange-800">
+					<div class="flex items-center mb-3">
+						<svg class="w-6 h-6 text-orange-600 dark:text-orange-400 mr-2" fill="currentColor" viewBox="0 0 20 20">
+							<path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+						</svg>
+						<h3 class="text-lg font-semibold text-orange-800 dark:text-orange-200">
+							Lotes por Vencer ({expiringBatches})
+						</h3>
+					</div>
+					<div class="space-y-2">
+						{batches.filter(b => b.status === 'por_vencer').slice(0, 3).map(batch => {
+							const expiryDate = new Date(batch.expiryDate);
+							const today = new Date();
+							const daysUntilExpiry = Math.ceil((expiryDate - today) / (1000 * 60 * 60 * 24));
+							
+							return (
+								<div class="flex items-center justify-between p-2 bg-orange-100 rounded dark:bg-orange-900/30">
+									<div>
+										<p class="text-sm font-medium text-orange-800 dark:text-orange-200">
+											{batch.productName}
+										</p>
+										<p class="text-xs text-orange-600 dark:text-orange-400">
+											Lote: {batch.lote} • Vence en {daysUntilExpiry} días
+										</p>
+									</div>
+									<span class="text-xs font-medium text-orange-800 dark:text-orange-200">
+										{batch.quantity} unid.
+									</span>
+								</div>
+							);
+						})}
+					</div>
+				</div>
+
+				<!-- Lotes Vencidos -->
+				<div class="p-4 bg-red-50 border border-red-200 rounded-lg dark:bg-red-900/20 dark:border-red-800">
+					<div class="flex items-center mb-3">
+						<svg class="w-6 h-6 text-red-600 dark:text-red-400 mr-2" fill="currentColor" viewBox="0 0 20 20">
+							<path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+						</svg>
+						<h3 class="text-lg font-semibold text-red-800 dark:text-red-200">
+							Lotes Vencidos ({expiredBatches})
+						</h3>
+					</div>
+					<div class="space-y-2">
+						{batches.filter(b => b.status === 'vencido').slice(0, 3).map(batch => (
+							<div class="flex items-center justify-between p-2 bg-red-100 rounded dark:bg-red-900/30">
+								<div>
+									<p class="text-sm font-medium text-red-800 dark:text-red-200">
+										{batch.productName}
+									</p>
+									<p class="text-xs text-red-600 dark:text-red-400">
+										Lote: {batch.lote} • Vencido el {new Date(batch.expiryDate).toLocaleDateString()}
+									</p>
+								</div>
+								<span class="text-xs font-medium text-red-800 dark:text-red-200">
+									{batch.quantity} unid.
+								</span>
+							</div>
+						))}
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Paginación -->
+		<div class="mt-6 flex items-center justify-between">
+			<div class="text-sm text-gray-700 dark:text-gray-400">
+				Mostrando <span class="font-medium">1</span> a <span class="font-medium">{batches.length}</span> de <span class="font-medium">{batches.length}</span> resultados
+			</div>
+			<div class="flex space-x-2">
+				<button class="px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-gray-50 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-400 dark:hover:bg-gray-700">
+					Anterior
+				</button>
+				<button class="px-3 py-2 text-sm font-medium text-white bg-blue-600 border border-blue-600 rounded-md hover:bg-blue-700">
+					1
+				</button>
+				<button class="px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-gray-50 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-400 dark:hover:bg-gray-700">
+					Siguiente
+				</button>
+			</div>
+		</div>
+	</div>
+</LayoutSidebar> 
