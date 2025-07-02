@@ -11,7 +11,7 @@ export default defineConfig({
 	site: process.env.CI
 		? 'https://themesberg.github.io'
 		: `http://localhost:${DEV_PORT}`,
-	base: process.env.CI ? '/MaestranzaPro-astro-admin-dashboard' : undefined,
+	// base: process.env.CI ? '/MaestranzaPro-astro-admin-dashboard' : undefined,
 
 	// output: 'server',
 
