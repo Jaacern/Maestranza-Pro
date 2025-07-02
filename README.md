@@ -95,13 +95,13 @@
 │ ├── 📁 app/ # Configuración de la aplicación
 │ ├── 📁 assets/ # Recursos estáticos
 │ ├── 📁 components/ # Componentes reutilizables
-│ │ └── �� dashboards/ # Dashboards específicos por rol
+│ │ └── 📄 dashboards/ # Dashboards específicos por rol
 │ ├── 📁 docs/ # Documentación del proyecto
 │ ├── 📁 layouts/ # Plantillas de página
 │ ├── 📁 lib/ # Utilidades y helpers
 │ ├── 📁 modules/ # Módulos de funcionalidad
 │ ├── 📁 pages/ # Páginas y rutas
-│ │ └── �� api/ # Endpoints de API
+│ │ └── 📄 api/ # Endpoints de API
 │ ├── 📁 services/ # Lógica de negocio
 │ └── 📁 types/ # Definiciones TypeScript
 ├── 📁 data/ # Datos mock y estáticos

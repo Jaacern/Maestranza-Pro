@@ -74,51 +74,60 @@ const chartData = {
     </div>
 </div>
 
-<script define:vars={{ chartData }}>
+<script type="module" define:vars={{ chartData }}>
     import Chart from 'chart.js/auto';
     
-    // Datos para el gráfico de estado del stock
-    const { statusLabels, statusData, statusColors } = chartData;
+    window.addEventListener('DOMContentLoaded', () => {
+        // Datos para el gráfico de estado del stock
+        const { statusLabels, statusData, statusColors } = chartData;
+        console.log('StockStatusChart chartData', chartData);
 
-    // Gráfico de estado del stock
-    const stockStatusCtx = document.getElementById('stockStatusChart').getContext('2d');
-    new Chart(stockStatusCtx, {
-        type: 'polarArea',
-        data: {
-            labels: statusLabels,
-            datasets: [{
-                data: statusData,
-                backgroundColor: statusColors.map(color => color + '80'),
-                borderColor: statusColors,
-                borderWidth: 2
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    display: false
-                },
-                tooltip: {
-                    callbacks: {
-                        label: function(context) {
-                            const label = context.label || '';
-                            const value = context.parsed;
-                            const total = context.dataset.data.reduce((a, b) => a + b, 0);
-                            const percentage = ((value / total) * 100).toFixed(1);
-                            return `${label}: ${value} productos (${percentage}%)`;
+        // Gráfico de estado del stock
+        const stockStatusCtx = document.getElementById('stockStatusChart');
+        if (stockStatusCtx) {
+            if (!statusLabels.length || !statusData.length) {
+                console.warn('No hay datos para el gráfico de estado del stock');
+            } else {
+                new Chart(stockStatusCtx, {
+                    type: 'polarArea',
+                    data: {
+                        labels: statusLabels,
+                        datasets: [{
+                            data: statusData,
+                            backgroundColor: statusColors.map(color => color + '80'),
+                            borderColor: statusColors,
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: false
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        const label = context.label || '';
+                                        const value = context.parsed;
+                                        const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                        const percentage = ((value / total) * 100).toFixed(1);
+                                        return `${label}: ${value} productos (${percentage}%)`;
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            r: {
+                                beginAtZero: true,
+                                ticks: {
+                                    stepSize: 1
+                                }
+                            }
                         }
                     }
-                }
-            },
-            scales: {
-                r: {
-                    beginAtZero: true,
-                    ticks: {
-                        stepSize: 1
-                    }
-                }
+                });
             }
         }
     });

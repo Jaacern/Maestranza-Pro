@@ -5,7 +5,6 @@ import { getAlerts } from '../services/alerts.ts';
 
 const products = await getProducts();
 const alerts = await getAlerts();
----
 
 // Datos de ejemplo para notificaciones de umbral
 const thresholdNotifications = [
@@ -90,6 +89,7 @@ const totalNotifications = thresholdNotifications.length;
 const activeNotifications = thresholdNotifications.filter(n => n.status === 'activa').length;
 const criticalNotifications = thresholdNotifications.filter(n => n.priority === 'critica' && n.status === 'activa').length;
 const resolvedNotifications = thresholdNotifications.filter(n => n.status === 'resuelta').length;
+---
 
 <LayoutSidebar>
 	<div class="px-4 pt-6">

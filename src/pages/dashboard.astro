@@ -177,91 +177,106 @@ const dashboardData = {
             <div class="bg-white p-6 rounded-lg shadow border dark:bg-gray-800 dark:border-gray-700">
                 <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Acciones Rápidas</h3>
                 <div class="space-y-2">
-                    <a href="/crud/products" class="block text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300">Gestionar Productos</a>
-                    <a href="/inventory/register" class="block text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300">Registrar Nuevo Producto</a>
-                    <a href="/suppliers" class="block text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300">Gestionar Proveedores</a>
-                    <a href="/inventory/reports" class="block text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300">Ver Reportes</a>
+                    <a href="/InventoryRegistration" class="block text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300">Gestionar Productos</a>
+                    <a href="/InventoryRegistration" class="block text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300">Registrar Nuevo Producto</a>
+                    <a href="/SuppliersManagement" class="block text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300">Gestionar Proveedores</a>
+                    <a href="/InventoryReports" class="block text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300">Ver Reportes</a>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Chart.js -->
-    <script define:vars={{ dashboardData }}>
+    <script type="module" define:vars={{ dashboardData }}>
         import Chart from 'chart.js/auto';
         
-        // Datos para los gráficos
-        const { chartLabels, chartData, chartColors } = dashboardData;
+        window.addEventListener('DOMContentLoaded', () => {
+            // Datos para los gráficos
+            const { chartLabels, chartData, chartColors } = dashboardData;
+            console.log('dashboardData', dashboardData);
 
-        // Gráfico de distribución por categorías
-        const categoryCtx = document.getElementById('categoryChart').getContext('2d');
-        new Chart(categoryCtx, {
-            type: 'doughnut',
-            data: {
-                labels: chartLabels,
-                datasets: [{
-                    data: chartData,
-                    backgroundColor: chartColors,
-                    borderWidth: 2,
-                    borderColor: '#ffffff'
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        position: 'bottom',
-                        labels: {
-                            padding: 20,
-                            usePointStyle: true
-                        }
-                    },
-                    tooltip: {
-                        callbacks: {
-                            label: function(context) {
-                                const label = context.label || '';
-                                const value = context.parsed;
-                                const total = context.dataset.data.reduce((a, b) => a + b, 0);
-                                const percentage = ((value / total) * 100).toFixed(1);
-                                return `${label}: ${value} (${percentage}%)`;
+            // Gráfico de distribución por categorías
+            const categoryCtx = document.getElementById('categoryChart');
+            if (categoryCtx) {
+                if (!chartLabels.length || !chartData.length) {
+                    console.warn('No hay datos para el gráfico de categorías');
+                } else {
+                    new Chart(categoryCtx, {
+                        type: 'doughnut',
+                        data: {
+                            labels: chartLabels,
+                            datasets: [{
+                                data: chartData,
+                                backgroundColor: chartColors,
+                                borderWidth: 2,
+                                borderColor: '#ffffff'
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    position: 'bottom',
+                                    labels: {
+                                        padding: 20,
+                                        usePointStyle: true
+                                    }
+                                },
+                                tooltip: {
+                                    callbacks: {
+                                        label: function(context) {
+                                            const label = context.label || '';
+                                            const value = context.parsed;
+                                            const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                            const percentage = ((value / total) * 100).toFixed(1);
+                                            return `${label}: ${value} (${percentage}%)`;
+                                        }
+                                    }
+                                }
                             }
                         }
-                    }
+                    });
                 }
             }
-        });
 
-        // Gráfico de barras para valor por categoría
-        const valueCtx = document.getElementById('valueChart').getContext('2d');
-        new Chart(valueCtx, {
-            type: 'bar',
-            data: {
-                labels: chartLabels,
-                datasets: [{
-                    label: 'Cantidad de Productos',
-                    data: chartData,
-                    backgroundColor: chartColors.map(color => color + '80'),
-                    borderColor: chartColors,
-                    borderWidth: 2,
-                    borderRadius: 5
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        display: false
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        ticks: {
-                            stepSize: 1
+            // Gráfico de barras para valor por categoría
+            const valueCtx = document.getElementById('valueChart');
+            if (valueCtx) {
+                if (!chartLabels.length || !chartData.length) {
+                    console.warn('No hay datos para el gráfico de valor por categoría');
+                } else {
+                    new Chart(valueCtx, {
+                        type: 'bar',
+                        data: {
+                            labels: chartLabels,
+                            datasets: [{
+                                label: 'Cantidad de Productos',
+                                data: chartData,
+                                backgroundColor: chartColors.map(color => color + '80'),
+                                borderColor: chartColors,
+                                borderWidth: 2,
+                                borderRadius: 5
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    display: false
+                                }
+                            },
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    ticks: {
+                                        stepSize: 1
+                                    }
+                                }
+                            }
                         }
-                    }
+                    });
                 }
             }
         });

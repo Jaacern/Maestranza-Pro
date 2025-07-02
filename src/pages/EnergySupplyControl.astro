@@ -68,6 +68,16 @@ const energySupplies = [
 const totalSupplies = energySupplies.length;
 const operationalSupplies = energySupplies.filter(s => s.status === 'operativo').length;
 const averageBatteryLevel = Math.round(energySupplies.reduce((sum, s) => sum + s.batteryLevel, 0) / energySupplies.length);
+
+// Calcular supplies con daysUntil para mantenimientos próximos
+const suppliesWithDaysUntil = energySupplies
+	.map(s => {
+		const nextMaintenance = new Date(s.nextMaintenance);
+		const today = new Date();
+		const daysUntil = Math.ceil((nextMaintenance - today) / (1000 * 60 * 60 * 24));
+		return { ...s, daysUntil };
+	})
+	.filter(s => s.daysUntil <= 30);
 ---
 
 <LayoutSidebar>
@@ -182,45 +192,32 @@ const averageBatteryLevel = Math.round(energySupplies.reduce((sum, s) => sum + s
 					Próximos Mantenimientos
 				</h3>
 				<div class="space-y-4">
-					{energySupplies
-						.filter(s => {
-							const nextMaintenance = new Date(s.nextMaintenance);
-							const today = new Date();
-							const daysUntil = Math.ceil((nextMaintenance - today) / (1000 * 60 * 60 * 24));
-							return daysUntil <= 30;
-						})
-						.map(supply => {
-							const nextMaintenance = new Date(supply.nextMaintenance);
-							const today = new Date();
-							const daysUntil = Math.ceil((nextMaintenance - today) / (1000 * 60 * 60 * 24));
-							
-							return (
-								<div class={`flex items-center justify-between p-3 rounded-lg ${
-									daysUntil <= 7 ? 'bg-red-50 dark:bg-red-900/20' :
-									daysUntil <= 14 ? 'bg-orange-50 dark:bg-orange-900/20' :
-									'bg-yellow-50 dark:bg-yellow-900/20'
+					{suppliesWithDaysUntil.map(supply => (
+						<div class={`flex items-center justify-between p-3 rounded-lg ${
+							supply.daysUntil <= 7 ? 'bg-red-50 dark:bg-red-900/20' :
+							supply.daysUntil <= 14 ? 'bg-orange-50 dark:bg-orange-900/20' :
+							'bg-yellow-50 dark:bg-yellow-900/20'
+						}`}>
+							<div>
+								<p class="font-medium text-gray-900 dark:text-white">{supply.name}</p>
+								<p class="text-sm text-gray-500 dark:text-gray-400">
+									Mantenimiento programado
+								</p>
+							</div>
+							<div class="text-right">
+								<p class={`text-sm font-medium ${
+									supply.daysUntil <= 7 ? 'text-red-600 dark:text-red-400' :
+									supply.daysUntil <= 14 ? 'text-orange-600 dark:text-orange-400' :
+									'text-yellow-600 dark:text-yellow-400'
 								}`}>
-									<div>
-										<p class="font-medium text-gray-900 dark:text-white">{supply.name}</p>
-										<p class="text-sm text-gray-500 dark:text-gray-400">
-											Mantenimiento programado
-										</p>
-									</div>
-									<div class="text-right">
-										<p class={`text-sm font-medium ${
-											daysUntil <= 7 ? 'text-red-600 dark:text-red-400' :
-											daysUntil <= 14 ? 'text-orange-600 dark:text-orange-400' :
-											'text-yellow-600 dark:text-yellow-400'
-										}`}>
-											{daysUntil} días
-										</p>
-										<p class="text-xs text-gray-500 dark:text-gray-400">
-											{new Date(supply.nextMaintenance).toLocaleDateString()}
-										</p>
-									</div>
-								</div>
-							);
-						})}
+									{supply.daysUntil} días
+								</p>
+								<p class="text-xs text-gray-500 dark:text-gray-400">
+									{new Date(supply.nextMaintenance).toLocaleDateString()}
+								</p>
+							</div>
+						</div>
+					))}
 				</div>
 			</div>
 		</div>

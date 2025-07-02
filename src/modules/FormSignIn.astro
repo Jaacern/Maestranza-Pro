@@ -14,24 +14,25 @@ import { asset, url } from '../lib/data.js';
 	</a>
 	<!-- Card -->
 	<div
-		class="w-full max-w-xl p-6 space-y-8 sm:p-8 bg-white rounded-lg shadow dark:bg-gray-800"
+		class="w-full max-w-xl p-6 space-y-8 sm:p-8 bg-white rounded-lg shadow dark:bg-gray-800 transition-all duration-300 opacity-0 translate-y-8 animate-fadeInCard hover:shadow-2xl hover:-translate-y-1 group"
+		style="will-change: box-shadow, transform;"
 	>
-		<h2 class="text-2xl font-bold text-gray-900 dark:text-white">
-			Sign in to platform
+		<h2 class="text-2xl font-bold text-gray-900 dark:text-white group-hover:text-blue-700 transition-colors duration-300">
+			Inicia sesión en la plataforma
 		</h2>
 		<form class="mt-8 space-y-6" action="#">
 			<div>
 				<label
 					for="email"
 					class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-					>Your email</label
+					>Correo electrónico</label
 				>
 				<input
 					type="email"
 					name="email"
 					id="email"
-					class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-					placeholder="name@company.com"
+					class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 transition-all duration-200 shadow-sm focus:shadow-lg"
+					placeholder="tucorreo@empresa.com"
 					required
 				/>
 			</div>
@@ -39,14 +40,14 @@ import { asset, url } from '../lib/data.js';
 				<label
 					for="password"
 					class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-					>Your password</label
+					>Contraseña</label
 				>
 				<input
 					type="password"
 					name="password"
 					id="password"
 					placeholder="••••••••"
-					class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+					class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 transition-all duration-200 shadow-sm focus:shadow-lg"
 					required
 				/>
 			</div>
@@ -57,33 +58,59 @@ import { asset, url } from '../lib/data.js';
 						aria-describedby="remember"
 						name="remember"
 						type="checkbox"
-						class="w-4 h-4 border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:focus:ring-primary-600 dark:ring-offset-gray-800 dark:bg-gray-700 dark:border-gray-600"
+						class="w-4 h-4 border-gray-300 rounded bg-gray-50 focus:ring-2 focus:ring-blue-400 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:bg-gray-700 dark:border-gray-600 transition-all duration-200"
 						required
 					/>
 				</div>
 				<div class="ml-3 text-sm">
 					<label
 						for="remember"
-						class="font-medium text-gray-900 dark:text-white">Remember me</label
+						class="font-medium text-gray-900 dark:text-white">Recuérdame</label
 					>
 				</div>
 				<a
 					href="#"
-					class="ml-auto mt-4 text-left text-sm text-primary-700 hover:underline dark:text-primary-500 w-full"
-					>Lost Password?</a
+					class="ml-auto mt-4 text-left text-sm text-blue-700 hover:underline dark:text-blue-400 w-full transition-colors duration-200"
+					>¿Olvidaste tu contraseña?</a
 				>
 			</div>
 			<button
 				type="submit"
-				class="w-full px-5 py-3 text-base font-medium text-center text-white bg-primary-700 rounded-lg hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 sm:w-auto dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
-				>Login to your account</button
+				class="w-full px-5 py-3 text-base font-medium text-center text-white bg-blue-700 rounded-lg shadow-md hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 sm:w-auto dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 transform transition-all duration-200 hover:scale-105 hover:shadow-xl active:scale-95"
+				>Ingresar</button
 			>
 			<div class="text-sm font-medium text-gray-500 dark:text-gray-400">
-				Not registered? <a
-					class="text-primary-700 hover:underline dark:text-primary-500"
-					>Create account</a
+				¿No tienes cuenta? <a
+					class="text-blue-700 hover:underline dark:text-blue-400 transition-colors duration-200"
+					>Crear cuenta</a
 				>
 			</div>
 		</form>
 	</div>
 </div>
+
+<div class="mt-4 w-full max-w-md mx-auto bg-white/90 rounded-lg shadow p-3 border border-blue-200 flex flex-col items-center justify-center">
+	<h3 class="text-base font-bold text-blue-700 mb-2 text-center">Credenciales de ejemplo</h3>
+	<div class="space-y-1 text-gray-800 text-xs w-full">
+		<div class="flex items-center justify-between w-full"><span class="font-semibold text-blue-800">Administrador del Sistema:</span> <span>Usuario: <span class="font-mono bg-blue-100 px-1 py-0.5 rounded">admin</span> | Contraseña: <span class="font-mono bg-blue-100 px-1 py-0.5 rounded">admin123</span></span></div>
+		<div class="flex items-center justify-between w-full"><span class="font-semibold text-green-800">Gestor de Inventario:</span> <span>Usuario: <span class="font-mono bg-green-100 px-1 py-0.5 rounded">gestor</span> | Contraseña: <span class="font-mono bg-green-100 px-1 py-0.5 rounded">gestor123</span></span></div>
+		<div class="flex items-center justify-between w-full"><span class="font-semibold text-orange-800">Comprador:</span> <span>Usuario: <span class="font-mono bg-orange-100 px-1 py-0.5 rounded">comprador</span> | Contraseña: <span class="font-mono bg-orange-100 px-1 py-0.5 rounded">compra123</span></span></div>
+		<div class="flex items-center justify-between w-full"><span class="font-semibold text-cyan-800">Encargado de Logística:</span> <span>Usuario: <span class="font-mono bg-cyan-100 px-1 py-0.5 rounded">logistica</span> | Contraseña: <span class="font-mono bg-cyan-100 px-1 py-0.5 rounded">log123</span></span></div>
+		<div class="flex items-center justify-between w-full"><span class="font-semibold text-purple-800">Jefe de Producción:</span> <span>Usuario: <span class="font-mono bg-purple-100 px-1 py-0.5 rounded">produccion</span> | Contraseña: <span class="font-mono bg-purple-100 px-1 py-0.5 rounded">prod123</span></span></div>
+		<div class="flex items-center justify-between w-full"><span class="font-semibold text-pink-800">Auditor de Inventario:</span> <span>Usuario: <span class="font-mono bg-pink-100 px-1 py-0.5 rounded">auditor</span> | Contraseña: <span class="font-mono bg-pink-100 px-1 py-0.5 rounded">audit123</span></span></div>
+		<div class="flex items-center justify-between w-full"><span class="font-semibold text-yellow-800">Gerente de Proyectos:</span> <span>Usuario: <span class="font-mono bg-yellow-100 px-1 py-0.5 rounded">proyectos</span> | Contraseña: <span class="font-mono bg-yellow-100 px-1 py-0.5 rounded">proj123</span></span></div>
+		<div class="flex items-center justify-between w-full"><span class="font-semibold text-gray-800">Usuario Final:</span> <span>Usuario: <span class="font-mono bg-gray-100 px-1 py-0.5 rounded">usuario</span> | Contraseña: <span class="font-mono bg-gray-100 px-1 py-0.5 rounded">user123</span></span></div>
+	</div>
+</div>
+
+<style>
+@keyframes fadeInCard {
+	to {
+		opacity: 1;
+		transform: none;
+	}
+}
+.animate-fadeInCard {
+	animation: fadeInCard 0.7s cubic-bezier(.4,0,.2,1) forwards;
+}
+</style>

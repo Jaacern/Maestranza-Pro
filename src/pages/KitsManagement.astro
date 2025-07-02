@@ -3,7 +3,6 @@ import LayoutSidebar from '../app/LayoutSidebar.astro';
 import { getProducts } from '../services/products.ts';
 
 const products = await getProducts();
----
 
 // Datos de ejemplo para kits
 const kits = [
@@ -68,6 +67,7 @@ const kits = [
 const totalKits = kits.length;
 const totalValue = kits.reduce((sum, k) => sum + k.totalValue, 0);
 const activeKits = kits.filter(k => k.status === 'activo').length;
+---
 
 <LayoutSidebar>
 	<div class="px-4 pt-6">

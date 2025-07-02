@@ -51,70 +51,79 @@ const chartData = {
     </div>
 </div>
 
-<script define:vars={{ chartData }}>
+<script type="module" define:vars={{ chartData }}>
     import Chart from 'chart.js/auto';
     
-    // Datos para el gráfico de evolución
-    const { months, monthlyData, topCategories } = chartData;
+    window.addEventListener('DOMContentLoaded', () => {
+        // Datos para el gráfico de evolución
+        const { months, monthlyData, topCategories } = chartData;
+        console.log('InventoryChart chartData', chartData);
 
-    // Gráfico de evolución temporal
-    const evolutionCtx = document.getElementById('evolutionChart').getContext('2d');
-    new Chart(evolutionCtx, {
-        type: 'line',
-        data: {
-            labels: months,
-            datasets: [{
-                label: 'Cantidad de Productos',
-                data: monthlyData,
-                borderColor: '#3B82F6',
-                backgroundColor: 'rgba(59, 130, 246, 0.1)',
-                borderWidth: 3,
-                fill: true,
-                tension: 0.4,
-                pointBackgroundColor: '#3B82F6',
-                pointBorderColor: '#ffffff',
-                pointBorderWidth: 2,
-                pointRadius: 6,
-                pointHoverRadius: 8
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    display: false
-                },
-                tooltip: {
-                    backgroundColor: 'rgba(0, 0, 0, 0.8)',
-                    titleColor: '#ffffff',
-                    bodyColor: '#ffffff',
-                    borderColor: '#3B82F6',
-                    borderWidth: 1,
-                    cornerRadius: 8,
-                    displayColors: false
-                }
-            },
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    grid: {
-                        color: 'rgba(0, 0, 0, 0.1)'
+        // Gráfico de evolución temporal
+        const evolutionCtx = document.getElementById('evolutionChart');
+        if (evolutionCtx) {
+            if (!months.length || !monthlyData.length) {
+                console.warn('No hay datos para el gráfico de evolución');
+            } else {
+                new Chart(evolutionCtx, {
+                    type: 'line',
+                    data: {
+                        labels: months,
+                        datasets: [{
+                            label: 'Cantidad de Productos',
+                            data: monthlyData,
+                            borderColor: '#3B82F6',
+                            backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                            borderWidth: 3,
+                            fill: true,
+                            tension: 0.4,
+                            pointBackgroundColor: '#3B82F6',
+                            pointBorderColor: '#ffffff',
+                            pointBorderWidth: 2,
+                            pointRadius: 6,
+                            pointHoverRadius: 8
+                        }]
                     },
-                    ticks: {
-                        stepSize: 10
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: false
+                            },
+                            tooltip: {
+                                backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                                titleColor: '#ffffff',
+                                bodyColor: '#ffffff',
+                                borderColor: '#3B82F6',
+                                borderWidth: 1,
+                                cornerRadius: 8,
+                                displayColors: false
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                grid: {
+                                    color: 'rgba(0, 0, 0, 0.1)'
+                                },
+                                ticks: {
+                                    stepSize: 10
+                                }
+                            },
+                            x: {
+                                grid: {
+                                    display: false
+                                }
+                            }
+                        },
+                        elements: {
+                            point: {
+                                hoverBackgroundColor: '#3B82F6'
+                            }
+                        }
                     }
-                },
-                x: {
-                    grid: {
-                        display: false
-                    }
-                }
-            },
-            elements: {
-                point: {
-                    hoverBackgroundColor: '#3B82F6'
-                }
+                });
             }
         }
     });

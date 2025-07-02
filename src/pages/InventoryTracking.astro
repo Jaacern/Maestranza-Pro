@@ -5,7 +5,6 @@ import { getMovements } from '../services/movements.ts';
 
 const products = await getProducts();
 const movements = await getMovements();
----
 
 // Datos de ejemplo para tracking
 const trackingData = [
@@ -70,6 +69,7 @@ const totalTracked = trackingData.length;
 const inLocation = trackingData.filter(t => t.status === 'en_ubicacion').length;
 const inUse = trackingData.filter(t => t.status === 'en_uso').length;
 const inMaintenance = trackingData.filter(t => t.status === 'en_mantenimiento').length;
+---
 
 <LayoutSidebar>
 	<div class="px-4 pt-6">
