@@ -4,9 +4,32 @@
 import { API_URL, REMOTE_ASSETS_BASE_URL } from '../app/constants.js';
 import type { Endpoint, EndpointsToOperations } from '../types/entities.js';
 
-export async function fetchData<Selected extends Endpoint>(endpoint: Selected) {
-	const apiEndpoint = `${API_URL}${endpoint}`;
+// Importar datos locales para build estático
+import productsData from '../../data/products.json';
+import usersData from '../../data/users.json';
+import suppliersData from '../../data/suppliers.json';
+import batchesData from '../../data/batches.json';
+import movementsData from '../../data/movements.json';
+import alertsData from '../../data/alerts.json';
 
+const localData = {
+	products: productsData,
+	users: usersData,
+	suppliers: suppliersData,
+	batches: batchesData,
+	movements: movementsData,
+	alerts: alertsData,
+};
+
+export async function fetchData<Selected extends Endpoint>(endpoint: Selected) {
+	// Para build estático, usar datos locales
+	if (import.meta.env.PROD) {
+		console.info(`Using local data for ${endpoint}…`);
+		return localData[endpoint] as ReturnType<EndpointsToOperations[Selected]>;
+	}
+
+	// Para desarrollo, usar API
+	const apiEndpoint = `${API_URL}${endpoint}`;
 	console.info(`Fetching ${apiEndpoint}…`);
 	return fetch(apiEndpoint)
 		.then(
