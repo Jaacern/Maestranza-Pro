@@ -1,32 +1,28 @@
 import { defineConfig } from 'astro/config';
-
 import sitemap from '@astrojs/sitemap';
 import tailwind from '@astrojs/tailwind';
 import react from '@astrojs/react';
 
 const DEV_PORT = 2121;
 
-// https://astro.build/config
 export default defineConfig({
-	site: process.env.CI
-		? 'https://themesberg.github.io'
-		: `http://localhost:${DEV_PORT}`,
-	// base: process.env.CI ? '/MaestranzaPro-astro-admin-dashboard' : undefined,
-
-	// output: 'server',
-
-	/* Like Vercel, Netlify,… Mimicking for dev. server */
-	// trailingSlash: 'always',
-
+	// site: `http://localhost:${DEV_PORT}`,
+	// base: undefined,
 	server: {
-		/* Dev. server only */
 		port: DEV_PORT,
 	},
 
 	integrations: [
-		//
 		sitemap(),
 		tailwind(),
 		react(),
 	],
+
+	vite: {
+		server: {
+			allowedHosts: [
+				'cb9e-190-5-33-44.ngrok-free.app' // ← tu subdominio de ngrok
+			]
+		}
+	}
 });

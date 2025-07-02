@@ -1,8 +1,8 @@
-export const API_URL = `${import.meta.env.SITE}${import.meta.env.BASE_URL}api/`;
+export const API_URL = `/api/`;
 
-export const REMOTE_ASSETS_BASE_URL = `https://MaestranzaPro-admin-dashboard.vercel.app`;
+export const REMOTE_ASSETS_BASE_URL = `/images`;
 
-export const SITE_TITLE = 'MaestranzaPro Astro Admin Dashboard';
+export const SITE_TITLE = 'MaestranzaPro Astro Admin Dashboard';
 
 /* Useful flag for sourcing from `./data` entirely, disabling randomize layer */
 export const RANDOMIZE = Boolean(import.meta.env.RANDOMIZE) || true;
